@@ -51,8 +51,5 @@ linters:
         - G304
         - G306
         - G404
-  exclusions:
-    paths-except:
-      - hk-split-maker/
 run:
   timeout: 5m
