@@ -9,7 +9,7 @@ on:
 jobs:
 
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
     - uses: actions/checkout@v4
       with:
@@ -24,13 +24,8 @@ jobs:
       run: |
         touch silksong_autosplit_wasm_stable.wasm
 
-    - name: Set Go Env
-      run: |
-        go env -w GOOS=windows
-        go env -w GOARCH=amd64
-
     - name: golangci-lint
-      uses: golangci/golangci-lint-action@v7
+      uses: golangci/golangci-lint-action@v8
       with:
         version: latest
 
