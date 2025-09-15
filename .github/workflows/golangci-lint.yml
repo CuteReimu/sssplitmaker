@@ -1,0 +1,38 @@
+name: Go
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: 'true'
+
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: 'stable'
+
+    - name: Create Fake LiveSplit Files
+      run: |
+        touch silksong_autosplit_wasm_stable.wasm
+
+    - name: Set Go Env
+      run: |
+        go env -w GOOS=windows
+        go env -w GOARCH=amd64
+
+    - name: golangci-lint
+      uses: golangci/golangci-lint-action@v7
+      with:
+        version: latest
+
+    - name: Build
+      run: go build -v ./...
