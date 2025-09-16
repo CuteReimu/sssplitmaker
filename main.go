@@ -91,7 +91,6 @@ func main() {
 							ComboBox{
 								AssignTo: &startTriggerComboBox,
 								Model:    splitDescriptions,
-								Enabled:  false,
 								Value:    getSplitDescriptionByID("StartNewGame"),
 							},
 						},
