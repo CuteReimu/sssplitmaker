@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/CuteReimu/sssplitmaker/translate"
 	"github.com/lxn/walk"
 	"github.com/lxn/win"
 )
@@ -56,7 +57,6 @@ type xmlSegment struct {
 	Name string
 }
 
-var fileLayoutPath string
 var fileLayoutData *xmlLayout
 var fileWasmSettings *autoSplittingRuntimeSettings
 var fileWasmSettingsString *string
@@ -99,7 +99,7 @@ func onClickLoadLayoutFile() {
 			walk.MsgBox(mainWindow, "内部错误", err.Error(), walk.MsgBoxIconError)
 			return
 		}
-		loadLayoutFile(file, buf)
+		loadLayoutFile(buf)
 	}
 }
 
@@ -120,7 +120,7 @@ func loadSplitFile(buf []byte) {
 	}
 }
 
-func loadLayoutFile(file string, buf []byte) {
+func loadLayoutFile(buf []byte) {
 	run := &xmlLayout{}
 	err := xml.Unmarshal(buf, run)
 	if err != nil {
@@ -147,7 +147,7 @@ func loadLayoutFile(file string, buf []byte) {
 								walk.MsgBox(mainWindow, "解析Settings失败", "splits子字段类型错误", walk.MsgBoxIconError)
 								return
 							} else {
-								index := getIndexByID(s.Value)
+								index := translate.GetIndexByID(s.Value)
 								if index < 0 {
 									walk.MsgBox(mainWindow, "解析Settings失败", fmt.Sprintf("无法识别的分割点ID：%s", s.Value), walk.MsgBoxIconError)
 									return
@@ -172,7 +172,6 @@ func loadLayoutFile(file string, buf []byte) {
 			break
 		}
 	}
-	fileLayoutPath = file
 	fileLayoutData = run
 	saveButton.SetEnabled(true)
 }
@@ -185,11 +184,11 @@ func onSaveLayoutFile() {
 	}}
 	fileWasmSettings.CustomSettings[0].Setting = append(fileWasmSettings.CustomSettings[0].Setting, &xmlWasmSetting{
 		Type:  "string",
-		Value: getIDByDescription(startTriggerComboBox.Text()),
+		Value: translate.GetIDByDescription(startTriggerComboBox.Text()),
 	})
 	for _, line := range lines {
 		text := line.splitId.Text()
-		id := getIDByDescription(text)
+		id := translate.GetIDByDescription(text)
 		fileWasmSettings.CustomSettings[0].Setting = append(fileWasmSettings.CustomSettings[0].Setting, &xmlWasmSetting{
 			Type:  "string",
 			Value: id,
@@ -203,7 +202,7 @@ func onSaveLayoutFile() {
 	fmt.Println(string(buf[len("<Settings>\n") : len(buf)-len("\n</Settings>")]))
 	*fileWasmSettingsString = string(buf[len("<Settings>\n") : len(buf)-len("\n</Settings>")])
 	if fileLayoutData == nil {
-		walk.MsgBox(mainWindow, "内部错误", err.Error(), walk.MsgBoxIconError)
+		walk.MsgBox(mainWindow, "内部错误", "还未加载 fileLayoutData", walk.MsgBoxIconError)
 		return
 	}
 	buf, err = xml.MarshalIndent(fileLayoutData, "", "  ")

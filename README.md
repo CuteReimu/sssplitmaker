@@ -18,7 +18,7 @@ https://cutereimu.cn/daily/silksong/sssplitmaker-faq.html
 如果想要自己使用`go build`进行编译，需要提前下载wasm文件：
 
 ```shell
-curl -O https://github.com/AlexKnauth/silksong-autosplit-wasm/releases/download/0.1.3/silksong_autosplit_wasm_stable.wasm
+curl -O https://github.com/AlexKnauth/silksong-autosplit-wasm/releases/download/0.1.5/silksong_autosplit_wasm_stable.wasm
 
 # -ldflags中，-s是去掉符号表，-w是去掉调试信息，均可减小所生成二进制文件的体积
 # -H=windowsgui是打开Windows窗口时隐藏控制台的黑框框

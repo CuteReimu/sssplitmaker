@@ -1,12 +1,12 @@
-package main
+package translate
 
 type SplitData struct {
 	ID          string
 	Description string
 }
 
-func getSplitDescriptionByID(id string) string {
-	for _, split := range splitsCache {
+func GetSplitDescriptionByID(id string) string {
+	for _, split := range SplitsCache {
 		if split.ID == id {
 			return split.Description
 		}
@@ -14,8 +14,8 @@ func getSplitDescriptionByID(id string) string {
 	return ""
 }
 
-func getIndexByID(id string) int {
-	for i, split := range splitsCache {
+func GetIndexByID(id string) int {
+	for i, split := range SplitsCache {
 		if split.ID == id {
 			return i
 		}
@@ -23,8 +23,8 @@ func getIndexByID(id string) int {
 	return -1
 }
 
-func getIDByDescription(desc string) string {
-	for _, split := range splitsCache {
+func GetIDByDescription(desc string) string {
+	for _, split := range SplitsCache {
 		if split.Description == desc {
 			return split.ID
 		}
@@ -32,7 +32,7 @@ func getIDByDescription(desc string) string {
 	return ""
 }
 
-var splitsCache = []*SplitData{
+var SplitsCache = []*SplitData{
 	{"ManualSplit", "手动分割（其它）"},
 	{"StartNewGame", "开始新游戏（开始）"},
 	{"EndingSplit", "任意结束（结束）"},
@@ -43,19 +43,26 @@ var splitsCache = []*SplitData{
 	{"MossMother", "苔藓之母（Boss）"},
 	{"SilkSpear", "丝之矛（技能）"},
 	{"BellBeast", "钟道兽（Boss）"},
+	{"MarrowBell", "髓骨洞窟敲钟（事件）"},
 	{"SwiftStep", "冲刺（技能）"},
 	{"Lace1", "蕾丝（Boss）"},
+	{"DeepDocksBell", "深坞敲钟（事件）"},
 	{"DriftersCloak", "斗篷（技能）"},
 	{"FourthChorus", "第四圣咏团（Boss）"},
 	{"EnterGreymoor", "进入灰沼（切图）"},
+	{"GreymoorBell", "灰沼敲钟（事件）"},
 	{"Moorwing", "荒沼翼主（Boss）"},
 	{"ClingGrip", "爬墙（技能）"},
+	{"ShellwoodBell", "甲木林敲钟（事件）"},
 	{"Widow", "黑寡妇（Boss）"},
+	{"BellhartBell", "钟心镇敲钟（事件）"},
+	{"LastJudge", "末代裁决者（Boss）"},
 	{"EnterMist", "进入迷雾（切图）"},
 	{"LeaveMist", "离开迷雾（切图）"},
 	{"Phantom", "幽影（Boss）"},
 	{"Act2Started", "第二幕开始（事件）"},
 	{"CogworkDancers", "机枢舞者（Boss）"},
+	{"WhisperingVaultsGauntlet", "低语书库遭遇战（小Boss）"},
 	{"Trobbio", "特罗比奥（Boss）"},
 	{"Clawline", "飞针冲刺（技能）"},
 	{"EnterHighHalls", "进入高庭（切图）"},

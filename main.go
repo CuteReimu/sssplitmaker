@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 	"syscall"
 
+	"github.com/CuteReimu/sssplitmaker/translate"
 	"github.com/lxn/walk"
 	. "github.com/lxn/walk/declarative"
 	"github.com/lxn/win"
@@ -42,7 +43,7 @@ func main() {
 						walk.MsgBox(mainWindow, "内部错误", err.Error(), walk.MsgBoxIconError)
 						return
 					}
-					loadLayoutFile(file, buf)
+					loadLayoutFile(buf)
 				}
 			}
 		},
@@ -66,7 +67,7 @@ func main() {
 				Children: []Widget{
 					TextLabel{
 						TextAlignment: AlignHFarVCenter,
-						Text:          "Auto Splitter Version: 0.1.3",
+						Text:          "Auto Splitter Version: 0.1.5",
 					},
 					PushButton{
 						Text:      "获取wasm文件",
@@ -92,7 +93,7 @@ func main() {
 							ComboBox{
 								AssignTo: &startTriggerComboBox,
 								Model:    splitDescriptions,
-								Value:    getSplitDescriptionByID("StartNewGame"),
+								Value:    translate.GetSplitDescriptionByID("StartNewGame"),
 							},
 						},
 					},
@@ -114,7 +115,6 @@ func main() {
 				Children: []Widget{
 					PushButton{Text: "清空", OnClicked: func() {
 						resetLines(1)
-						fileLayoutPath = ""
 						fileLayoutData = nil
 						fileWasmSettings = nil
 						saveButton.SetEnabled(false)

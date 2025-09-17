@@ -1,18 +1,15 @@
 package main
 
 import (
+	"github.com/CuteReimu/sssplitmaker/translate"
 	"github.com/lxn/walk"
 	. "github.com/lxn/walk/declarative"
 )
 
-type splitData struct {
-	description, tooltip, id string
-}
-
 var splitDescriptions []string
 
 func init() {
-	for _, split := range splitsCache {
+	for _, split := range translate.SplitsCache {
 		splitDescriptions = append(splitDescriptions, split.Description)
 	}
 }
