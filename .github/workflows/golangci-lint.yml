@@ -9,11 +9,9 @@ on:
 jobs:
 
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-      with:
-        submodules: 'true'
 
     - name: Set up Go
       uses: actions/setup-go@v5
@@ -23,6 +21,13 @@ jobs:
     - name: Create Fake LiveSplit Files
       run: |
         touch silksong_autosplit_wasm_stable.wasm
+
+    - name: Set Go Env
+      run: |
+        go env -w GOOS=windows
+        go env -w GOARCH=amd64
+
+    - run: go mod download
 
     - name: golangci-lint
       uses: golangci/golangci-lint-action@v8
