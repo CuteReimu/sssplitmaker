@@ -3,6 +3,7 @@ linters:
   default: all
   disable:
     - wsl
+    - wsl_v5
     - varnamelen
     - gocognit
     - funlen
@@ -34,6 +35,7 @@ linters:
     - nonamedreturns
     - goconst
     - musttag
+    - noinlineerr
   settings:
     staticcheck:
       checks:

@@ -149,7 +149,7 @@ func loadLayoutFile(buf []byte) {
 							} else {
 								index := translate.GetIndexByID(s.Value)
 								if index < 0 {
-									walk.MsgBox(mainWindow, "解析Settings失败", fmt.Sprintf("无法识别的分割点ID：%s", s.Value), walk.MsgBoxIconError)
+									walk.MsgBox(mainWindow, "解析Settings失败", "无法识别的分割点ID："+s.Value, walk.MsgBoxIconError)
 									return
 								}
 								if i == 0 {
