@@ -33,6 +33,12 @@ func addLine() {
 			ComboBox{AssignTo: &line.splitId, MinSize: Size{Width: 200},
 				Model: splitDescriptions, Value: splitDescriptions[0],
 			},
+			PushButton{Text: "+", MaxSize: Size{Width: 25}, ToolTipText: "在此位置增加一行",
+				OnClicked: func() {
+					idx := splitLinesView.Children().Index(line.line)
+					moveLine(idx)
+				},
+			},
 		},
 	}
 	err := c.Create(NewBuilder(splitLinesView))
@@ -72,6 +78,12 @@ func resetLines(count int) {
 				ComboBox{AssignTo: &line.splitId, MinSize: Size{Width: 200},
 					Model: splitDescriptions, Value: splitDescriptions[0],
 				},
+				PushButton{Text: "+", MaxSize: Size{Width: 25}, ToolTipText: "在此位置增加一行",
+					OnClicked: func() {
+						idx := splitLinesView.Children().Index(line.line)
+						moveLine(idx)
+					},
+				},
 			},
 		})
 		lines = append(lines, line)
@@ -80,5 +92,15 @@ func resetLines(count int) {
 	if err != nil {
 		walk.MsgBox(mainWindow, "错误", err.Error(), walk.MsgBoxIconError)
 		panic(err)
+	}
+}
+
+func moveLine(index int) {
+	for i := len(lines) - 2; i >= index; i-- {
+		err := lines[i+1].splitId.SetCurrentIndex(lines[i].splitId.CurrentIndex())
+		if err != nil {
+			walk.MsgBox(nil, "错误", err.Error(), walk.MsgBoxIconError)
+			return
+		}
 	}
 }
