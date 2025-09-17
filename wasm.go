@@ -2,9 +2,10 @@ package main
 
 import (
 	_ "embed"
-	"github.com/lxn/walk"
 	"os"
 	"path/filepath"
+
+	"github.com/lxn/walk"
 )
 
 //go:embed silksong_autosplit_wasm_stable.wasm

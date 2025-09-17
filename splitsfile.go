@@ -3,10 +3,11 @@ package main
 import (
 	"encoding/xml"
 	"fmt"
-	"github.com/lxn/walk"
-	"github.com/lxn/win"
 	"os"
 	"path/filepath"
+
+	"github.com/lxn/walk"
+	"github.com/lxn/win"
 )
 
 type xmlLayout struct {

@@ -1,12 +1,13 @@
 package main
 
 import (
-	"github.com/lxn/walk"
-	. "github.com/lxn/walk/declarative"
-	"github.com/lxn/win"
 	"os"
 	"path/filepath"
 	"syscall"
+
+	"github.com/lxn/walk"
+	. "github.com/lxn/walk/declarative"
+	"github.com/lxn/win"
 )
 
 func getSystemMetrics(nIndex int) int {
