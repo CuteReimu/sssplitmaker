@@ -146,7 +146,7 @@ var SplitsCache = []*SplitData{
 	{"SavedFleaChoralChambersWind", "救跳蚤-圣咏殿-风（跳蚤）"},
 	{"SavedFleaChoralChambersCage", "救跳蚤-圣咏殿-笼子（跳蚤）"},
 	{"SavedFleaUnderworksExplosions", "救跳蚤-圣堡工厂-爆炸怪（跳蚤）"},
-	{"SavedFleaUnderworksWispThicket", "救跳蚤-火灵竹丛-爆炸怪（跳蚤）"},
+	{"SavedFleaUnderworksWispThicket", "救跳蚤-圣堡工厂-火灵竹丛（跳蚤）"},
 	{"SavedFleaGiantFlea", "击败大跳蚤（跳蚤）"},
 	{"SavedFleaVog", "沃格（跳蚤）"},
 	{"SavedFleaKratt", "救跳蚤-灰沼-克拉特（跳蚤）"},
