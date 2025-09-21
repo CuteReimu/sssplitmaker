@@ -164,7 +164,7 @@ var SplitsCache = []*SplitData{
 	{"UnderworksTube", "圣脉枢管-圣堡工厂（圣脉枢管）"},
 	{"CityBellwayTube", "圣脉枢管-圣堡钟道（圣脉枢管）"},
 	{"HighHallsTube", "圣脉枢管-高庭（圣脉枢管）"},
-	{"SongclaveTube", "圣脉枢管-圣歌盟地（圣脉枢管）"},
+	{"SongclaveTube", "圣脉枢管-始源钟殿（圣脉枢管）"},
 	{"MemoriumTube", "圣脉枢管-忆廊（圣脉枢管）"},
 	{"SeenShakraBonebottom", "制图师-骸底镇（NPC）"},
 	{"SeenShakraMarrow", "制图师-髓骨洞窟（NPC）"},
