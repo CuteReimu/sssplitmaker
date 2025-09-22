@@ -183,7 +183,7 @@ var SplitsCache = []*SplitData{
 	{"MetJubilanaEnclave", "朱比拉娜-圣歌盟地（NPC）"},
 	{"MetShermaEnclave", "谢尔玛-圣歌盟地（NPC）"},
 	{"UnlockedPrinceCage", "绿王子-罪途（事件）"},
-	{"GreenPrinceInVerdania", "绿王子-圣堡工厂（事件）"},
+	{"GreenPrinceInVerdania", "绿王子-机枢核心（事件）"},
 	{"SeenFleatopiaEmpty", "蚤托邦（事件）"},
 	{"FaydownCloak", "二段跳（技能）"},
 	{"SilkSoar", "灵丝升腾（技能）"},
