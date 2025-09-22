@@ -118,6 +118,7 @@ func loadSplitFile(buf []byte) {
 			return
 		}
 	}
+	commentTextLabel.SetVisible(true)
 }
 
 func loadLayoutFile(buf []byte) {
@@ -174,6 +175,10 @@ func loadLayoutFile(buf []byte) {
 	}
 	fileLayoutData = run
 	saveButton.SetEnabled(true)
+	err = saveButton.SetText("另存为lsl文件")
+	if err != nil {
+		walk.MsgBox(mainWindow, "错误", err.Error(), walk.MsgBoxIconError)
+	}
 }
 
 func onSaveLayoutFile() {

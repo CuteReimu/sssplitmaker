@@ -36,7 +36,13 @@ func addLine() {
 			PushButton{Text: "+", MaxSize: Size{Width: 25}, ToolTipText: "在此位置增加一行",
 				OnClicked: func() {
 					idx := splitLinesView.Children().Index(line.line)
-					moveLine(idx)
+					moveLine(idx, true)
+				},
+			},
+			PushButton{Text: "-", MaxSize: Size{Width: 25}, ToolTipText: "删掉此行",
+				OnClicked: func() {
+					idx := splitLinesView.Children().Index(line.line)
+					moveLine(idx, false)
 				},
 			},
 		},
@@ -81,7 +87,13 @@ func resetLines(count int) {
 				PushButton{Text: "+", MaxSize: Size{Width: 25}, ToolTipText: "在此位置增加一行",
 					OnClicked: func() {
 						idx := splitLinesView.Children().Index(line.line)
-						moveLine(idx)
+						moveLine(idx, true)
+					},
+				},
+				PushButton{Text: "-", MaxSize: Size{Width: 25}, ToolTipText: "删掉此行",
+					OnClicked: func() {
+						idx := splitLinesView.Children().Index(line.line)
+						moveLine(idx, false)
 					},
 				},
 			},
@@ -95,7 +107,21 @@ func resetLines(count int) {
 	}
 }
 
-func moveLine(index int) {
+func moveLine(index int, down bool) {
+	if !down {
+		for i := index; i <= len(lines)-2; i++ {
+			err := lines[i].splitId.SetCurrentIndex(lines[i+1].splitId.CurrentIndex())
+			if err != nil {
+				walk.MsgBox(nil, "错误", err.Error(), walk.MsgBoxIconError)
+				return
+			}
+		}
+		err := lines[len(lines)-1].splitId.SetCurrentIndex(translate.GetIndexByID("EndingSplit"))
+		if err != nil {
+			walk.MsgBox(nil, "错误", err.Error(), walk.MsgBoxIconError)
+		}
+		return
+	}
 	for i := len(lines) - 2; i >= index; i-- {
 		err := lines[i+1].splitId.SetCurrentIndex(lines[i].splitId.CurrentIndex())
 		if err != nil {

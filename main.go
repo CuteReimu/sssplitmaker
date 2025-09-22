@@ -20,6 +20,7 @@ var mainWindow *walk.MainWindow
 var splitLinesViewContainer *walk.Composite
 var splitLinesView *walk.Composite
 var startTriggerCheckBox *walk.CheckBox
+var commentTextLabel *walk.TextLabel
 var startTriggerComboBox *walk.ComboBox
 var saveButton *walk.PushButton
 
@@ -59,7 +60,7 @@ func main() {
 					TextLabel{TextAlignment: AlignHFarVCenter, Text: "你可以"},
 					PushButton{Text: "打开lss文件", OnClicked: onClickLoadSplitFile},
 					PushButton{Text: "打开lsl文件", OnClicked: onClickLoadLayoutFile},
-					TextLabel{TextAlignment: AlignHFarVCenter, Text: "或者把文件拖拽进来"},
+					TextLabel{TextAlignment: AlignHNearVCenter, Text: "或者把文件拖拽进来"},
 				},
 			},
 			Composite{
@@ -97,6 +98,12 @@ func main() {
 							},
 						},
 					},
+					TextLabel{
+						AssignTo:      &commentTextLabel,
+						TextAlignment: AlignHNearVCenter,
+						Text:          "想要修改左边一列，请直接在LiveSplit中使用Edit Splits进行修改。",
+						Visible:       false,
+					},
 					Composite{
 						AssignTo: &splitLinesViewContainer,
 						Layout:   Flow{},
@@ -117,9 +124,14 @@ func main() {
 						resetLines(1)
 						fileLayoutData = nil
 						fileWasmSettings = nil
+						commentTextLabel.SetVisible(false)
 						saveButton.SetEnabled(false)
+						err := saveButton.SetText("请先打开lsl文件")
+						if err != nil {
+							walk.MsgBox(mainWindow, "错误", err.Error(), walk.MsgBoxIconError)
+						}
 					}},
-					PushButton{AssignTo: &saveButton, Text: "另存为", OnClicked: onSaveLayoutFile, Enabled: false},
+					PushButton{AssignTo: &saveButton, Text: "请先打开lsl文件", OnClicked: onSaveLayoutFile, Enabled: false},
 				},
 			},
 		},
