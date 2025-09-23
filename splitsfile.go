@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/xml"
-	"fmt"
 	"os"
 	"path/filepath"
 
@@ -204,7 +203,6 @@ func onSaveLayoutFile() {
 		walk.MsgBox(mainWindow, "内部错误", err.Error(), walk.MsgBoxIconError)
 		return
 	}
-	fmt.Println(string(buf[len("<Settings>\n") : len(buf)-len("\n</Settings>")]))
 	*fileWasmSettingsString = string(buf[len("<Settings>\n") : len(buf)-len("\n</Settings>")])
 	if fileLayoutData == nil {
 		walk.MsgBox(mainWindow, "内部错误", "还未加载 fileLayoutData", walk.MsgBoxIconError)
@@ -215,6 +213,7 @@ func onSaveLayoutFile() {
 		walk.MsgBox(mainWindow, "内部错误", err.Error(), walk.MsgBoxIconError)
 		return
 	}
+	buf = append([]byte(`<?xml version="1.0" encoding="UTF-8"?>`+"\n"), buf...)
 	dlg := new(walk.FileDialog)
 	dlg.Title = "保存Layout文件"
 	dlg.Filter = "Layout文件（*.lsl）|*.lsl"
