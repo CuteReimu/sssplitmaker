@@ -68,7 +68,7 @@ func main() {
 				Children: []Widget{
 					TextLabel{
 						TextAlignment: AlignHFarVCenter,
-						Text:          "Auto Splitter Version: 0.1.9",
+						Text:          "Auto Splitter Version: 0.1.10",
 					},
 					PushButton{
 						Text:      "获取wasm文件",

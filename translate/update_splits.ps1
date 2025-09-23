@@ -1,0 +1,1 @@
+Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/AlexKnauth/silksong-autosplit-wasm/refs/heads/master/examples/splits.json' -OutFile 'splits.json' -v

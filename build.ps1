@@ -1,0 +1,2 @@
+Invoke-WebRequest -Uri 'https://github.com/AlexKnauth/silksong-autosplit-wasm/releases/download/0.1.10/silksong_autosplit_wasm_stable.wasm' -OutFile 'silksong_autosplit_wasm_stable.wasm' -v
+go build -ldflags "-s -w -H=windowsgui" -o sssplitmaker.exe github.com/CuteReimu/sssplitmaker
