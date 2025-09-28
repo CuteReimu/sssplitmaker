@@ -11,6 +11,9 @@ type SplitData struct {
 }
 
 func GetSplitDescriptionByID(id string) string {
+	if v, ok := cacheAliases[id]; ok {
+		id = v
+	}
 	for _, split := range SplitsCache {
 		if split.ID == id {
 			return split.Description
@@ -20,6 +23,9 @@ func GetSplitDescriptionByID(id string) string {
 }
 
 func GetIndexByID(id string) int {
+	if v, ok := cacheAliases[id]; ok {
+		id = v
+	}
 	for i, split := range SplitsCache {
 		if split.ID == id {
 			return i
@@ -59,7 +65,7 @@ func init() {
 		if aScore != bScore {
 			return aScore - bScore
 		}
-		return strings.Compare(ad, bd)
+		return strings.Compare(a.Description, b.Description)
 	})
 }
 
@@ -145,7 +151,7 @@ var SplitsCache = []*SplitData{
 	{"SavedFleaSlabCage", "救跳蚤-罪石监狱-笼子（跳蚤）"},
 	{"SavedFleaChoralChambersWind", "救跳蚤-圣咏殿-风（跳蚤）"},
 	{"SavedFleaChoralChambersCage", "救跳蚤-圣咏殿-笼子（跳蚤）"},
-	{"SavedFleaUnderworksExplosions", "救跳蚤-圣堡工厂-爆炸怪（跳蚤）"},
+	{"SavedFleaUnderworksCauldron", "救跳蚤-圣堡工厂-大熔釜（跳蚤）"},
 	{"SavedFleaUnderworksWispThicket", "救跳蚤-圣堡工厂-火灵竹丛（跳蚤）"},
 	{"SavedFleaGiantFlea", "击败大跳蚤（跳蚤）"},
 	{"SavedFleaVog", "沃格（跳蚤）"},
@@ -157,12 +163,12 @@ var SplitsCache = []*SplitData{
 	{"BlastedStepsStation", "钟道-蚀阶（钟道）"},
 	{"DeepDocksStation", "钟道-深坞（钟道）"},
 	{"GreymoorStation", "钟道-灰沼（钟道）"},
-	{"MountFayStation", "钟道-费耶山（钟道）"},
+	{"SlabStation", "钟道-罪石牢狱（钟道）"},
 	{"BilewaterStation", "钟道-腐汁泽（钟道）"},
 	{"ShellwoodStation", "钟道-甲木林（钟道）"},
 	{"ChoralChambersTube", "圣脉枢管-圣咏殿（圣脉枢管）"},
 	{"UnderworksTube", "圣脉枢管-圣堡工厂（圣脉枢管）"},
-	{"CityBellwayTube", "圣脉枢管-圣堡钟道（圣脉枢管）"},
+	{"GrandBellwayTube", "圣脉枢管-圣堡钟道（圣脉枢管）"},
 	{"HighHallsTube", "圣脉枢管-高庭（圣脉枢管）"},
 	{"SongclaveTube", "圣脉枢管-始源钟殿（圣脉枢管）"},
 	{"MemoriumTube", "圣脉枢管-忆廊（圣脉枢管）"},
@@ -187,10 +193,53 @@ var SplitsCache = []*SplitData{
 	{"SeenFleatopiaEmpty", "蚤托邦（事件）"},
 	{"FaydownCloak", "二段跳（技能）"},
 	{"SilkSoar", "灵丝升腾（技能）"},
-	{"CollectedHeartNyleth", "尼莱斯之心（道具）"},
-	{"CollectedHeartKhann", "卡汗之心（道具）"},
-	{"CollectedHeartKarmelita", "卡梅莉塔之心（道具）"},
-	{"CollectedHeartClover", "双生之心（道具）"},
-	{"CompletedRedMemory", "赤红忆境（事件）"},
+	{"RedMemory", "赤红忆境（事件）"},
 	{"BellhouseKeyConversation", "钟居钥匙（NPC）"},
+	{"Act1Start", "第一幕开始（开始）"},
+	{"EnterWormways", "进入沙噬虫道（切图）"},
+	{"EnterFarFields", "进入远野（切图）"},
+	{"EnterShellwood", "进入甲木林（切图）"},
+	{"EnterBellhart", "进入钟心镇（切图）"},
+	{"ReaperCrestTrans", "收割者纹章（切图）"},
+	{"HeartNyleth", "尼莱斯之心（道具）"},
+	{"HeartKhann", "卡汗之心（道具）"},
+	{"HeartKarmelita", "卡梅莉塔之心（道具）"},
+	{"HeartClover", "双生之心（道具）"},
+	{"VerdaniaOrbsCollected", "翠庭球收集完成（事件）"},
+	{"Forebrothers", "监工兄弟（Boss）"},
+	{"Groal", "格洛（Boss）"},
+	{"Conchflies1", "巨型螺蝇1（Boss）"},
+	{"SavageBeastfly1", "残暴的兽蝇1（Boss）"},
+	{"SavageBeastfly2", "暴怒的兽蝇2（Boss）"},
+	{"CaravanTroupeGreymoor", "跳蚤剧团移动-灰沼（事件）"},
+	{"CaravanTroupeFleatopia", "跳蚤剧团移动-蚤托邦（事件）"},
+	{"SoldRelic", "卖古董（事件）"},
+	{"CollectedWhiteWardKey", "白愈钥匙（道具）"},
+	{"PavoTimePassed", "与帕沃对话后休息（坐椅子）"},
+	{"SongclaveBell", "敲钟-圣歌盟地（事件）"},
+	{"Voltvyrm", "伏特维姆（Boss）"},
+	{"SkullTyrant1", "骷髅暴君1（Boss）"},
+	{"ShermaReturned", "谢尔玛归来（NPC）"},
+	{"JubilanaRescuedMemorium", "救朱比拉娜-忆廊（事件）"},
+	{"JubilanaRescuedChoralChambers", "救朱比拉娜-圣咏殿（事件）"},
+	{"SilkAndSoulOffered", "灵丝与灵魂前置达成（事件）"},
+	{"SoulSnareReady", "灵丝陷阱就绪（事件）"},
+	{"Seth", "赛斯（Boss）"},
+	{"AbyssEscape", "深渊逃脱完成（事件）"},
+	{"BallowMoved", "巴洛前往潜钟（事件）"},
+	{"Act3Started", "第三幕开始（事件）"},
+}
+
+var cacheAliases = map[string]string{
+	"WhisperingVaultsGauntlet":      "WhisperingVaultsArena",
+	"EnterHighHallsGauntlet":        "EnterHighHallsArena",
+	"HighHallsGauntlet":             "HighHallsArena",
+	"SavedFleaUnderworksExplosions": "SavedFleaUnderworksCauldron",
+	"MountFayStation":               "SlabStation",
+	"CityBellwayTube":               "GrandBellwayTube",
+	"CollectedHeartNyleth":          "HeartNyleth",
+	"CollectedHeartKhann":           "HeartKhann",
+	"CollectedHeartKarmelita":       "HeartKarmelita",
+	"CollectedHeartClover":          "HeartClover",
+	"CompletedRedMemory":            "RedMemory",
 }

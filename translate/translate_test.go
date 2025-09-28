@@ -13,23 +13,30 @@ func TestSplits(t *testing.T) {
 		t.Fatal(err)
 	}
 	type splitData struct {
+		Alias       any    `json:"alias"`
 		Description string `json:"description"`
 		Key         string `json:"key"`
 		Tooltip     string `json:"tooltip"`
 		translate   string
 	}
 	var splits []*splitData
+	var splitsWithAlias []*splitData
 	err = json.Unmarshal(buf, &splits)
 	if err != nil {
 		t.Fatal(err)
 	}
+	var newSplits []string
 	for _, split := range splits {
 		i := GetIndexByID(split.Key)
 		if i == -1 {
+			newSplits = append(newSplits, split.Key)
 			t.Log("找不到分割: " + split.Key)
 			t.Fail()
 		} else {
 			split.translate = SplitsCache[i].Description
+		}
+		if split.Alias != nil {
+			splitsWithAlias = append(splitsWithAlias, split)
 		}
 	}
 
@@ -38,15 +45,28 @@ func TestSplits(t *testing.T) {
 	for _, split := range splits {
 		splitMap[split.Key] = split
 	}
-	for _, split := range SplitsCache {
+	for i, split := range SplitsCache {
+		if index := GetIndexByID(split.ID); index != i && index != -1 {
+			t.Log("重复分割: " + split.ID)
+			t.Fail()
+		}
 		if splitMap[split.ID] == nil {
 			t.Log("多余分割: " + split.ID)
 			t.Fail()
 		}
 	}
 	if t.Failed() {
+		for _, s := range newSplits {
+			fmt.Printf("{\"%s\", \"\"},\n", s)
+		}
 		t.FailNow()
 	}
+
+	fmt.Println("var cacheAliases = map[string]string{")
+	for _, s := range splitsWithAlias {
+		fmt.Printf("\t\"%s\": \"%s\",\n", s.Alias, s.Key)
+	}
+	fmt.Println("}")
 
 	fmt.Println("| Description | 翻译 | Tooltip | Key |")
 	fmt.Println("|-----|------|-------------|---------|")
