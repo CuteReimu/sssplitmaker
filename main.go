@@ -83,7 +83,7 @@ func main() {
 				Children: []Widget{
 					TextLabel{
 						TextAlignment: AlignHFarVCenter,
-						Text:          "由于翻译水平有限，翻译可能不准确，请打开翻译对照列表检查后使用。",
+						Text:          "由于翻译水平有限，翻译可能不准确，请检查翻译对照列表是否正确后使用。",
 					},
 					PushButton{
 						Text:      "打开翻译对照列表",
@@ -140,6 +140,17 @@ func main() {
 			Composite{
 				Layout: HBox{},
 				Children: []Widget{
+					PushButton{
+						MaxSize:   Size{Width: 100},
+						Alignment: AlignHFarVCenter,
+						Text:      "帮助",
+						OnClicked: func() {
+							const url = "https://cutereimu.cn/daily/silksong/sssplitmaker-faq.html"
+							if err := exec.Command("rundll32", "url.dll,FileProtocolHandler", url).Start(); err != nil {
+								walk.MsgBox(mainWindow, "错误", "打开浏览器失败，请手动访问："+url, walk.MsgBoxIconError)
+							}
+						},
+					},
 					PushButton{Text: "清空", OnClicked: func() {
 						resetLines(1)
 						fileLayoutData = nil
