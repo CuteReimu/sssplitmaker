@@ -2,6 +2,7 @@ package main
 
 import (
 	"os"
+	"os/exec"
 	"path/filepath"
 	"syscall"
 
@@ -74,6 +75,25 @@ func main() {
 						Text:      "获取wasm文件",
 						Alignment: AlignHFarVCenter,
 						OnClicked: saveWasmFile,
+					},
+				},
+			},
+			Composite{
+				Layout: HBox{},
+				Children: []Widget{
+					TextLabel{
+						TextAlignment: AlignHFarVCenter,
+						Text:          "由于翻译水平有限，翻译可能不准确，请打开翻译对照列表检查后使用。",
+					},
+					PushButton{
+						Text:      "打开翻译对照列表",
+						Alignment: AlignHFarVCenter,
+						OnClicked: func() {
+							const url = "https://cutereimu.cn/daily/silksong/splits-translate.html"
+							if err := exec.Command("rundll32", "url.dll,FileProtocolHandler", url).Start(); err != nil {
+								walk.MsgBox(mainWindow, "错误", "打开浏览器失败，请手动访问："+url, walk.MsgBoxIconError)
+							}
+						},
 					},
 				},
 			},
