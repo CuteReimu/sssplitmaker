@@ -68,10 +68,14 @@ func TestSplits(t *testing.T) {
 	}
 	fmt.Println("}")
 
-	fmt.Println("| Description | 翻译 | Tooltip | Key |")
-	fmt.Println("|-----|------|-------------|---------|")
+	fmt.Println("| Description | 翻译 | Tooltip | Key1 | Key2 |")
+	fmt.Println("|---|---|---|---|---|")
 	for _, s := range SplitsCache {
 		split := splitMap[s.ID]
-		fmt.Printf("| %s | %s | %s | %s |\n", split.Description, split.translate, split.Tooltip, split.Key)
+		var alias string
+		if split.Alias != nil {
+			alias = split.Alias.(string)
+		}
+		fmt.Printf("| %s | %s | %s | %s | %s |\n", split.Description, split.translate, split.Tooltip, split.Key, alias)
 	}
 }
