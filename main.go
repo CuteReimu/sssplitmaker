@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/CuteReimu/sssplitmaker/splitmaker"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -23,6 +24,7 @@ var splitLinesView *walk.Composite
 var startTriggerCheckBox *walk.CheckBox
 var commentTextLabel *walk.TextLabel
 var startTriggerComboBox *walk.ComboBox
+var splitmakerComboBox *walk.ComboBox
 var saveButton *walk.PushButton
 
 func main() {
@@ -69,7 +71,25 @@ func main() {
 				Children: []Widget{
 					TextLabel{
 						TextAlignment: AlignHFarVCenter,
-						Text:          "Auto Splitter Version: 0.1.12",
+						Text:          "一键填入预设分割点(请配合+和-使用)",
+					},
+					ComboBox{
+						AssignTo: &splitmakerComboBox,
+						Model:    splitmaker.GetAllFiles(),
+						Value:    "",
+						Enabled:  false,
+						OnCurrentIndexChanged: func() {
+							loadLayoutFileFromSplitmaker(splitmakerComboBox.Text())
+						},
+					},
+				},
+			},
+			Composite{
+				Layout: HBox{},
+				Children: []Widget{
+					TextLabel{
+						TextAlignment: AlignHFarVCenter,
+						Text:          "Auto Splitter Version: 0.1.13",
 					},
 					PushButton{
 						Text:      "获取wasm文件",
@@ -156,6 +176,7 @@ func main() {
 						fileLayoutData = nil
 						fileWasmSettings = nil
 						commentTextLabel.SetVisible(false)
+						splitmakerComboBox.SetEnabled(false)
 						saveButton.SetEnabled(false)
 						err := saveButton.SetText("请先打开lsl文件")
 						if err != nil {

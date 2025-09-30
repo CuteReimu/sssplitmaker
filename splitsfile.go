@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/xml"
+	"github.com/CuteReimu/sssplitmaker/splitmaker"
 	"os"
 	"path/filepath"
 
@@ -173,10 +174,36 @@ func loadLayoutFile(buf []byte) {
 		}
 	}
 	fileLayoutData = run
+	splitmakerComboBox.SetEnabled(true)
 	saveButton.SetEnabled(true)
 	err = saveButton.SetText("另存为lsl文件")
 	if err != nil {
 		walk.MsgBox(mainWindow, "错误", err.Error(), walk.MsgBoxIconError)
+	}
+}
+
+func loadLayoutFileFromSplitmaker(fileName string) {
+	splitIds, err := splitmaker.GetSplitIds(fileName)
+	if err != nil {
+		walk.MsgBox(mainWindow, "获取splitmaker失败", err.Error(), walk.MsgBoxIconError)
+		return
+	}
+	resetLines(max(len(lines), len(splitIds)-1))
+	for i, id := range splitIds {
+		index := translate.GetIndexByID(id)
+		if index < 0 {
+			walk.MsgBox(mainWindow, "解析Settings失败", "无法识别的分割点ID："+id, walk.MsgBoxIconError)
+			return
+		}
+		if i == 0 {
+			err = startTriggerComboBox.SetCurrentIndex(index)
+		} else {
+			err = lines[i-1].splitId.SetCurrentIndex(index)
+		}
+		if err != nil {
+			walk.MsgBox(mainWindow, "内部错误", err.Error(), walk.MsgBoxIconError)
+			return
+		}
 	}
 }
 

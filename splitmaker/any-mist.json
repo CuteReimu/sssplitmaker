@@ -1,0 +1,35 @@
+{
+    "categoryName": "Any%",
+    "splitIds": [
+        "StartNewGame",
+        "MossMotherTrans",
+        "SilkSpearTrans",
+        "BellBeastTrans",
+        "SwiftStepTrans",
+        "Lace1Trans",
+        "DriftersCloakTrans",
+        "MoorwingTrans",
+        "ClingGripTrans",
+        "Widow",
+        "EnterMist",
+        "LeaveMist",
+        "Act2Started",
+        "CogworkDancers",
+        "WhisperingVaultsArena",
+        "TrobbioTrans",
+        "Clawline",
+        "VaultkeepersMelodyTrans",
+        "ArchitectsMelodyTrans",
+        "EnterHighHallsArena",
+        "ConductorsMelodyTrans",
+        "Lace2",
+        "EndingSplit"
+    ],
+    "names": {
+        "EndingSplit": "Grand Mother Silk"
+    },
+    "gameName": "Hollow Knight: Silksong",
+    "variables": {
+        "Any% Glitch": "No Major Glitches"
+    }
+}
