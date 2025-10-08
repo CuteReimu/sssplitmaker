@@ -18,7 +18,7 @@
         "CogworkDancers",
         "Trobbio",
         "Clawline",
-        "MountFayStation",
+        "SlabStation",
         "FaydownCloak",
         "SavedFleaSongclave",
         "SavedFleaGiantFlea",
@@ -43,7 +43,7 @@
         "SavedFleaKratt": "%s (2)",
         "EnterMist": "%s (2)",
         "Clawline": "%s (1)",
-        "MountFayStation": "%s (2)",
+        "SlabStation": "%s (2)",
         "FaydownCloak": "%s (1)",
         "SavedFleaSongclave": "%s (2)",
         "SavedFleaGiantFlea": "%s (1)",
@@ -60,6 +60,6 @@
     },
     "gameName": "Hollow Knight: Silksong Category Extensions",
     "variables": {
-        "Awoo% Glitch": "No Major Glitches"
+        "Awoo% Subcategory": "No Major Glitches"
     }
 }

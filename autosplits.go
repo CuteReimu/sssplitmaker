@@ -15,43 +15,100 @@ func init() {
 }
 
 type lineData struct {
-	line    *walk.Composite
-	name    *walk.LineEdit
-	splitId *walk.ComboBox
+	line            *walk.Composite
+	name            *walk.LineEdit
+	splitId         *walk.ComboBox
+	xmlSegmentOther []*xmlElement
 }
 
 var lines []*lineData
 
-func addLine() {
-	line := new(lineData)
-	c := Composite{
-		AssignTo: &line.line,
-		Layout:   HBox{},
-		MaxSize:  Size{Width: 0, Height: 25},
-		Children: []Widget{
-			LineEdit{AssignTo: &line.name, MinSize: Size{Width: 200}, ToolTipText: "片段名", Enabled: false},
-			ComboBox{AssignTo: &line.splitId, MinSize: Size{Width: 200},
-				Model: splitDescriptions, Value: splitDescriptions[0],
+func clearLine(line *lineData) {
+	if err := line.name.SetText(""); err != nil {
+		walk.MsgBox(mainWindow, "错误", err.Error(), walk.MsgBoxIconError)
+	}
+	if err := line.splitId.SetCurrentIndex(0); err != nil {
+		walk.MsgBox(mainWindow, "错误", err.Error(), walk.MsgBoxIconError)
+	}
+	line.xmlSegmentOther = nil
+}
+
+func buildLine(line *lineData, c *Composite) {
+	c.AssignTo = &line.line
+	c.Layout = HBox{}
+	c.MaxSize = Size{Width: 0, Height: 25}
+	c.Children = []Widget{
+		LineEdit{AssignTo: &line.name, MinSize: Size{Width: 200}, ToolTipText: "片段名"},
+		ComboBox{AssignTo: &line.splitId, MinSize: Size{Width: 200},
+			Model: splitDescriptions, Value: splitDescriptions[0],
+			OnCurrentIndexChanged: func() {
+				if line.name.Text() == "" {
+					if err := line.name.SetText(translate.GetSplitDescriptionByID(line.splitId.Text())); err != nil {
+						walk.MsgBox(mainWindow, "错误", err.Error(), walk.MsgBoxIconError)
+					}
+				}
 			},
-			PushButton{Text: "+", MaxSize: Size{Width: 25}, ToolTipText: "在此位置增加一行",
-				OnClicked: func() {
-					idx := splitLinesView.Children().Index(line.line)
-					moveLine(idx, true)
-				},
+		},
+		PushButton{Text: "✘", MaxSize: Size{Width: 25}, ToolTipText: "删除", OnClicked: func() {
+			if len(lines) > 1 {
+				removeLine(line)
+			}
+		}},
+		PushButton{Text: "↑+", MaxSize: Size{Width: 25}, ToolTipText: "在上方增加一行",
+			OnClicked: func() {
+				idx := splitLinesView.Children().Index(line.line)
+				addLine()
+				moveLine(idx)
+				clearLine(lines[idx])
 			},
-			PushButton{Text: "-", MaxSize: Size{Width: 25}, ToolTipText: "删掉此行",
-				OnClicked: func() {
-					idx := splitLinesView.Children().Index(line.line)
-					moveLine(idx, false)
-				},
+		},
+		PushButton{Text: "↓+", MaxSize: Size{Width: 25}, ToolTipText: "在下方增加一行",
+			OnClicked: func() {
+				idx := splitLinesView.Children().Index(line.line)
+				addLine()
+				moveLine(idx + 1)
+				clearLine(lines[idx+1])
+			},
+		},
+		PushButton{Text: "↑", MaxSize: Size{Width: 25}, ToolTipText: "上移一行",
+			OnClicked: func() {
+				idx := splitLinesView.Children().Index(line.line)
+				swapLine(idx-1, idx)
+			},
+		},
+		PushButton{Text: "↓", MaxSize: Size{Width: 25}, ToolTipText: "下移一行",
+			OnClicked: func() {
+				idx := splitLinesView.Children().Index(line.line)
+				swapLine(idx, idx+1)
 			},
 		},
 	}
+}
+
+func addLine() {
+	line := new(lineData)
+	c := Composite{}
+	buildLine(line, &c)
 	err := c.Create(NewBuilder(splitLinesView))
 	if err != nil {
-		walk.MsgBox(nil, "错误", err.Error(), walk.MsgBoxIconError)
+		walk.MsgBox(mainWindow, "错误", err.Error(), walk.MsgBoxIconError)
 	}
 	lines = append(lines, line)
+}
+
+func removeLine(line *lineData) {
+	idx := splitLinesView.Children().Index(line.line)
+	if idx < 0 {
+		walk.MsgBox(mainWindow, "错误", "无法删除这一行", walk.MsgBoxIconError)
+		return
+	}
+	err := splitLinesView.Children().RemoveAt(idx)
+	if err != nil {
+		walk.MsgBox(mainWindow, "错误", err.Error(), walk.MsgBoxIconError)
+		return
+	}
+	line.line.Dispose()
+	lines = append(lines[:idx], lines[idx+1:]...)
 }
 
 func resetLines(count int) {
@@ -75,58 +132,58 @@ func resetLines(count int) {
 	lines = []*lineData{}
 	for range count {
 		line := new(lineData)
-		composite.Children = append(composite.Children, Composite{
-			AssignTo: &line.line,
-			Layout:   HBox{},
-			MaxSize:  Size{Width: 0, Height: 25},
-			Children: []Widget{
-				LineEdit{AssignTo: &line.name, MinSize: Size{Width: 200}, Enabled: false},
-				ComboBox{AssignTo: &line.splitId, MinSize: Size{Width: 200},
-					Model: splitDescriptions, Value: splitDescriptions[0],
-				},
-				PushButton{Text: "+", MaxSize: Size{Width: 25}, ToolTipText: "在此位置增加一行",
-					OnClicked: func() {
-						idx := splitLinesView.Children().Index(line.line)
-						moveLine(idx, true)
-					},
-				},
-				PushButton{Text: "-", MaxSize: Size{Width: 25}, ToolTipText: "删掉此行",
-					OnClicked: func() {
-						idx := splitLinesView.Children().Index(line.line)
-						moveLine(idx, false)
-					},
-				},
-			},
-		})
+		c := Composite{}
+		buildLine(line, &c)
+		composite.Children = append(composite.Children, c)
 		lines = append(lines, line)
 	}
 	err = composite.Create(NewBuilder(splitLinesViewContainer))
 	if err != nil {
 		walk.MsgBox(mainWindow, "错误", err.Error(), walk.MsgBoxIconError)
-		panic(err)
+		return
 	}
 }
 
-func moveLine(index int, down bool) {
-	if !down {
-		for i := index; i <= len(lines)-2; i++ {
-			err := lines[i].splitId.SetCurrentIndex(lines[i+1].splitId.CurrentIndex())
-			if err != nil {
-				walk.MsgBox(nil, "错误", err.Error(), walk.MsgBoxIconError)
-				return
-			}
-		}
-		err := lines[len(lines)-1].splitId.SetCurrentIndex(translate.GetIndexByID("EndingSplit"))
-		if err != nil {
-			walk.MsgBox(nil, "错误", err.Error(), walk.MsgBoxIconError)
-		}
+func swapLine(index1, index2 int) {
+	if index1 == index2 || index1 < 0 || index2 < 0 || index1 >= len(lines) || index2 >= len(lines) {
 		return
 	}
+	name1 := lines[index1].name.Text()
+	name2 := lines[index2].name.Text()
+	splitId1 := lines[index1].splitId.CurrentIndex()
+	splitId2 := lines[index2].splitId.CurrentIndex()
+	if err := lines[index1].name.SetText(name2); err != nil {
+		walk.MsgBox(mainWindow, "错误", err.Error(), walk.MsgBoxIconError)
+		return
+	}
+	if err := lines[index2].name.SetText(name1); err != nil {
+		walk.MsgBox(mainWindow, "错误", err.Error(), walk.MsgBoxIconError)
+		return
+	}
+	if err := lines[index1].splitId.SetCurrentIndex(splitId2); err != nil {
+		walk.MsgBox(mainWindow, "错误", err.Error(), walk.MsgBoxIconError)
+		return
+	}
+	if err := lines[index2].splitId.SetCurrentIndex(splitId1); err != nil {
+		walk.MsgBox(mainWindow, "错误", err.Error(), walk.MsgBoxIconError)
+		return
+	}
+	lines[index1].xmlSegmentOther, lines[index2].xmlSegmentOther = lines[index2].xmlSegmentOther, lines[index1].xmlSegmentOther
+}
+
+func moveLine(index int) {
+	var err error
 	for i := len(lines) - 2; i >= index; i-- {
-		err := lines[i+1].splitId.SetCurrentIndex(lines[i].splitId.CurrentIndex())
+		err = lines[i+1].name.SetText(lines[i].name.Text())
 		if err != nil {
-			walk.MsgBox(nil, "错误", err.Error(), walk.MsgBoxIconError)
+			walk.MsgBox(mainWindow, "错误", err.Error(), walk.MsgBoxIconError)
 			return
 		}
+		err = lines[i+1].splitId.SetCurrentIndex(lines[i].splitId.CurrentIndex())
+		if err != nil {
+			walk.MsgBox(mainWindow, "错误", err.Error(), walk.MsgBoxIconError)
+			return
+		}
+		lines[i+1].xmlSegmentOther = lines[i].xmlSegmentOther
 	}
 }

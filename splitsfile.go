@@ -2,41 +2,18 @@ package main
 
 import (
 	"encoding/xml"
-	"github.com/CuteReimu/sssplitmaker/splitmaker"
 	"os"
 	"path/filepath"
+	"strings"
 
+	"github.com/CuteReimu/sssplitmaker/splitmaker"
 	"github.com/CuteReimu/sssplitmaker/translate"
 	"github.com/lxn/walk"
 	"github.com/lxn/win"
 )
 
-type xmlLayout struct {
-	XMLName    xml.Name        `xml:"Layout"`
-	Version    string          `xml:"version,attr"`
-	Components []*xmlComponent `xml:"Components>Component"`
-	Other      []*xmlElement   `xml:",any"`
-}
-
-type xmlElement struct {
-	XMLName xml.Name
-	Content string `xml:",innerxml"`
-}
-
-type xmlComponent struct {
-	Path     string
-	Settings *xmlTempSettings
-	Other    []*xmlElement `xml:",any"`
-}
-
-type xmlTempSettings struct {
-	Settings string `xml:",innerxml"`
-}
-
 type autoSplittingRuntimeSettings struct {
-	XMLName        xml.Name `xml:"Settings"`
 	Version        string
-	ScriptPath     string
 	CustomSettings []*xmlWasmSetting `xml:"CustomSettings>Setting"`
 }
 
@@ -48,18 +25,29 @@ type xmlWasmSetting struct {
 }
 
 type xmlRun struct {
-	XMLName  xml.Name      `xml:"Run"`
-	Version  string        `xml:"version,attr"`
-	Segments []*xmlSegment `xml:"Segments>Segment"`
+	XMLName              xml.Name      `xml:"Run"`
+	Version              string        `xml:"version,attr"`
+	GameIcon             string        `xml:"GameIcon"`
+	GameName             string        `xml:"GameName"`
+	CategoryName         string        `xml:"CategoryName"`
+	Offset               string        `xml:"Offset"`
+	AttemptCount         int           `xml:"AttemptCount"`
+	Segments             []*xmlSegment `xml:"Segments>Segment"`
+	AutoSplitterSettings autoSplittingRuntimeSettings
+	Other                []*xmlElement `xml:",any"`
 }
 
 type xmlSegment struct {
-	Name string
+	Name  string
+	Other []*xmlElement `xml:",any"`
 }
 
-var fileLayoutData *xmlLayout
-var fileWasmSettings *autoSplittingRuntimeSettings
-var fileWasmSettingsString *string
+type xmlElement struct {
+	XMLName xml.Name
+	Content string `xml:",innerxml"`
+}
+
+var fileRunData = &xmlRun{}
 
 func onClickLoadSplitFile() {
 	dlg := new(walk.FileDialog)
@@ -82,104 +70,57 @@ func onClickLoadSplitFile() {
 	}
 }
 
-func onClickLoadLayoutFile() {
-	dlg := new(walk.FileDialog)
-	dlg.Title = "打开Layout文件"
-	dlg.Filter = "Layout文件（*.lsl）|*.lsl"
-	dlg.Flags = win.OFN_FILEMUSTEXIST
-	if ok, err := dlg.ShowOpen(mainWindow); err != nil {
-		walk.MsgBox(mainWindow, "内部错误", err.Error(), walk.MsgBoxIconError)
-	} else if ok {
-		file := dlg.FilePath
-		if filepath.Ext(file) != ".lsl" {
-			return
-		}
-		buf, err := os.ReadFile(file)
-		if err != nil {
-			walk.MsgBox(mainWindow, "内部错误", err.Error(), walk.MsgBoxIconError)
-			return
-		}
-		loadLayoutFile(buf)
-	}
-}
-
 func loadSplitFile(buf []byte) {
 	run := &xmlRun{}
 	err := xml.Unmarshal(buf, run)
 	if err != nil {
-		walk.MsgBox(mainWindow, "内部错误", err.Error(), walk.MsgBoxIconError)
+		walk.MsgBox(mainWindow, "解析文件失败", err.Error(), walk.MsgBoxIconError)
 		return
 	}
-	resetLines(max(len(lines), len(run.Segments)))
-	for i, segments := range run.Segments {
-		err = lines[i].name.SetText(segments.Name)
+
+	resetLines(len(run.Segments))
+	for i, segment := range run.Segments {
+		err = lines[i].name.SetText(segment.Name)
 		if err != nil {
 			walk.MsgBox(mainWindow, "内部错误", err.Error(), walk.MsgBoxIconError)
 			return
 		}
+		lines[i].xmlSegmentOther = segment.Other
 	}
-	commentTextLabel.SetVisible(true)
-}
 
-func loadLayoutFile(buf []byte) {
-	run := &xmlLayout{}
-	err := xml.Unmarshal(buf, run)
-	if err != nil {
-		walk.MsgBox(mainWindow, "内部错误", err.Error(), walk.MsgBoxIconError)
-		return
-	}
-	for _, component := range run.Components {
-		if component.Path == "LiveSplit.AutoSplittingRuntime.dll" {
-			var settings autoSplittingRuntimeSettings
-			err := xml.Unmarshal([]byte("<Settings>"+component.Settings.Settings+"</Settings>"), &settings)
-			if err != nil {
-				walk.MsgBox(mainWindow, "解析Settings失败", err.Error(), walk.MsgBoxIconError)
+	for _, setting := range run.AutoSplitterSettings.CustomSettings {
+		if setting.Id == "splits" {
+			if setting.Type != "list" {
+				walk.MsgBox(mainWindow, "解析Settings失败", "splits字段类型错误", walk.MsgBoxIconError)
 				return
-			}
-			for _, setting := range settings.CustomSettings {
-				if setting.Id == "splits" {
-					if setting.Type != "list" {
-						walk.MsgBox(mainWindow, "解析Settings失败", "splits字段类型错误", walk.MsgBoxIconError)
+			} else {
+				resetLines(max(len(lines), len(setting.Setting)-1))
+				for i, s := range setting.Setting {
+					if s.Type != "string" {
+						walk.MsgBox(mainWindow, "解析Settings失败", "splits子字段类型错误", walk.MsgBoxIconError)
 						return
 					} else {
-						resetLines(max(len(lines), len(setting.Setting)-1))
-						for i, s := range setting.Setting {
-							if s.Type != "string" {
-								walk.MsgBox(mainWindow, "解析Settings失败", "splits子字段类型错误", walk.MsgBoxIconError)
-								return
-							} else {
-								index := translate.GetIndexByID(s.Value)
-								if index < 0 {
-									walk.MsgBox(mainWindow, "解析Settings失败", "无法识别的分割点ID："+s.Value, walk.MsgBoxIconError)
-									return
-								}
-								if i == 0 {
-									err = startTriggerComboBox.SetCurrentIndex(index)
-								} else {
-									err = lines[i-1].splitId.SetCurrentIndex(index)
-								}
-								if err != nil {
-									walk.MsgBox(mainWindow, "内部错误", err.Error(), walk.MsgBoxIconError)
-									return
-								}
-							}
+						index := translate.GetIndexByID(s.Value)
+						if index < 0 {
+							walk.MsgBox(mainWindow, "解析Settings失败", "无法识别的分割点ID："+s.Value, walk.MsgBoxIconError)
+							return
+						}
+						if i == 0 {
+							err = startTriggerComboBox.SetCurrentIndex(index)
+						} else {
+							err = lines[i-1].splitId.SetCurrentIndex(index)
+						}
+						if err != nil {
+							walk.MsgBox(mainWindow, "内部错误", err.Error(), walk.MsgBoxIconError)
+							return
 						}
 					}
-					break
 				}
 			}
-			fileWasmSettings = &settings
-			fileWasmSettingsString = &component.Settings.Settings
 			break
 		}
 	}
-	fileLayoutData = run
-	splitmakerComboBox.SetEnabled(true)
-	saveButton.SetEnabled(true)
-	err = saveButton.SetText("另存为lsl文件")
-	if err != nil {
-		walk.MsgBox(mainWindow, "错误", err.Error(), walk.MsgBoxIconError)
-	}
+	fileRunData = run
 }
 
 func loadLayoutFileFromSplitmaker(fileName string) {
@@ -188,7 +129,7 @@ func loadLayoutFileFromSplitmaker(fileName string) {
 		walk.MsgBox(mainWindow, "获取splitmaker失败", err.Error(), walk.MsgBoxIconError)
 		return
 	}
-	resetLines(max(len(lines), len(splitIds)-1))
+	resetLines(len(splitIds) - 1)
 	for i, id := range splitIds {
 		index := translate.GetIndexByID(id)
 		if index < 0 {
@@ -198,6 +139,12 @@ func loadLayoutFileFromSplitmaker(fileName string) {
 		if i == 0 {
 			err = startTriggerComboBox.SetCurrentIndex(index)
 		} else {
+			name := translate.GetSplitDescriptionByID(id)
+			splitIndex := strings.LastIndex(name, "（")
+			if splitIndex > 0 {
+				name = name[:splitIndex]
+			}
+			err = lines[i-1].name.SetText(name)
 			err = lines[i-1].splitId.SetCurrentIndex(index)
 		}
 		if err != nil {
@@ -207,49 +154,59 @@ func loadLayoutFileFromSplitmaker(fileName string) {
 	}
 }
 
-func onSaveLayoutFile() {
-	fileWasmSettings.CustomSettings = []*xmlWasmSetting{{
-		Id:      "splits",
-		Type:    "list",
-		Setting: make([]*xmlWasmSetting, 0, len(lines)+1),
-	}}
-	fileWasmSettings.CustomSettings[0].Setting = append(fileWasmSettings.CustomSettings[0].Setting, &xmlWasmSetting{
-		Type:  "string",
-		Value: translate.GetIDByDescription(startTriggerComboBox.Text()),
-	})
-	for _, line := range lines {
-		text := line.splitId.Text()
-		id := translate.GetIDByDescription(text)
-		fileWasmSettings.CustomSettings[0].Setting = append(fileWasmSettings.CustomSettings[0].Setting, &xmlWasmSetting{
+func onSaveSplitsFile() {
+	if fileRunData.Version == "" {
+		fileRunData.Version = "1.7.0"
+	}
+	if fileRunData.AutoSplitterSettings.Version == "" {
+		fileRunData.AutoSplitterSettings.Version = "1.0"
+	}
+	if fileRunData.GameName == "" {
+		fileRunData.GameName = "Hollow Knight: Silksong"
+	}
+	if fileRunData.Offset == "" {
+		fileRunData.Offset = "00:00:00"
+	}
+	splits := &xmlWasmSetting{
+		Id:   "splits",
+		Type: "list",
+		Setting: []*xmlWasmSetting{{
 			Type:  "string",
-			Value: id,
+			Value: translate.GetIDByDescription(startTriggerComboBox.Text()),
+		}},
+	}
+	fileRunData.AutoSplitterSettings.CustomSettings = []*xmlWasmSetting{{
+		Id:    "script_name",
+		Type:  "string",
+		Value: "silksong_autosplit_wasm",
+	}, splits}
+	fileRunData.Segments = nil
+	for _, line := range lines {
+		splits.Setting = append(splits.Setting, &xmlWasmSetting{
+			Type:  "string",
+			Value: translate.GetIDByDescription(line.splitId.Text()),
+		})
+		fileRunData.Segments = append(fileRunData.Segments, &xmlSegment{
+			Name:  line.name.Text(),
+			Other: line.xmlSegmentOther,
 		})
 	}
-	buf, err := xml.MarshalIndent(fileWasmSettings, "", "  ")
-	if err != nil {
-		walk.MsgBox(mainWindow, "内部错误", err.Error(), walk.MsgBoxIconError)
-		return
-	}
-	*fileWasmSettingsString = string(buf[len("<Settings>\n") : len(buf)-len("\n</Settings>")])
-	if fileLayoutData == nil {
-		walk.MsgBox(mainWindow, "内部错误", "还未加载 fileLayoutData", walk.MsgBoxIconError)
-		return
-	}
-	buf, err = xml.MarshalIndent(fileLayoutData, "", "  ")
+	buf, err := xml.MarshalIndent(fileRunData, "", "  ")
 	if err != nil {
 		walk.MsgBox(mainWindow, "内部错误", err.Error(), walk.MsgBoxIconError)
 		return
 	}
 	buf = append([]byte(`<?xml version="1.0" encoding="UTF-8"?>`+"\n"), buf...)
 	dlg := new(walk.FileDialog)
-	dlg.Title = "保存Layout文件"
-	dlg.Filter = "Layout文件（*.lsl）|*.lsl"
+	dlg.Title = "保存分段文件"
+	dlg.Filter = "分段文件（*.lss）|*.lss"
+	dlg.Flags = win.OFN_OVERWRITEPROMPT | win.OFN_NOREADONLYRETURN
 	if ok, err := dlg.ShowSave(mainWindow); err != nil {
 		walk.MsgBox(mainWindow, "内部错误", err.Error(), walk.MsgBoxIconError)
 	} else if ok {
 		file := dlg.FilePath
-		if filepath.Ext(file) != ".lsl" {
-			file += ".lsl"
+		if filepath.Ext(file) != ".lss" {
+			file += ".lss"
 		}
 		err = os.WriteFile(file, buf, 0644)
 		if err != nil {

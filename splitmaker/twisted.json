@@ -1,35 +1,41 @@
 {
-    "categoryName": "Low%",
+    "categoryName": "Twisted%",
     "splitIds": [
         "StartNewGame",
         "MossMother",
-        "EnterMosshome",
-        "BoneBottomSimpleKey",
-        "EnterWormways",
-        "EnterShellwood",
-        "ClingGrip",
+        "SilkSpear",
+        "BellBeast",
+        "SwiftStep",
         "Lace1",
         "DriftersCloak",
+        "Moorwing",
+        "ClingGrip",
         "Widow",
-        "EnterSinnersRoad",
+        "EnterMist",
         "LeaveMist",
         "Phantom",
+        "Act2Started",
         "CogworkDancers",
         "WhisperingVaultsArena",
         "Trobbio",
         "Clawline",
         "VaultkeepersMelody",
+        "ManualSplit",
         "ArchitectsMelody",
-        "EnterHighHallsArena",
         "ConductorsMelody",
         "Lace2",
+        "ManualSplit",
         "EndingSplit"
     ],
     "names": {
-        "EndingSplit": "Grand Mother Silk"
+        "EndingSplit": "Grand Mother Silk",
+        "ManualSplit": [
+            "Twisted Bud (Manual Split)",
+            "Get Cursed (Manual Split)"
+        ]
     },
     "gameName": "Hollow Knight: Silksong",
     "variables": {
-        "Low% Subcategory": "No Major Glitches"
+        "Twisted% Subcategory": "No Major Glitches"
     }
 }
