@@ -20,6 +20,7 @@ jobs:
 
     - name: Create Fake LiveSplit Files
       run: |
+        touch LiveSplit.AutoSplitters.xml
         touch silksong_autosplit_wasm_stable.wasm
 
     - name: Set Go Env
