@@ -1,7 +1,6 @@
 package splitmaker
 
 import (
-	"bytes"
 	"embed"
 	"encoding/json"
 )
@@ -18,20 +17,13 @@ func GetAllFiles() (allFiles []string) {
 }
 
 func GetSplitIds(fileName string) ([]string, error) {
-	f, err := fs.Open(fileName)
+	buf, err := fs.ReadFile(fileName)
 	if err != nil {
 		return nil, err
 	}
-	defer f.Close()
-	var buf bytes.Buffer
-	_, err = buf.ReadFrom(f)
-	if err != nil {
-		return nil, err
-	}
-	content := buf.String()
 	var result struct {
 		Ids []string `json:"splitIds"`
 	}
-	_ = json.Unmarshal([]byte(content), &result)
+	_ = json.Unmarshal(buf, &result)
 	return result.Ids, nil
 }

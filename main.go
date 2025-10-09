@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -90,7 +91,7 @@ func main() {
 						Alignment: AlignHFarVCenter,
 						OnClicked: func() {
 							const url = "https://cutereimu.cn/daily/silksong/splits-translate.html"
-							if err := exec.Command("rundll32", "url.dll,FileProtocolHandler", url).Start(); err != nil {
+							if err := exec.CommandContext(context.Background(), "rundll32", "url.dll,FileProtocolHandler", url).Start(); err != nil {
 								walk.MsgBox(mainWindow, "错误", "打开浏览器失败，请手动访问："+url, walk.MsgBoxIconError)
 							}
 						},
@@ -139,7 +140,7 @@ func main() {
 						Text:      "帮助",
 						OnClicked: func() {
 							const url = "https://cutereimu.cn/daily/silksong/sssplitmaker-faq.html"
-							if err := exec.Command("rundll32", "url.dll,FileProtocolHandler", url).Start(); err != nil {
+							if err := exec.CommandContext(context.Background(), "rundll32", "url.dll,FileProtocolHandler", url).Start(); err != nil {
 								walk.MsgBox(mainWindow, "错误", "打开浏览器失败，请手动访问："+url, walk.MsgBoxIconError)
 							}
 						},

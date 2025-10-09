@@ -138,6 +138,10 @@ func loadLayoutFileFromSplitmaker(fileName string) {
 		}
 		if i == 0 {
 			err = startTriggerComboBox.SetCurrentIndex(index)
+			if err != nil {
+				walk.MsgBox(mainWindow, "内部错误", err.Error(), walk.MsgBoxIconError)
+				return
+			}
 		} else {
 			name := translate.GetSplitDescriptionByID(id)
 			splitIndex := strings.LastIndex(name, "（")
@@ -145,11 +149,15 @@ func loadLayoutFileFromSplitmaker(fileName string) {
 				name = name[:splitIndex]
 			}
 			err = lines[i-1].name.SetText(name)
+			if err != nil {
+				walk.MsgBox(mainWindow, "内部错误", err.Error(), walk.MsgBoxIconError)
+				return
+			}
 			err = lines[i-1].splitId.SetCurrentIndex(index)
-		}
-		if err != nil {
-			walk.MsgBox(mainWindow, "内部错误", err.Error(), walk.MsgBoxIconError)
-			return
+			if err != nil {
+				walk.MsgBox(mainWindow, "内部错误", err.Error(), walk.MsgBoxIconError)
+				return
+			}
 		}
 	}
 }
