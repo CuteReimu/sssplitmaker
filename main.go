@@ -7,7 +7,6 @@ import (
 	"path/filepath"
 	"syscall"
 
-	"github.com/CuteReimu/sssplitmaker/splitmaker"
 	"github.com/CuteReimu/sssplitmaker/translate"
 	"github.com/lxn/walk"
 	. "github.com/lxn/walk/declarative"
@@ -57,7 +56,7 @@ func main() {
 					TextLabel{TextAlignment: AlignHNearVCenter, Text: "或者把文件拖拽进来，也可以使用现有模板"},
 					ComboBox{
 						AssignTo: &splitmakerComboBox,
-						Model:    splitmaker.GetAllFiles(),
+						Model:    GetAllFiles(),
 						Value:    "",
 						OnCurrentIndexChanged: func() {
 							loadLayoutFileFromSplitmaker(splitmakerComboBox.Text())

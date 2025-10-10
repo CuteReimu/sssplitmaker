@@ -6,7 +6,6 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/CuteReimu/sssplitmaker/splitmaker"
 	"github.com/CuteReimu/sssplitmaker/translate"
 	"github.com/lxn/walk"
 	"github.com/lxn/win"
@@ -124,7 +123,7 @@ func loadSplitFile(buf []byte) {
 }
 
 func loadLayoutFileFromSplitmaker(fileName string) {
-	splitIds, err := splitmaker.GetSplitIds(fileName)
+	splitIds, err := GetSplitIds(fileName)
 	if err != nil {
 		walk.MsgBox(mainWindow, "获取splitmaker失败", err.Error(), walk.MsgBoxIconError)
 		return

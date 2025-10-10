@@ -1,6 +1,7 @@
 splits.json
 *.wasm
 
+/hk-split-maker/
 .idea/
 *.xml
 
