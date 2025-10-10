@@ -1,2 +1,0 @@
-#!/bin/sh
-curl -s "https://api.github.com/repos/slaurent22/hk-split-maker/contents/src/asset/silksong/categories" | jq -r '.[] | .name' | awk '{for(i=1;i<=NF;i++)printf "https://raw.githubusercontent.com/slaurent22/hk-split-maker/refs/heads/main/src/asset/silksong/categories/%s\n",$i}' | xargs -I {} curl -O {}
