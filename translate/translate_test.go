@@ -50,6 +50,10 @@ func TestSplits(t *testing.T) {
 			t.Log("重复分割: " + split.ID)
 			t.Fail()
 		}
+		if id := GetIDByDescription(split.Description); id != "" && id != split.ID {
+			t.Log("重复翻译: " + split.ID)
+			t.Fail()
+		}
 		if splitMap[split.ID] == nil {
 			t.Log("多余分割: " + split.ID)
 			t.Fail()
