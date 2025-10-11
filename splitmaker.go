@@ -16,14 +16,15 @@ func GetAllFiles() (allFiles []string) {
 	return
 }
 
-func GetSplitIds(fileName string) ([]string, error) {
+func GetSplitIds(fileName string) (string, []string, error) {
 	buf, err := fs.ReadFile("splitmaker/" + fileName)
 	if err != nil {
-		return nil, err
+		return "", nil, err
 	}
 	var result struct {
-		Ids []string `json:"splitIds"`
+		CategoryName string   `json:"categoryName"`
+		Ids          []string `json:"splitIds"`
 	}
 	_ = json.Unmarshal(buf, &result)
-	return result.Ids, nil
+	return result.CategoryName, result.Ids, nil
 }

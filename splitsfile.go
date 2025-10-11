@@ -123,7 +123,7 @@ func loadSplitFile(buf []byte) {
 }
 
 func loadLayoutFileFromSplitmaker(fileName string) {
-	splitIds, err := GetSplitIds(fileName)
+	categoryName, splitIds, err := GetSplitIds(fileName)
 	if err != nil {
 		walk.MsgBox(mainWindow, "获取splitmaker失败", err.Error(), walk.MsgBoxIconError)
 		return
@@ -159,6 +159,7 @@ func loadLayoutFileFromSplitmaker(fileName string) {
 			}
 		}
 	}
+	fileRunData = &xmlRun{CategoryName: categoryName}
 }
 
 func onSaveSplitsFile() {
