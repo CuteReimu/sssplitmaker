@@ -309,7 +309,7 @@ var SplitsCache = []*SplitData{
 	{"EnterVerdaniaCastle", "进入翠庭城堡（切图）"},
 	{"VerdaniaLakeFountainOrbs", "翠庭-喷泉（事件）"},
 	{"EnterSeth", "进入赛斯战斗（切图）"},
-	{"TransitionExcludingDiscontinuities", ""},
+	{"TransitionExcludingDiscontinuities", "任意切图（切图）"},
 	{"EnterBoneBottom", "进入骸底镇（切图）"},
 	{"NeedleStrike", "蓄力斩（技能）"},
 	{"NeedleStrikeTrans", "蓄力斩（切图）"},
