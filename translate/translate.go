@@ -300,7 +300,7 @@ var SplitsCache = []*SplitData{
 	{"ArchitectCrestTrans", "建筑师纹章（切图）"},
 	{"ShamanCrest", "萨满纹章（纹章）"},
 	{"ShamanCrestTrans", "萨满纹章（切图）"},
-	{"EnterBellEater", "进入食钟者（切图）"},
+	{"EnterBellEater", "进入噬钟者（切图）"},
 	{"BeastlingCall", "唤兽曲（技能）"},
 	{"EnterNylethMemory", "进入尼莱斯记忆（切图）"},
 	{"EnterKhannMemory", "进入卡汗记忆（切图）"},
