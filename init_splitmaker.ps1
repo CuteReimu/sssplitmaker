@@ -20,4 +20,5 @@ Set-Location ..
 
 # 删除并复制 splitmaker 目录
 Remove-Item -Recurse -Force splitmaker -ErrorAction SilentlyContinue
-Copy-Item -Recurse -Force hk-split-maker/src/asset/silksong/categories splitmaker
+New-Item -ItemType Directory -Path splitmaker | Out-Null
+Copy-Item -Force hk-split-maker/src/asset/silksong/categories/*.json splitmaker

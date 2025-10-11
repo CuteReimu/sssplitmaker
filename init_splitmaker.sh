@@ -22,4 +22,5 @@ cd ..
 
 # 删除并复制 splitmaker 目录
 rm -rf splitmaker
-cp -avf hk-split-maker/src/asset/silksong/categories splitmaker
+mkdir splitmaker
+cp -vf hk-split-maker/src/asset/silksong/categories/*.json splitmaker
