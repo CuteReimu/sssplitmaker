@@ -77,6 +77,12 @@ func loadSplitFile(buf []byte) {
 		walk.MsgBox(mainWindow, "解析文件失败", err.Error(), walk.MsgBoxIconError)
 		return
 	}
+	if len(run.Segments) >= 50 {
+		result := walk.MsgBox(mainWindow, "确认操作", "此lss文件的分段非常多，可能需要加载一段时间，是否继续？", walk.MsgBoxYesNo|walk.MsgBoxIconQuestion)
+		if result != walk.DlgCmdYes {
+			return
+		}
+	}
 
 	resetLines(len(run.Segments))
 	for i, segment := range run.Segments {
@@ -135,8 +141,8 @@ func loadLayoutFileFromSplitmaker(fileName string) {
 		walk.MsgBox(mainWindow, "获取splitmaker失败", err.Error(), walk.MsgBoxIconError)
 		return
 	}
-	if len(splitIds) > 50 {
-		result := walk.MsgBox(mainWindow, "确认操作", "此模板的分段过多，可能需要加载一段时间，是否继续？", walk.MsgBoxYesNo|walk.MsgBoxIconQuestion)
+	if len(splitIds) >= 50 {
+		result := walk.MsgBox(mainWindow, "确认操作", "此模板的分段非常多，可能需要加载一段时间，是否继续？", walk.MsgBoxYesNo|walk.MsgBoxIconQuestion)
 		if result != walk.DlgCmdYes {
 			return
 		}
