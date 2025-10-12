@@ -1,6 +1,9 @@
 package main
 
 import (
+	"slices"
+	"strings"
+
 	"github.com/CuteReimu/sssplitmaker/translate"
 	"github.com/lxn/walk"
 	. "github.com/lxn/walk/declarative"
@@ -42,8 +45,21 @@ func buildLine(line *lineData, c *Composite) {
 		ComboBox{AssignTo: &line.splitId, MinSize: Size{Width: 200},
 			Model: splitDescriptions, Value: splitDescriptions[0],
 			OnCurrentIndexChanged: func() {
-				if line.name.Text() == "" {
-					if err := line.name.SetText(translate.GetSplitDescriptionByID(line.splitId.Text())); err != nil {
+				name := line.name.Text()
+				isSubSplit := strings.HasPrefix(name, "-")
+				name = strings.TrimLeft(name, "-")
+				if name == "" || slices.ContainsFunc(translate.SplitsCache, func(d *translate.SplitData) bool {
+					return strings.Contains(d.Description, name)
+				}) {
+					splitId := line.splitId.Text()
+					splitIndex := strings.LastIndex(splitId, "（")
+					if splitIndex > 0 {
+						splitId = splitId[:splitIndex]
+					}
+					if isSubSplit {
+						splitId = "-" + splitId
+					}
+					if err := line.name.SetText(splitId); err != nil {
 						walk.MsgBox(mainWindow, "错误", err.Error(), walk.MsgBoxIconError)
 					}
 				}
