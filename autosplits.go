@@ -128,7 +128,7 @@ func removeLine(line *lineData) {
 }
 
 func resetLines(count int) {
-	if count >= len(lines) {
+	if count >= len(lines) && len(lines) >= count/3 {
 		for i := len(lines); i < count; i++ {
 			addLine()
 		}
