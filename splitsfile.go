@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 
 	"github.com/CuteReimu/sssplitmaker/translate"
@@ -122,14 +123,29 @@ func loadSplitFile(buf []byte) {
 	fileRunData = run
 }
 
+var currentSplitmakerFileName string
+
 func loadLayoutFileFromSplitmaker(fileName string) {
+	if currentSplitmakerFileName == fileName {
+		return
+	}
+	currentSplitmakerFileName = fileName
 	categoryName, splitIds, err := GetSplitIds(fileName)
 	if err != nil {
 		walk.MsgBox(mainWindow, "获取splitmaker失败", err.Error(), walk.MsgBoxIconError)
 		return
 	}
+	if len(splitIds) > 50 {
+		result := walk.MsgBox(mainWindow, "确认操作", "此模板的分段过多，可能需要加载一段时间，是否继续？", walk.MsgBoxYesNo|walk.MsgBoxIconQuestion)
+		if result != walk.DlgCmdYes {
+			return
+		}
+	}
 	resetLines(len(splitIds) - 1)
 	for i, id := range splitIds {
+		isSubSplit := strings.HasPrefix(id, "-")
+		id = strings.TrimLeft(id, "-")
+		id = regexp.MustCompile(`\{.*?}`).ReplaceAllString(id, "")
 		index := translate.GetIndexByID(id)
 		if index < 0 {
 			walk.MsgBox(mainWindow, "解析Settings失败", "无法识别的分割点ID："+id, walk.MsgBoxIconError)
@@ -146,6 +162,9 @@ func loadLayoutFileFromSplitmaker(fileName string) {
 			splitIndex := strings.LastIndex(name, "（")
 			if splitIndex > 0 {
 				name = name[:splitIndex]
+			}
+			if isSubSplit {
+				name = "-" + name
 			}
 			err = lines[i-1].name.SetText(name)
 			if err != nil {

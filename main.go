@@ -69,7 +69,7 @@ func main() {
 				Children: []Widget{
 					TextLabel{
 						TextAlignment: AlignHFarVCenter,
-						Text:          "Auto Splitter Version: 1.6.0",
+						Text:          "Auto Splitter Version: 1.6.1",
 					},
 					PushButton{
 						Text:      "更新LiveSplit",
