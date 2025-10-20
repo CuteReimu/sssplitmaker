@@ -365,7 +365,7 @@ var SplitsCache = []*SplitData{
 	{"TrailsEndTrans", "沙克拉导师（切图）"},
 	{"Broodmother", "育母（Boss）"},
 	{"EnterSandsOfKarak", "进入卡拉卡沙川（切图）"},
-	{"EnterVoltnest", "进入伏特巢穴（切图）"},
+	{"EnterVoltnest", "进入电荷巢穴（切图）"},
 	{"RagingConchfly", "狂暴的螺蝇（Boss）"},
 	{"RagingConchflyTrans", "狂暴的螺蝇（切图）"},
 	{"WatcherAtTheEdge", "边陲守望者（Boss）"},
