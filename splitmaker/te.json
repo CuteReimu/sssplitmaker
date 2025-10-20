@@ -50,7 +50,7 @@
         "FaydownCloak",
         "SavedFleaMountFay",
         "SavedFleaSlabBellway",
-        "Conchflies1",
+        "GreatConchflies",
         "SeenShakraSandsOfKarak",
         "SavedFleaBlastedSteps",
         "SavedFleaSandsOfKarak",
@@ -81,6 +81,7 @@
         "SoulSnareReady",
         "EndingSplit",
         "GreenPrinceInVerdania",
+        "DivingBellAbyssTrans",
         "SilkSoar",
         "AbyssEscape",
         "EnterSeth",
@@ -92,7 +93,9 @@
         "EnterVerdaniaMemory",
         "VerdaniaOrbsCollected",
         "HeartClover",
+        "EnterRedMemory",
         "RedMemory",
+        "LastDiveTrans",
         "EndingSplit"
     ],
     "names": {
