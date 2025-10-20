@@ -19,11 +19,24 @@ https://cutereimu.cn/daily/silksong/sssplitmaker-faq.html
 
 ```shell
 curl -O https://github.com/AlexKnauth/silksong-autosplit-wasm/releases/latest/download/silksong_autosplit_wasm_stable.wasm
+curl -O https://raw.githubusercontent.com/LiveSplit/LiveSplit.AutoSplitters/master/LiveSplit.AutoSplitters.xml
 
 # -ldflags中，-s是去掉符号表，-w是去掉调试信息，均可减小所生成二进制文件的体积
 # -H=windowsgui是打开Windows窗口时隐藏控制台的黑框框
 GOOS=windows GOARCH=amd64 go build -ldflags "-s -w -H=windowsgui" -o sssplitmaker.exe
 ```
+
+## （开发向）如何更新最新的节点
+
+```bash
+cd translate
+./update_splits.sh
+go test
+```
+
+执行完毕后会输出缺少了什么节点，将其补全。
+
+打开 `main.go` 搜索 `Auto Splitter Version`，更新一下版本号。之后执行`./build.sh`重新编译即可。
 
 ## 特别鸣谢
 
