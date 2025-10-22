@@ -1,5 +1,5 @@
 {
-    "categoryName": "Any%",
+    "categoryName": "Slap%",
     "splitIds": [
         "StartNewGame",
         "MossMotherTrans",
@@ -8,28 +8,29 @@
         "SwiftStepTrans",
         "Lace1Trans",
         "DriftersCloakTrans",
+        "GreymoorBell",
         "MoorwingTrans",
         "ClingGripTrans",
         "Widow",
-        "EnterMist",
-        "LeaveMist",
+        "ShellwoodBell",
         "Act2Started",
+        "ManualSplit",
         "CogworkDancers",
         "WhisperingVaultsArena",
         "TrobbioTrans",
         "Clawline",
-        "VaultkeepersMelodyTrans",
-        "ArchitectsMelodyTrans",
-        "EnterHighHallsArena",
-        "ConductorsMelodyTrans",
-        "Lace2",
-        "EndingSplit"
+        "ManualSplit",
+        "GainedCurse",
+        "ManualSplit",
+        "ManualSplit"
     ],
     "names": {
-        "EndingSplit": "Grand Mother Silk"
+        "ManualSplit": [
+            "Grindle Slap",
+            "Twisted Bud",
+            "Nuu Slap",
+            "Yarnaby Slap"
+        ]
     },
-    "gameName": "Hollow Knight: Silksong",
-    "variables": {
-        "Any% Subcategory": "No Major Glitches"
-    }
+    "gameName": "Hollow Knight: Silksong Category Extensions"
 }
