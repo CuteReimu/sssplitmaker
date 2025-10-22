@@ -18,10 +18,16 @@ jobs:
       with:
         go-version: 'stable'
 
-    - name: Create Fake LiveSplit Files
+    - name: Create Fake Embed Files
       run: |
         touch LiveSplit.AutoSplitters.xml
         touch silksong_autosplit_wasm_stable.wasm
+        mkdir -p static
+        touch static/axios.min.js
+        touch static/index.css
+        touch static/index.full.min.js
+        touch static/index.iife.min.js
+        touch static/vue.global.prod.js
 
     - name: Set Go Env
       run: |
