@@ -4,14 +4,13 @@
 [![](https://img.shields.io/github/actions/workflow/status/CuteReimu/sssplitmaker/golangci-lint.yml?branch=master)](https://github.com/CuteReimu/sssplitmaker/actions/workflows/golangci-lint.yml "Analysis")
 [![](https://img.shields.io/github/license/CuteReimu/sssplitmaker)](https://github.com/CuteReimu/sssplitmaker/blob/master/LICENSE "LICENSE")
 
-> [!Note]
-> 本项目只能在Windows环境下运行。
-
 ## 如何使用
 
 https://cutereimu.cn/daily/silksong/sssplitmaker-faq.html
 
 ## 编译说明
+
+**因为目前支持了网页版，因此需要提前下载CDN，运行`download_cdn.sh`或`download_cdn.ps1`即可下载。**
 
 **根据自己的编译环境，运行`build.bat`或`build.sh`即可进行编译。**
 

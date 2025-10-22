@@ -1,11 +1,13 @@
 splits.json
 *.wasm
+/static/
 
 /hk-split-maker/
 .idea/
 *.xml
 
 # Binaries for programs and plugins
+/sssplitmaker
 *.exe
 *.exe~
 *.dll
