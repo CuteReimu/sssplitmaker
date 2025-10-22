@@ -8,32 +8,37 @@
     <script src="http://127.0.0.1:12333/x/static/vue.global.prod.js"></script>
     <script src="http://127.0.0.1:12333/x/static/index.full.min.js"></script>
     <script src="http://127.0.0.1:12333/x/static/index.iife.min.js"></script>
+    <script src="http://127.0.0.1:12333/x/static/axios.min.js"></script>
 </head>
 
 <body>
-<div id="app">
-    <el-table :data="tableData">
+<div id="app" style="display: flex; flex-direction: column;">
+    <el-select v-model="currentTemplate" filterable placeholder="你可以选择现有模板" style="width: 500px" @change="selectTemplate">
+        <el-option v-for="item in templates" :key="item.value" :label="item.label" :value="item.value"></el-option>
+    </el-select>
+    <el-table :data="tableData" style="max-width: 960px">
         <el-table-column label="节点名称">
             <template #default="scope">
-                <el-input v-model="scope.row.name" filterable placeholder="节点名称" style="width: 300px"></el-input>
+                <el-input v-if="scope.$index>0 && scope.$index<tableData.length-1" v-model="scope.row.name" filterable placeholder="节点名称" style="width: 300px"></el-input>
             </template>
         </el-table-column>
         <el-table-column label="触发事件">
             <template #default="scope">
-                <el-select v-model="scope.row.event" filterable placeholder="触发事件" style="width: 300px">
+                <el-select v-if="scope.$index<tableData.length-1" v-model="scope.row.event" filterable placeholder="触发事件" style="width: 300px">
                     <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
                 </el-select>
             </template>
         </el-table-column>
-        <el-table-column label="操作">
+        <el-table-column label="操作" :width="220">
             <template #default="scope">
-                <el-button :icon="Plus" circle @click="addLine(scope.$index)"></el-button>
-                <el-button :icon="Minus" circle @click="removeLine(scope.$index)"></el-button>
-                <el-button :icon="Top" circle></el-button>
-                <el-button :icon="Bottom" circle></el-button>
+                <el-button v-if="scope.$index>0" :icon="Plus" circle @click="addLine(scope.$index)"></el-button>
+                <el-button :disabled="tableData.length<=3" v-if="scope.$index>0 && scope.$index<tableData.length-1" :icon="Minus" circle @click="removeLine(scope.$index)"></el-button>
+                <el-button :disabled="scope.$index<=1" v-if="scope.$index>0 && scope.$index<tableData.length-1" :icon="Top" circle @click="swapLine(scope.$index-1, scope.$index)"></el-button>
+                <el-button :disabled="scope.$index>=tableData.length-2" v-if="scope.$index>0 && scope.$index<tableData.length-1" :icon="Bottom" @click="swapLine(scope.$index, scope.$index+1)" circle></el-button>
             </template>
         </el-table-column>
     </el-table>
+    <el-button type="primary" @click="submit" style="align-self: flex-start;">另存为</el-button>
 </div>
 
 <script>
@@ -43,14 +48,20 @@
         data() {
             return {
                 options: {{.options}},
+                currentTemplate: '',
+                templates: [],
                 tableData: [
                     {
-                        name: '开始新游戏',
+                        name: '',
                         event: 'StartNewGame',
                     },
                     {
                         name: '任意结束',
                         event: 'EndingSplit',
+                    },
+                    {
+                        name: '',
+                        event: 'ManualSplit',
                     },
                 ],
             };
@@ -63,6 +74,15 @@
                 Bottom,
             };
         },
+        mounted() {
+            axios.get('/get-templates')
+                .then(response => {
+                    this.templates = response.data;
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        },
         methods: {
             addLine(index) {
                 this.tableData.splice(index, 0,
@@ -73,10 +93,30 @@
                 );
             },
             removeLine(index) {
-                if (this.tableData.length <= 1) {
-                    return;
-                }
                 this.tableData.splice(index, 1);
+            },
+            swapLine(index1, index2) {
+                const temp = this.tableData[index1];
+                this.tableData[index1] = this.tableData[index2];
+                this.tableData[index2] = temp;
+            },
+            submit() {
+                const params = encodeURIComponent(JSON.stringify(this.tableData.slice(0, -1)));
+                const url = `/build-splits?data=${params}`;
+                window.open(url, '_blank', 'noopener,noreferrer');
+            },
+            selectTemplate(value) {
+                axios.post('/get-splits', {name: value}, {
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                })
+                    .then(response => {
+                        this.tableData = response.data.splits;
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    })
             },
         },
     });

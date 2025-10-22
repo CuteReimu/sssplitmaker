@@ -27,6 +27,7 @@ var startTriggerComboBox *walk.ComboBox
 var splitmakerComboBox *walk.ComboBox
 
 func main() {
+	initWebUi()
 	screenX, screenY := getSystemMetrics(0), getSystemMetrics(1)
 	width, height := 720, 960
 	err := MainWindow{
@@ -69,6 +70,13 @@ func main() {
 			Composite{
 				Layout: HBox{},
 				Children: []Widget{
+					PushButton{
+						Text:      "打开网页版",
+						Alignment: AlignHNearVCenter,
+						OnClicked: func() {
+							_ = exec.Command("rundll32", "url.dll,FileProtocolHandler", "http://127.0.0.1:12333/").Start()
+						},
+					},
 					TextLabel{
 						TextAlignment: AlignHFarVCenter,
 						Text:          "Auto Splitter Version: 1.13.0",

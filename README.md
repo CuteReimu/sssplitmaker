@@ -10,6 +10,8 @@ https://cutereimu.cn/daily/silksong/sssplitmaker-faq.html
 
 ## 编译说明
 
+**因为目前支持了网页版，因此需要提前下载CDN，运行`download_cdn.sh`或`download_cdn.ps1`即可下载。**
+
 **根据自己的编译环境，运行`build.bat`或`build.sh`即可进行编译。**
 
 如果想要自己使用`go build`进行编译，需要提前下载wasm文件：

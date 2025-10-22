@@ -14,41 +14,6 @@ import (
 	"github.com/lxn/win"
 )
 
-type autoSplittingRuntimeSettings struct {
-	Version        string
-	CustomSettings []*xmlWasmSetting `xml:"CustomSettings>Setting"`
-}
-
-type xmlWasmSetting struct {
-	Id      string `xml:"id,attr,omitempty"`
-	Type    string `xml:"type,attr"`
-	Value   string `xml:"value,attr,omitempty"`
-	Setting []*xmlWasmSetting
-}
-
-type xmlRun struct {
-	XMLName              xml.Name      `xml:"Run"`
-	Version              string        `xml:"version,attr"`
-	GameIcon             string        `xml:"GameIcon"`
-	GameName             string        `xml:"GameName"`
-	CategoryName         string        `xml:"CategoryName"`
-	Offset               string        `xml:"Offset"`
-	AttemptCount         int           `xml:"AttemptCount"`
-	Segments             []*xmlSegment `xml:"Segments>Segment"`
-	AutoSplitterSettings autoSplittingRuntimeSettings
-	Other                []*xmlElement `xml:",any"`
-}
-
-type xmlSegment struct {
-	Name  string
-	Other []*xmlElement `xml:",any"`
-}
-
-type xmlElement struct {
-	XMLName xml.Name
-	Content string `xml:",innerxml"`
-}
-
 var fileRunData = &xmlRun{}
 
 func onClickLoadSplitFile() {
