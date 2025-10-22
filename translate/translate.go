@@ -377,6 +377,20 @@ var SplitsCache = []*SplitData{
 	{"CollectedSurgeonsKey", "医师的钥匙（道具）"},
 	{"TheUnravelledEncountered", "散茧魂渊-遭遇（Boss）"},
 	{"TheUnravelled", "散茧魂渊（Boss）"},
+	{"SecondSentinelAwoken", ""},
+	{"EnterSecondSentinel", ""},
+	{"SecondSentinelBossEncountered", ""},
+	{"SecondSentinel", ""},
+	{"FleaFestivalBegin", ""},
+	{"FleaFestivalEnd", ""},
+	{"NylethEncountered", ""},
+	{"Nyleth", ""},
+	{"KhannEncountered", ""},
+	{"CrustKingKhann", ""},
+	{"SkarrsingerKarmelita", ""},
+	{"Palestag", ""},
+	{"CloverDancersEncountered", ""},
+	{"CloverDancers", ""},
 }
 
 var cacheAliases = map[string]string{
