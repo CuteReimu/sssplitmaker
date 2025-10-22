@@ -3,20 +3,12 @@
 package main
 
 import (
-	"embed"
 	_ "embed"
 	"fmt"
 	"os/exec"
 	"runtime"
 	"strings"
 	"time"
-)
-
-var (
-	//go:embed static
-	htmlFiles embed.FS
-	//go:embed index.html
-	htmlIndex string
 )
 
 func main() {
