@@ -16,7 +16,7 @@
     <el-select v-model="currentTemplate" filterable placeholder="你可以选择现有模板" style="width: 500px" @change="selectTemplate">
         <el-option v-for="item in templates" :key="item.value" :label="item.label" :value="item.value"></el-option>
     </el-select>
-    <el-table :data="tableData" style="max-width: 960px">
+    <el-table :data="tableData" style="max-width: 960px" v-loading="loading" element-loading-text="正在加载模板数据...">
         <el-table-column label="节点名称">
             <template #default="scope">
                 <el-input v-if="scope.$index>0 && scope.$index<tableData.length-1" v-model="scope.row.name" filterable placeholder="节点名称" style="width: 300px"></el-input>
@@ -42,7 +42,6 @@
 </div>
 
 <script>
-    const options = {{.options}};
     const { createApp } = Vue;
     const app = createApp({
         data() {
@@ -50,6 +49,7 @@
                 options: {{.options}},
                 currentTemplate: '',
                 templates: [],
+                loading: false,
                 tableData: [
                     {
                         name: '',
@@ -106,17 +106,22 @@
                 window.open(url, '_blank', 'noopener,noreferrer');
             },
             selectTemplate(value) {
+                this.loading = true;
                 axios.post('/get-splits', {name: value}, {
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
                     },
                 })
-                    .then(response => {
-                        this.tableData = response.data.splits;
-                    })
-                    .catch(error => {
-                        console.log(error);
-                    })
+                .then(response => {
+                    this.tableData = response.data.splits;
+                    this.$nextTick(() => {
+                        this.loading = false;
+                    });
+                })
+                .catch(error => {
+                    console.log(error);
+                    this.loading = false;
+                });
             },
         },
     });
