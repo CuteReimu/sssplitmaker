@@ -74,7 +74,7 @@ func main() {
 						Text:      "打开网页版",
 						Alignment: AlignHNearVCenter,
 						OnClicked: func() {
-							_ = exec.Command("rundll32", "url.dll,FileProtocolHandler", "http://127.0.0.1:12333/").Start()
+							_ = exec.CommandContext(context.Background(), "rundll32", "url.dll,FileProtocolHandler", "http://127.0.0.1:12333/").Start()
 						},
 					},
 					TextLabel{

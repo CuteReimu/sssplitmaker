@@ -5,7 +5,6 @@ import (
 	"embed"
 	"encoding/json"
 	"encoding/xml"
-	"fmt"
 	"net/http"
 	"regexp"
 	"strings"
@@ -36,18 +35,21 @@ func initWebUi() {
 	for _, v := range translate.SplitsCache {
 		options = append(options, Option{Value: v.ID, Label: v.Description})
 	}
-	buf, _ := json.MarshalIndent(options, "", "  ")
+	buf, err := json.MarshalIndent(options, "", "  ")
+	if err != nil {
+		panic(err)
+	}
 	var b bytes.Buffer
 	err = t.Execute(&b, map[string]any{"options": string(buf)})
 	if err != nil {
-		fmt.Println(err)
+		panic(err)
 	}
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 		w.WriteHeader(http.StatusOK)
-		w.Write(b.Bytes())
+		_, _ = w.Write(b.Bytes())
 	})
 	mux.HandleFunc("/get-templates", func(w http.ResponseWriter, r *http.Request) {
 		files := GetAllFiles()
@@ -110,7 +112,7 @@ func initWebUi() {
 	mux.Handle("/x/", http.StripPrefix("/x/", http.FileServer(http.FS(htmlFiles))))
 
 	go func() {
-		if err := http.ListenAndServe("127.0.0.1:12333", mux); err != nil {
+		if err := http.ListenAndServe("127.0.0.1:12333", mux); err != nil { //nolint:gosec
 			panic(err)
 		}
 	}()
