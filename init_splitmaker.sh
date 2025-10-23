@@ -16,6 +16,8 @@ git sparse-checkout set --no-cone
 echo "src/asset/silksong/categories/*" > .git/info/sparse-checkout
 echo "!src/asset/silksong/categories/category-directory.json" >> .git/info/sparse-checkout
 echo "!src/asset/silksong/categories/every.json" >> .git/info/sparse-checkout
+echo "!src/asset/silksong/categories/room-timer.json" >> .git/info/sparse-checkout
+echo "!src/asset/silksong/categories/blank.json" >> .git/info/sparse-checkout
 # 拉取主分支
 git pull --depth=1 origin main
 
