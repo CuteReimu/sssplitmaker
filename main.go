@@ -99,10 +99,7 @@ func main() {
 						Text:      "打开翻译对照列表",
 						Alignment: AlignHFarVCenter,
 						OnClicked: func() {
-							const url = "https://cutereimu.cn/daily/silksong/splits-translate.html"
-							if err := exec.CommandContext(context.Background(), "rundll32", "url.dll,FileProtocolHandler", url).Start(); err != nil {
-								walk.MsgBox(mainWindow, "错误", "打开浏览器失败，请手动访问："+url, walk.MsgBoxIconError)
-							}
+							_ = exec.CommandContext(context.Background(), "rundll32", "url.dll,FileProtocolHandler", "http://127.0.0.1:12333/translate").Start()
 						},
 					},
 				},

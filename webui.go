@@ -18,12 +18,18 @@ var (
 	htmlFiles embed.FS
 	//go:embed index.html
 	htmlIndex string
+	//go:embed translate.html
+	htmlTranslate string
 )
 
 func initWebUi() {
 	t, err := template.New("result").Parse(htmlIndex)
 	if err != nil {
-		panic(t)
+		panic(err)
+	}
+	t2, err := template.New("translate").Parse(htmlTranslate)
+	if err != nil {
+		panic(err)
 	}
 
 	type Option struct {
@@ -45,11 +51,22 @@ func initWebUi() {
 		panic(err)
 	}
 
+	var b2 bytes.Buffer
+	err = t2.Execute(&b2, map[string]any{"tableData": translate.SplitsHtml})
+	if err != nil {
+		panic(err)
+	}
+
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 		w.WriteHeader(http.StatusOK)
 		_, _ = w.Write(b.Bytes())
+	})
+	mux.HandleFunc("/translate", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "text/html; charset=utf-8")
+		w.WriteHeader(http.StatusOK)
+		_, _ = w.Write(b2.Bytes())
 	})
 	mux.HandleFunc("/get-templates", func(w http.ResponseWriter, r *http.Request) {
 		files := GetAllFiles()

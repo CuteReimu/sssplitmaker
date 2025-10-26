@@ -3,15 +3,10 @@ package translate
 import (
 	"encoding/json"
 	"fmt"
-	"os"
 	"testing"
 )
 
 func TestSplits(t *testing.T) {
-	buf, err := os.ReadFile("splits.json")
-	if err != nil {
-		t.Fatal(err)
-	}
 	type splitData struct {
 		Alias       any    `json:"alias"`
 		Description string `json:"description"`
@@ -21,7 +16,7 @@ func TestSplits(t *testing.T) {
 	}
 	var splits []*splitData
 	var splitsWithAlias []*splitData
-	err = json.Unmarshal(buf, &splits)
+	err := json.Unmarshal(splitsJson, &splits)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -61,7 +56,7 @@ func TestSplits(t *testing.T) {
 	}
 	if t.Failed() {
 		for _, s := range newSplits {
-			fmt.Printf("{\"%s\", \"\"},\n", s)
+			fmt.Printf("{ID: \"%s\", Description: \"\"},\n", s)
 		}
 		t.FailNow()
 	}
@@ -71,15 +66,4 @@ func TestSplits(t *testing.T) {
 		fmt.Printf("\t\"%s\": \"%s\",\n", s.Alias, s.Key)
 	}
 	fmt.Println("}")
-
-	fmt.Println("| Description | 翻译 | Tooltip | Key1 | Key2 |")
-	fmt.Println("|---|---|---|---|---|")
-	for _, s := range SplitsCache {
-		split := splitMap[s.ID]
-		var alias string
-		if split.Alias != nil {
-			alias = split.Alias.(string)
-		}
-		fmt.Printf("| %s | %s | %s | %s | %s |\n", split.Description, split.translate, split.Tooltip, split.Key, alias)
-	}
 }

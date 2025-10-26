@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>test</title>
+    <link rel="stylesheet" href="http://127.0.0.1:12333/x/static/index.css" />
+    <script src="http://127.0.0.1:12333/x/static/vue.global.prod.js"></script>
+    <script src="http://127.0.0.1:12333/x/static/index.full.min.js"></script>
+</head>
+
+<body>
+<div id="app" style="display: flex; flex-direction: column; align-items: center;">
+    <el-table :data="tableData" border stripe>
+        <el-table-column prop="description" label="Description" :width="350"></el-table-column>
+        <el-table-column prop="translate" label="翻译" :width="250"></el-table-column>
+        <el-table-column prop="tooltip" label="Tooltip"></el-table-column>
+        <el-table-column label="Key" :width="310">
+            <template #default="scope">
+                <div>{{"{{"}}scope.row.key{{"}}"}}</div>
+                <div v-if="scope.row.alias">{{"{{"}}scope.row.alias{{"}}"}}</div>
+            </template>
+        </el-table-column>
+    </el-table>
+</div>
+
+<script>
+    const { createApp } = Vue;
+    const app = createApp({
+        data() {
+            return {
+                tableData: {{.tableData}},
+            };
+        },
+    });
+    app.use(ElementPlus);
+    app.mount('#app');
+</script>
+</body>
+</html>
