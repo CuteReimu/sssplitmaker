@@ -13,6 +13,8 @@ git sparse-checkout set --no-cone
 Set-Content .git/info/sparse-checkout "src/asset/silksong/categories/*"
 Add-Content .git/info/sparse-checkout "!src/asset/silksong/categories/category-directory.json"
 Add-Content .git/info/sparse-checkout "!src/asset/silksong/categories/every.json"
+Add-Content .git/info/sparse-checkout "!src/asset/silksong/categories/room-timer.json"
+Add-Content .git/info/sparse-checkout "!src/asset/silksong/categories/blank.json"
 
 # 拉取主分支
 git pull --depth=1 origin main
