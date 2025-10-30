@@ -417,6 +417,16 @@ var SplitsCache = []*SplitData{
 	{ID: "Palestag", Description: "苍白苜鹿（Boss）"},
 	{ID: "CloverDancersEncountered", Description: "三叶草舞者-遭遇（Boss）"},
 	{ID: "CloverDancers", Description: "三叶草舞者（Boss）"},
+	{ID: "BenchAny", Description: ""},
+	{ID: "MenuNeedolinMemory", Description: ""},
+	{ID: "WardenflyCaptureTrans", Description: ""},
+	{ID: "EnterCogworkCore", Description: ""},
+	{ID: "GreatTasteReward", Description: ""},
+	{ID: "PostClawlineArenaTrans", Description: ""},
+	{ID: "PostLace2ArenaTrans", Description: ""},
+	{ID: "EnterTheCradle", Description: ""},
+	{ID: "BellwayTrans", Description: ""},
+	{ID: "ShakraMapBuyout", Description: ""},
 }
 
 var cacheAliases = map[string]string{
