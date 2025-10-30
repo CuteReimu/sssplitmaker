@@ -27,3 +27,5 @@ cd ..
 rm -rf splitmaker
 mkdir splitmaker
 cp -vf hk-split-maker/src/asset/silksong/categories/*.json splitmaker
+
+git add -A splitmaker
