@@ -102,11 +102,8 @@ func initWebUi() {
 		}
 		c.JSON(http.StatusOK, ret)
 	})
-	g.GET("/get-options", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{"data": options})
-	})
-	g.GET("/get-splits", func(c *gin.Context) {
-		name := c.Query("name")
+	g.POST("/get-splits", func(c *gin.Context) {
+		name := c.PostForm("name")
 		name, splits, err := GetSplitIds(name)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"code": -2, "msg": "read template failed"})

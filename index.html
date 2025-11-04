@@ -156,7 +156,6 @@
                 });
             },
             handleChange(file, fileList) {
-                // 保持原数组引用，只保留最新的那个文件对象（使用回调传入的 fileList，包含完整状态）
                 const latest = fileList.slice(-1);
                 this.fileList.splice(0, this.fileList.length, ...latest);
             },
