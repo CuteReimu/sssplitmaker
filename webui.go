@@ -80,6 +80,10 @@ func initWebUi() {
 		}
 		defer func() { _ = f.Close() }()
 		buf, err := io.ReadAll(f)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"code": -5, "msg": fmt.Sprintf("读取文件失败: %+v", err)})
+			return
+		}
 		result, err := webLoadSplitFile(buf)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"code": -2, "msg": fmt.Sprintf("解析文件失败: %+v", err)})
@@ -88,7 +92,7 @@ func initWebUi() {
 		c.JSON(http.StatusOK, result)
 	})
 	g.GET("/translate", func(c *gin.Context) {
-		c.Data(http.StatusOK, "text/html; charset=utf-8", b.Bytes())
+		c.Data(http.StatusOK, "text/html; charset=utf-8", b2.Bytes())
 	})
 	g.GET("/get-templates", func(c *gin.Context) {
 		files := GetAllFiles()
@@ -97,6 +101,9 @@ func initWebUi() {
 			ret = append(ret, Option{Value: f, Label: f})
 		}
 		c.JSON(http.StatusOK, ret)
+	})
+	g.GET("/get-options", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{"data": options})
 	})
 	g.GET("/get-splits", func(c *gin.Context) {
 		name := c.Query("name")
@@ -126,7 +133,7 @@ func initWebUi() {
 	g.StaticFS("/x/", http.FS(htmlFiles))
 
 	go func() {
-		if err = g.Run("127.0.0.1:12333"); err != nil { //nolint:gosec
+		if err = g.Run("127.0.0.1:12333"); err != nil {
 			panic(err)
 		}
 	}()

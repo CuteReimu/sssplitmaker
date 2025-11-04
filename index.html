@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>test</title>
+    <title>丝之歌计时器生成器网页版</title>
     <link rel="stylesheet" href="http://127.0.0.1:12333/x/static/index.css" />
     <script src="http://127.0.0.1:12333/x/static/vue.global.prod.js"></script>
     <script src="http://127.0.0.1:12333/x/static/index.full.min.js"></script>
@@ -16,17 +16,18 @@
     <el-select v-model="currentTemplate" filterable placeholder="你可以选择现有模板" style="width: 500px" @change="selectTemplate">
         <el-option v-for="item in templates" :key="item.value" :label="item.label" :value="item.value"></el-option>
     </el-select>
-    <el-upload drag action="/upload" :on-success="uploadTableData" :on-error="uploadFailed">
-        <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+    <el-upload v-model:file-list="fileList" drag action="/upload" accept=".lss" :on-success="uploadTableData" :on-error="uploadFailed" :on-change="handleChange" style="max-width: 960px">
+        <el-icon class="el-icon--upload"><upload-filled></upload-filled></el-icon>
         <div class="el-upload__text">
             将文件拖拽到这里或者 <em>点击上传</em>
         </div>
         <template #tip>
             <div class="el-upload__tip">
-                只支持 *.lsl 文件
+                只支持 *.lss 文件
             </div>
         </template>
     </el-upload>
+    <el-alert title="注意：网页版目前导入lss文件编辑后并不会保留历史时间数据。" type="warning" style="max-width: 960px"></el-alert>
     <el-table :data="tableData" style="max-width: 960px" v-loading="loading" element-loading-text="正在加载数据...">
         <el-table-column label="节点名称">
             <template #default="scope">
@@ -53,6 +54,9 @@
 </div>
 
 <script>
+    // 导入需要的图标
+    const { Plus, Minus, Top, Bottom, UploadFilled } = ElementPlusIconsVue;
+    const { ElMessage } = ElementPlus;
     const { createApp } = Vue;
     const app = createApp({
         data() {
@@ -75,6 +79,7 @@
                         event: 'ManualSplit',
                     },
                 ],
+                fileList: [],
             };
         },
         setup() {
@@ -83,6 +88,7 @@
                 Minus,
                 Top,
                 Bottom,
+                UploadFilled,
             };
         },
         mounted() {
@@ -149,11 +155,14 @@
                     this.loading = false;
                 });
             },
+            handleChange(file, fileList) {
+                // 保持原数组引用，只保留最新的那个文件对象（使用回调传入的 fileList，包含完整状态）
+                const latest = fileList.slice(-1);
+                this.fileList.splice(0, this.fileList.length, ...latest);
+            },
         },
     });
-    // 导入需要的图标
-    const { Plus, Minus, Top, Bottom } = ElementPlusIconsVue;
-    const { ElMessage } = ElementPlus;
+    app.component(UploadFilled.name, UploadFilled);
     app.use(ElementPlus);
     app.mount('#app');
 </script>
