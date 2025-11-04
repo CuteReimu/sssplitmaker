@@ -16,7 +16,18 @@
     <el-select v-model="currentTemplate" filterable placeholder="你可以选择现有模板" style="width: 500px" @change="selectTemplate">
         <el-option v-for="item in templates" :key="item.value" :label="item.label" :value="item.value"></el-option>
     </el-select>
-    <el-table :data="tableData" style="max-width: 960px" v-loading="loading" element-loading-text="正在加载模板数据...">
+    <el-upload drag action="/upload" :on-success="uploadTableData" :on-error="uploadFailed">
+        <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+        <div class="el-upload__text">
+            将文件拖拽到这里或者 <em>点击上传</em>
+        </div>
+        <template #tip>
+            <div class="el-upload__tip">
+                只支持 *.lsl 文件
+            </div>
+        </template>
+    </el-upload>
+    <el-table :data="tableData" style="max-width: 960px" v-loading="loading" element-loading-text="正在加载数据...">
         <el-table-column label="节点名称">
             <template #default="scope">
                 <el-input v-if="scope.$index>0 && scope.$index<tableData.length-1" v-model="scope.row.name" filterable placeholder="节点名称" style="width: 300px"></el-input>
@@ -105,6 +116,21 @@
                 const url = `/build-splits?data=${params}`;
                 window.open(url, '_blank', 'noopener,noreferrer');
             },
+            uploadTableData(newData) {
+                this.loading = true;
+                this.tableData = newData;
+                this.$nextTick(() => {
+                    this.loading = false;
+                });
+            },
+            uploadFailed(err) {
+                console.log(err);
+                ElMessage({
+                    message: err,
+                    type: 'error',
+                    plain: true,
+                });
+            },
             selectTemplate(value) {
                 this.loading = true;
                 axios.post('/get-splits', {name: value}, {
@@ -127,6 +153,7 @@
     });
     // 导入需要的图标
     const { Plus, Minus, Top, Bottom } = ElementPlusIconsVue;
+    const { ElMessage } = ElementPlus;
     app.use(ElementPlus);
     app.mount('#app');
 </script>

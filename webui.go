@@ -5,12 +5,16 @@ import (
 	"embed"
 	"encoding/json"
 	"encoding/xml"
+	"errors"
+	"fmt"
+	"io"
 	"net/http"
 	"regexp"
 	"strings"
 	"text/template"
 
 	"github.com/CuteReimu/sssplitmaker/translate"
+	"github.com/gin-gonic/gin"
 )
 
 var (
@@ -57,44 +61,48 @@ func initWebUi() {
 		panic(err)
 	}
 
-	mux := http.NewServeMux()
-	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-		w.WriteHeader(http.StatusOK)
-		_, _ = w.Write(b.Bytes())
+	gin.SetMode(gin.ReleaseMode)
+	g := gin.New()
+	g.GET("/", func(c *gin.Context) {
+		c.Writer.Header().Set("Content-Type", "")
+		c.Data(http.StatusOK, "text/html; charset=utf-8", b.Bytes())
 	})
-	mux.HandleFunc("/translate", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-		w.WriteHeader(http.StatusOK)
-		_, _ = w.Write(b2.Bytes())
+	g.POST("/upload", func(c *gin.Context) {
+		file, err := c.FormFile("file")
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"code": -3, "msg": fmt.Sprintf("获取文件失败: %+v", err)})
+			return
+		}
+		f, err := file.Open()
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"code": -4, "msg": fmt.Sprintf("打开文件失败: %+v", err)})
+			return
+		}
+		defer func() { _ = f.Close() }()
+		buf, err := io.ReadAll(f)
+		result, err := webLoadSplitFile(buf)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"code": -2, "msg": fmt.Sprintf("解析文件失败: %+v", err)})
+			return
+		}
+		c.JSON(http.StatusOK, result)
 	})
-	mux.HandleFunc("/get-templates", func(w http.ResponseWriter, r *http.Request) {
+	g.GET("/translate", func(c *gin.Context) {
+		c.Data(http.StatusOK, "text/html; charset=utf-8", b.Bytes())
+	})
+	g.GET("/get-templates", func(c *gin.Context) {
 		files := GetAllFiles()
 		ret := make([]Option, 0, len(files))
 		for _, f := range files {
 			ret = append(ret, Option{Value: f, Label: f})
 		}
-		buf, err := json.Marshal(ret)
-		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			_, _ = w.Write([]byte(`{"code": -1, "msg": "internal server error"}`))
-			return
-		}
-		w.Header().Set("Content-Type", "application/json; charset=utf-8")
-		w.WriteHeader(http.StatusOK)
-		_, _ = w.Write(buf)
+		c.JSON(http.StatusOK, ret)
 	})
-	mux.HandleFunc("/get-splits", func(w http.ResponseWriter, r *http.Request) {
-		if err := r.ParseForm(); err != nil {
-			w.WriteHeader(http.StatusBadRequest)
-			_, _ = w.Write([]byte(`{"code": -1, "msg": "invalid params"}`))
-			return
-		}
-		name := r.Form.Get("name")
+	g.GET("/get-splits", func(c *gin.Context) {
+		name := c.Query("name")
 		name, splits, err := GetSplitIds(name)
 		if err != nil {
-			w.WriteHeader(http.StatusBadRequest)
-			_, _ = w.Write([]byte(`{"code": -2, "msg": "read template failed"}`))
+			c.JSON(http.StatusBadRequest, gin.H{"code": -2, "msg": "read template failed"})
 			return
 		}
 		retSplits := make([]webSplitLine, 0, len(splits)+1)
@@ -112,24 +120,13 @@ func initWebUi() {
 			}
 			retSplits = append(retSplits, webSplitLine{Name: name, Event: id})
 		}
-		buf, err := json.Marshal(map[string]any{
-			"name":   name,
-			"splits": retSplits,
-		})
-		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			_, _ = w.Write([]byte(`{"code": -1, "msg": "internal server error"}`))
-			return
-		}
-		w.Header().Set("Content-Type", "application/json; charset=utf-8")
-		w.WriteHeader(http.StatusOK)
-		_, _ = w.Write(buf)
+		c.JSON(http.StatusOK, gin.H{"name": name, "splits": retSplits})
 	})
-	mux.HandleFunc("/build-splits", webBuildSplits)
-	mux.Handle("/x/", http.StripPrefix("/x/", http.FileServer(http.FS(htmlFiles))))
+	g.POST("/build-splits", webBuildSplits)
+	g.StaticFS("/x/", http.FS(htmlFiles))
 
 	go func() {
-		if err := http.ListenAndServe("127.0.0.1:12333", mux); err != nil { //nolint:gosec
+		if err = g.Run("127.0.0.1:12333"); err != nil { //nolint:gosec
 			panic(err)
 		}
 	}()
@@ -140,19 +137,12 @@ type webSplitLine struct {
 	Event string `json:"event"`
 }
 
-func webBuildSplits(w http.ResponseWriter, r *http.Request) {
-	if err := r.ParseForm(); err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		_, _ = w.Write([]byte(`{"code": -1, "msg": "invalid params"}`))
-		return
-	}
-
+func webBuildSplits(c *gin.Context) {
 	var lines []webSplitLine
-	data := r.Form.Get("data")
+	data := c.PostForm("data")
 	err := json.Unmarshal([]byte(data), &lines)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		_, _ = w.Write([]byte(`{"code": -1, "msg": "unmarshal failed"}`))
+		c.JSON(http.StatusBadRequest, gin.H{"code": -1, "msg": "unmarshal failed"})
 		return
 	}
 
@@ -187,15 +177,47 @@ func webBuildSplits(w http.ResponseWriter, r *http.Request) {
 	}
 	buf, err := xml.MarshalIndent(fileRunData, "", "  ")
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		_, _ = w.Write([]byte(`{"code": -3, "msg": "internal server error"}`))
+		c.JSON(http.StatusInternalServerError, gin.H{"code": -3, "msg": "internal server error"})
 		return
 	}
 
-	w.Header().Set("Content-Disposition", "attachment; filename=splits.lss")
-	w.Header().Set("Content-Type", "text-xml; charset=utf-8")
-	w.WriteHeader(http.StatusOK)
-	_, _ = w.Write(buf)
+	c.Header("Content-Disposition", "attachment; filename=splits.lss")
+	c.Data(http.StatusOK, "text/xml; charset=utf-8", buf)
+}
+
+func webLoadSplitFile(buf []byte) ([]webSplitLine, error) {
+	run := &xmlRun{}
+	err := xml.Unmarshal(buf, run)
+	if err != nil {
+		return nil, err
+	}
+
+	result := []webSplitLine{{}}
+	for _, segment := range run.Segments {
+		result = append(result, webSplitLine{Name: segment.Name})
+	}
+
+	for _, setting := range run.AutoSplitterSettings.CustomSettings {
+		if setting.Id == "splits" {
+			if setting.Type != "list" {
+				return nil, errors.New("splits字段类型错误")
+			} else {
+				for i, s := range setting.Setting {
+					if s.Type != "string" {
+						return nil, errors.New("splits子字段类型错误")
+					} else {
+						if i < len(result) {
+							result[i].Event = s.Value
+						} else {
+							result = append(result, webSplitLine{Event: s.Value})
+						}
+					}
+				}
+			}
+			break
+		}
+	}
+	return append(result, webSplitLine{Name: "ManualSplit"}), nil
 }
 
 type autoSplittingRuntimeSettings struct {
