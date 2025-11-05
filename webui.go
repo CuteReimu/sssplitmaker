@@ -180,6 +180,7 @@ func webBuildSplits(c *gin.Context) {
 		Type:  "string",
 		Value: "silksong_autosplit_wasm",
 	}, splits}
+	fileRunData.Segments = nil
 	for i, line := range lines {
 		splits.Setting = append(splits.Setting, &xmlWasmSetting{
 			Type:  "string",
