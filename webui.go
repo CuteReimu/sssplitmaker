@@ -102,6 +102,11 @@ func initWebUi() {
 		}
 		c.JSON(http.StatusOK, ret)
 	})
+	g.GET("/get-icon", func(c *gin.Context) {
+		name := c.Query("name")
+		icon := getIconHtmlFormat(name)
+		c.Data(http.StatusOK, "text/plain; charset=utf-8", []byte(icon))
+	})
 	g.POST("/get-splits", func(c *gin.Context) {
 		name := c.PostForm("name")
 		name, splits, err := GetSplitIds(name)

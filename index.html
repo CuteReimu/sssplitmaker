@@ -20,7 +20,7 @@
     <el-upload v-model:file-list="fileList" drag action="/upload" accept=".lss" :on-success="uploadTableData" :on-error="uploadFailed" :on-change="handleChange" style="max-width: 960px">
         <el-icon class="el-icon--upload"><upload-filled></upload-filled></el-icon>
         <div class="el-upload__text">
-            将文件拖拽到这里或者 <em>点击上传</em>
+            你也可以将文件拖拽到这里或者 <em>点击上传</em>
         </div>
         <template #tip>
             <div class="el-upload__tip">
@@ -28,7 +28,11 @@
             </div>
         </template>
     </el-upload>
-    <el-alert title="由于翻译水平有限，翻译可能不准确，请检查翻译对照表是否正确后使用。" type="primary" :show-icon="true" close-text="打开翻译对照表" @close="openTranslate" style="max-width: 960px"></el-alert>
+    <el-alert title="由于翻译水平有限，翻译可能不准确，请检查翻译对照表是否正确后使用。" type="warning" :show-icon="true" close-text="打开翻译对照表" @close="openTranslate" style="max-width: 960px"></el-alert>
+    <div style="align-self: flex-start; display: flex; gap: 8px;">
+        <el-button type="success" @click="fillIcons">一键填充所有未填充的图标</el-button>
+        <el-button type="danger" @click="resetIcons">一键清空所有图标</el-button>
+    </div>
     <el-table :data="tableData" style="max-width: 960px" v-loading="loading" element-loading-text="正在加载数据...">
         <el-table-column label="图标" width="60px">
             <template #default="scope">
@@ -42,8 +46,10 @@
         </el-table-column>
         <el-table-column label="触发事件">
             <template #default="scope">
-                <el-select v-if="scope.$index<tableData.length-1" v-model="scope.row.event" filterable placeholder="触发事件" style="width: 300px">
-                    <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                <el-select v-if="scope.$index<tableData.length-1" v-model="scope.row.event"
+                           @change="onEventChange(scope.$index)" filterable placeholder="触发事件" style="width: 300px">
+                    <el-option v-for="item in options" :key="item.value" :label="item.label"
+                               :value="item.value"></el-option>
                 </el-select>
             </template>
         </el-table-column>
@@ -116,6 +122,7 @@
                     {
                         name: '手动分割',
                         event: 'ManualSplit',
+                        icon: '',
                     },
                 );
             },
@@ -177,27 +184,65 @@
                         'Content-Type': 'application/x-www-form-urlencoded',
                     },
                 })
-                .then(response => {
-                    this.tableData = [...response.data.splits, {
-                        name: '',
-                        event: 'ManualSplit',
-                        icon: '',
-                    }];
-                    this.$nextTick(() => {
+                    .then(response => {
+                        this.tableData = [...response.data.splits, {
+                            name: '',
+                            event: 'ManualSplit',
+                            icon: '',
+                        }];
+                        this.$nextTick(() => {
+                            this.loading = false;
+                        });
+                    })
+                    .catch(error => {
+                        console.log(error);
                         this.loading = false;
                     });
-                })
-                .catch(error => {
-                    console.log(error);
-                    this.loading = false;
-                });
             },
             handleChange(file, fileList) {
                 const latest = fileList.slice(-1);
                 this.fileList.splice(0, this.fileList.length, ...latest);
             },
             openTranslate() {
-                window.open('/translate', '_blank', 'noopener,noreferrer')
+                window.open('/translate', '_blank', 'noopener,noreferrer');
+            },
+            onEventChange(idx) {
+                const eventValue = this.tableData[idx].event;
+                const opt = this.options.find(o => o.value === eventValue);
+                if (opt) {
+                    const label = opt.label;
+                    const pos = label.indexOf('（');
+                    this.tableData[idx].name = pos === -1 ? label : label.slice(0, pos);
+                }
+                axios.get('/get-icon?name=' + encodeURIComponent(this.tableData[idx].event))
+                    .then(response => {
+                        this.tableData[idx].icon = response.data;
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+            },
+            fillIcons() {
+                for (let idx = 1; idx < this.tableData.length - 1; idx++) {
+                    const row = this.tableData[idx];
+                    if (row.icon.length === 0) {
+                        axios.get('/get-icon?name=' + encodeURIComponent(row.event))
+                            .then(response => {
+                                row.icon = response.data;
+                            })
+                            .catch(error => {
+                                console.log(error);
+                            });
+                    }
+                }
+            },
+            resetIcons() {
+                for (let idx = 1; idx < this.tableData.length - 1; idx++) {
+                    if (idx === 0 || idx === this.tableData.length - 1) {
+                        continue;
+                    }
+                    this.tableData[idx].icon = '';
+                }
             },
         },
     });
