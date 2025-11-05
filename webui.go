@@ -106,7 +106,7 @@ func initWebUi() {
 		name := c.PostForm("name")
 		name, splits, err := GetSplitIds(name)
 		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"code": -2, "msg": "read template failed"})
+			c.JSON(http.StatusBadRequest, gin.H{"code": -2, "msg": err.Error()})
 			return
 		}
 		retSplits := make([]webSplitLine, 0, len(splits)+1)
@@ -137,26 +137,39 @@ func initWebUi() {
 }
 
 type webSplitLine struct {
-	Name  string `json:"name"`
-	Event string `json:"event"`
+	Name  string        `json:"name"`
+	Event string        `json:"event"`
+	Other []*xmlElement `json:"other"`
 }
 
 func webBuildSplits(c *gin.Context) {
 	var lines []webSplitLine
-	data := c.PostForm("data")
-	err := json.Unmarshal([]byte(data), &lines)
+	buf, err := c.GetRawData()
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"code": -2, "msg": err.Error()})
+		return
+	}
+	err = json.Unmarshal(buf, &lines)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"code": -1, "msg": "unmarshal failed"})
 		return
 	}
 
-	fileRunData := &xmlRun{
-		Version:  "1.7.0",
-		GameName: "Hollow Knight: Silksong",
-		Offset:   "00:00:00",
-		AutoSplitterSettings: autoSplittingRuntimeSettings{
-			Version: "1.0",
-		},
+	fileRunData := webRun
+	if fileRunData == nil {
+		fileRunData = &xmlRun{}
+	}
+	if fileRunData.Version == "" {
+		fileRunData.Version = "1.7.0"
+	}
+	if fileRunData.AutoSplitterSettings.Version == "" {
+		fileRunData.AutoSplitterSettings.Version = "1.0"
+	}
+	if fileRunData.GameName == "" {
+		fileRunData.GameName = "Hollow Knight: Silksong"
+	}
+	if fileRunData.Offset == "" {
+		fileRunData.Offset = "00:00:00"
 	}
 	splits := &xmlWasmSetting{
 		Id:   "splits",
@@ -176,18 +189,20 @@ func webBuildSplits(c *gin.Context) {
 			continue
 		}
 		fileRunData.Segments = append(fileRunData.Segments, &xmlSegment{
-			Name: line.Name,
+			Name:  line.Name,
+			Other: line.Other,
 		})
 	}
-	buf, err := xml.MarshalIndent(fileRunData, "", "  ")
+	buf, err = xml.MarshalIndent(fileRunData, "", "  ")
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"code": -3, "msg": "internal server error"})
+		c.JSON(http.StatusInternalServerError, gin.H{"code": -3, "msg": err.Error()})
 		return
 	}
-
-	c.Header("Content-Disposition", "attachment; filename=splits.lss")
-	c.Data(http.StatusOK, "text/xml; charset=utf-8", buf)
+	buf = append([]byte(`<?xml version="1.0" encoding="UTF-8"?>`+"\n"), buf...)
+	c.Data(http.StatusOK, "application/octet-stream", buf)
 }
+
+var webRun *xmlRun
 
 func webLoadSplitFile(buf []byte) ([]webSplitLine, error) {
 	run := &xmlRun{}
@@ -198,7 +213,7 @@ func webLoadSplitFile(buf []byte) ([]webSplitLine, error) {
 
 	result := []webSplitLine{{}}
 	for _, segment := range run.Segments {
-		result = append(result, webSplitLine{Name: segment.Name})
+		result = append(result, webSplitLine{Name: segment.Name, Other: segment.Other})
 	}
 
 	for _, setting := range run.AutoSplitterSettings.CustomSettings {
@@ -221,6 +236,7 @@ func webLoadSplitFile(buf []byte) ([]webSplitLine, error) {
 			break
 		}
 	}
+	webRun = run
 	return append(result, webSplitLine{Name: "ManualSplit"}), nil
 }
 
