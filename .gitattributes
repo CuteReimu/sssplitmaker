@@ -1,1 +1,3 @@
 *.html linguist-language=Vue
+icons/** linguist-vendored
+splitmaker/** linguist-vendored

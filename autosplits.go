@@ -23,6 +23,7 @@ type lineData struct {
 	line            *walk.Composite
 	name            *walk.LineEdit
 	splitId         *walk.ComboBox
+	icon            string
 	xmlSegmentOther []*xmlElement
 }
 

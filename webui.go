@@ -110,19 +110,23 @@ func initWebUi() {
 			return
 		}
 		retSplits := make([]webSplitLine, 0, len(splits)+1)
-		for _, id := range splits {
+		for i, id := range splits {
 			isSubSplit := strings.HasPrefix(id, "-")
 			id = strings.TrimLeft(id, "-")
 			id = regexp.MustCompile(`\{.*?}`).ReplaceAllString(id, "")
-			name := translate.GetSplitDescriptionByID(id)
-			splitIndex := strings.LastIndex(name, "（")
-			if splitIndex > 0 {
-				name = name[:splitIndex]
+			var name, icon string
+			if i > 0 {
+				name = translate.GetSplitDescriptionByID(id)
+				splitIndex := strings.LastIndex(name, "（")
+				if splitIndex > 0 {
+					name = name[:splitIndex]
+				}
+				if isSubSplit {
+					name = "-" + name
+				}
+				icon = getIconHtmlFormat(id)
 			}
-			if isSubSplit {
-				name = "-" + name
-			}
-			retSplits = append(retSplits, webSplitLine{Name: name, Event: id})
+			retSplits = append(retSplits, webSplitLine{Name: name, Event: id, Icon: icon})
 		}
 		c.JSON(http.StatusOK, gin.H{"name": name, "splits": retSplits})
 	})
@@ -139,6 +143,7 @@ func initWebUi() {
 type webSplitLine struct {
 	Name  string        `json:"name"`
 	Event string        `json:"event"`
+	Icon  string        `json:"icon"`
 	Other []*xmlElement `json:"other"`
 }
 
@@ -192,6 +197,7 @@ func webBuildSplits(c *gin.Context) {
 		fileRunData.Segments = append(fileRunData.Segments, &xmlSegment{
 			Name:  line.Name,
 			Other: line.Other,
+			Icon:  xmlIcon{convertIconToLiveSplitFormat(line.Icon)},
 		})
 	}
 	buf, err = xml.MarshalIndent(fileRunData, "", "  ")
@@ -214,7 +220,11 @@ func webLoadSplitFile(buf []byte) ([]webSplitLine, error) {
 
 	result := []webSplitLine{{}}
 	for _, segment := range run.Segments {
-		result = append(result, webSplitLine{Name: segment.Name, Other: segment.Other})
+		result = append(result, webSplitLine{
+			Name:  segment.Name,
+			Other: segment.Other,
+			Icon:  convertIconToHtmlFormat(segment.Icon.Icon),
+		})
 	}
 
 	for _, setting := range run.AutoSplitterSettings.CustomSettings {
@@ -268,10 +278,15 @@ type xmlRun struct {
 
 type xmlSegment struct {
 	Name  string
+	Icon  xmlIcon
 	Other []*xmlElement `xml:",any"`
 }
 
 type xmlElement struct {
 	XMLName xml.Name
 	Content string `xml:",innerxml"`
+}
+
+type xmlIcon struct {
+	Icon string `xml:",cdata"`
 }

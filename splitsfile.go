@@ -189,6 +189,7 @@ func onSaveSplitsFile() {
 		fileRunData.Segments = append(fileRunData.Segments, &xmlSegment{
 			Name:  line.name.Text(),
 			Other: line.xmlSegmentOther,
+			Icon:  xmlIcon{icon},
 		})
 	}
 	buf, err := xml.MarshalIndent(fileRunData, "", "  ")

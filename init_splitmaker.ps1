@@ -15,6 +15,7 @@ Add-Content .git/info/sparse-checkout "!src/asset/silksong/categories/category-d
 Add-Content .git/info/sparse-checkout "!src/asset/silksong/categories/every.json"
 Add-Content .git/info/sparse-checkout "!src/asset/silksong/categories/room-timer.json"
 Add-Content .git/info/sparse-checkout "!src/asset/silksong/categories/blank.json"
+Add-Content .git/info/sparse-checkout "src/asset/silksong/icons/*"
 
 # 拉取主分支
 git pull --depth=1 origin main
@@ -27,3 +28,9 @@ New-Item -ItemType Directory -Path splitmaker | Out-Null
 Copy-Item -Force hk-split-maker/src/asset/silksong/categories/*.json splitmaker
 
 git add -A splitmaker
+
+# 删除并复制 splitmaker 目录
+Remove-Item -Recurse -Force icons -ErrorAction SilentlyContinue
+Copy-Item -Recurse -Force -Path hk-split-maker/src/asset/silksong/icons -Destination icons
+
+git add -A icons

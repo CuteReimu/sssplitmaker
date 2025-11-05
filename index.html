@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>丝之歌计时器生成器网页版</title>
+    <link rel="stylesheet" href="http://127.0.0.1:12333/x/static/css-vars.css" />
     <link rel="stylesheet" href="http://127.0.0.1:12333/x/static/index.css" />
     <script src="http://127.0.0.1:12333/x/static/vue.global.prod.js"></script>
     <script src="http://127.0.0.1:12333/x/static/index.full.min.js"></script>
@@ -29,6 +30,11 @@
     </el-upload>
     <el-alert title="由于翻译水平有限，翻译可能不准确，请检查翻译对照表是否正确后使用。" type="primary" :show-icon="true" close-text="打开翻译对照表" @close="openTranslate" style="max-width: 960px"></el-alert>
     <el-table :data="tableData" style="max-width: 960px" v-loading="loading" element-loading-text="正在加载数据...">
+        <el-table-column label="图标" width="60px">
+            <template #default="scope">
+                <el-image v-if="scope.row.icon.length>0" style="width: 25px; height: 25px" :src="scope.row.icon" fit="contain"></el-image>
+            </template>
+        </el-table-column>
         <el-table-column label="节点名称">
             <template #default="scope">
                 <el-input v-if="scope.$index>0 && scope.$index<tableData.length-1" v-model="scope.row.name" filterable placeholder="节点名称" style="width: 300px"></el-input>
@@ -70,14 +76,17 @@
                     {
                         name: '',
                         event: 'StartNewGame',
+                        icon: '',
                     },
                     {
                         name: '任意结束',
                         event: 'EndingSplit',
+                        icon: '',
                     },
                     {
                         name: '',
                         event: 'ManualSplit',
+                        icon: '',
                     },
                 ],
                 fileList: [],
@@ -169,7 +178,11 @@
                     },
                 })
                 .then(response => {
-                    this.tableData = response.data.splits;
+                    this.tableData = [...response.data.splits, {
+                        name: '',
+                        event: 'ManualSplit',
+                        icon: '',
+                    }];
                     this.$nextTick(() => {
                         this.loading = false;
                     });
