@@ -182,10 +182,15 @@ func onSaveSplitsFile() {
 	}, splits}
 	fileRunData.Segments = nil
 	for _, line := range lines {
+		splitId := translate.GetIDByDescription(line.splitId.Text())
 		splits.Setting = append(splits.Setting, &xmlWasmSetting{
 			Type:  "string",
-			Value: translate.GetIDByDescription(line.splitId.Text()),
+			Value: splitId,
 		})
+		icon := line.icon
+		if icon == "" {
+			icon = getIcon(splitId)
+		}
 		fileRunData.Segments = append(fileRunData.Segments, &xmlSegment{
 			Name:  line.name.Text(),
 			Other: line.xmlSegmentOther,
