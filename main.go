@@ -93,10 +93,10 @@ func main() {
 				Children: []Widget{
 					TextLabel{
 						TextAlignment: AlignHFarVCenter,
-						Text:          "由于翻译水平有限，翻译可能不准确，请检查翻译对照列表是否正确后使用。",
+						Text:          "由于翻译水平有限，翻译可能不准确，请检查翻译对照表是否正确后使用。",
 					},
 					PushButton{
-						Text:      "打开翻译对照列表",
+						Text:      "打开翻译对照表",
 						Alignment: AlignHFarVCenter,
 						OnClicked: func() {
 							_ = exec.CommandContext(context.Background(), "rundll32", "url.dll,FileProtocolHandler", "http://127.0.0.1:12333/translate").Start()

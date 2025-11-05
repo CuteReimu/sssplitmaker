@@ -27,6 +27,7 @@
             </div>
         </template>
     </el-upload>
+    <el-alert title="由于翻译水平有限，翻译可能不准确，请检查翻译对照表是否正确后使用。" type="primary" :show-icon="true" close-text="打开翻译对照表" @close="openTranslate" style="max-width: 960px"></el-alert>
     <el-table :data="tableData" style="max-width: 960px" v-loading="loading" element-loading-text="正在加载数据...">
         <el-table-column label="节点名称">
             <template #default="scope">
@@ -181,6 +182,9 @@
             handleChange(file, fileList) {
                 const latest = fileList.slice(-1);
                 this.fileList.splice(0, this.fileList.length, ...latest);
+            },
+            openTranslate() {
+                window.open('/translate', '_blank', 'noopener,noreferrer')
             },
         },
     });
