@@ -243,6 +243,7 @@ var SplitsCache = []*SplitData{
 	{ID: "SavageBeastfly1", Description: "残暴的兽蝇1（Boss）"},
 	{ID: "SavageBeastfly2", Description: "暴怒的兽蝇2（Boss）"},
 	{ID: "CaravanTroupeGreymoor", Description: "跳蚤剧团移动-灰沼（事件）"},
+	{ID: "CaravanTroupeBlastedSteps", Description: "跳蚤剧团移动-蚀阶（事件）"},
 	{ID: "CaravanTroupeFleatopia", Description: "跳蚤剧团移动-蚤托邦（事件）"},
 	{ID: "SoldRelic", Description: "卖古董（事件）"},
 	{ID: "CollectedWhitewardKey", Description: "白愈钥匙（道具）"},
