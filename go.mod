@@ -1,6 +1,6 @@
 module github.com/CuteReimu/sssplitmaker
 
-go 1.24.1
+go 1.25.4
 
 require (
 	github.com/gin-gonic/gin v1.11.0
@@ -42,3 +42,5 @@ require (
 	google.golang.org/protobuf v1.36.9 // indirect
 	gopkg.in/Knetic/govaluate.v3 v3.0.0 // indirect
 )
+
+ignore ./hk-split-maker

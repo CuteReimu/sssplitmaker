@@ -25,6 +25,7 @@ jobs:
         mkdir -p static
         touch static/axios.min.js
         touch static/index.css
+        touch static/css-vars.css
         touch static/index.full.min.js
         touch static/index.iife.min.js
         touch static/vue.global.prod.js
