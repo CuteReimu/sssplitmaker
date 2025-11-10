@@ -41,4 +41,4 @@ go test
 
 感谢 AlexKnauth 大佬编写的丝之歌 AutoSplitter： https://github.com/AlexKnauth/silksong-autosplit-wasm
 
-默认模板来自： https://github.com/slaurent22/hk-split-maker
+默认模板和图标来自： https://github.com/slaurent22/hk-split-maker
