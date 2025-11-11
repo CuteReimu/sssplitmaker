@@ -91,6 +91,14 @@ func initWebUi() {
 		}
 		c.JSON(http.StatusOK, result)
 	})
+	g.GET("/download/icons", func(context *gin.Context) {
+		icons, err := zipIcons()
+		if err != nil {
+			context.JSON(http.StatusInternalServerError, gin.H{"code": -2, "msg": fmt.Sprintf("打包图标失败: %+v", err)})
+			return
+		}
+		context.Data(http.StatusOK, "application/zip", icons)
+	})
 	g.GET("/translate", func(c *gin.Context) {
 		c.Data(http.StatusOK, "text/html; charset=utf-8", b2.Bytes())
 	})

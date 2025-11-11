@@ -1,12 +1,14 @@
 package main
 
 import (
+	"archive/zip"
 	"bufio"
 	"bytes"
 	"embed"
 	"encoding/base64"
 	"errors"
 	"io"
+	fs2 "io/fs"
 	"path"
 	"regexp"
 	"strings"
@@ -48,6 +50,36 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
+}
+
+func zipIcons() ([]byte, error) {
+	b := &bytes.Buffer{}
+	zipWriter := zip.NewWriter(b)
+	err := fs2.WalkDir(iconFs, "icons", func(filePath string, d fs2.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		if d.IsDir() || d.Name() == "icons.ts" {
+			return nil
+		}
+		fw, err := zipWriter.Create(filePath)
+		if err != nil {
+			return err
+		}
+		buf, err := iconFs.ReadFile(filePath)
+		if err != nil {
+			return err
+		}
+		_, err = fw.Write(buf)
+		return err
+	})
+	if err != nil {
+		return nil, err
+	}
+	if err = zipWriter.Close(); err != nil {
+		return nil, err
+	}
+	return b.Bytes(), nil
 }
 
 func getIconHtmlFormat(splitId string) string {
