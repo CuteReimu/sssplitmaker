@@ -3,13 +3,12 @@
     "splitIds": [
         "StartNewGame",
         "MossMotherTrans",
-        "EnterMosshome",
-        "BoneBottomSimpleKey",
-        "EnterUpperWormways",
-        "EnterShellwood",
+        "SilkSpearTrans",
+        "BellBeast",
+        "SwiftStepTrans",
+        "EnterWormways",
         "ClingGripTrans",
         "WardenflyCaptureTrans",
-        "SwiftStepTrans",
         "SlabKeyIndolent",
         "SlabKeyHeretic",
         "SlabStation"
@@ -17,6 +16,6 @@
     "gameName": "Hollow Knight: Silksong Category Extensions",
     "variables": {
         "Slab% Subcategory": "No Major Glitches",
-        "Jail?": "Jailed"
+        "Jail?": "Bellbeast"
     }
 }
