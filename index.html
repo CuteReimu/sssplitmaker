@@ -34,6 +34,19 @@
         <el-button type="danger" @click="resetIcons">一键清空所有图标</el-button>
         <el-button type="primary" @click="downloadIcons">下载所有图标</el-button>
     </div>
+    <div>
+        <el-switch
+            v-model="skipStartAnimation"
+            size="large"
+            active-text="跳过开场动画"
+            inactive-text="不跳过"
+            @change="onSkipStartAnimationChange"
+            :disabled="disableStartAnimation"
+        ></el-switch>
+        <a href="https://cutereimu.cn/daily/silksong/speedrun-submit.html#%E6%96%B0%E8%A7%84%E5%88%99-%E5%85%81%E8%AE%B8%E8%B7%B3%E8%BF%87%E5%BC%80%E5%9C%BA%E5%8A%A8%E7%94%BB" target="_blank" rel="noopener noreferrer">
+            <el-text size="large" style="margin-left: 12px;">这是什么意思？</el-text>
+        </a>
+    </div>
     <el-table :data="tableData" style="max-width: 960px" v-loading="loading" element-loading-text="正在加载数据...">
         <el-table-column label="图标" width="60px">
             <template #default="scope">
@@ -75,6 +88,8 @@
         data() {
             return {
                 disableSubmit: false,
+                skipStartAnimation: false,
+                disableStartAnimation: false,
                 options: {{.options}},
                 currentTemplate: '',
                 templates: [],
@@ -118,6 +133,31 @@
                 })
         },
         methods: {
+            onSkipStartAnimationChange(value) {
+                if (value) {
+                    if (this.tableData[0].event !== "Act1Start") {
+                        this.tableData[0].event = "Act1Start";
+                    }
+                } else {
+                    if (this.tableData[0].event !== "StartNewGame") {
+                        this.tableData[0].event = "StartNewGame";
+                    }
+                }
+            },
+            refreshStartAnimationChange(eventValue) {
+                switch (eventValue) {
+                    case "StartNewGame":
+                        this.skipStartAnimation = false;
+                        this.disableStartAnimation = false;
+                        break;
+                    case "Act1Start":
+                        this.skipStartAnimation = true;
+                        this.disableStartAnimation = false;
+                        break;
+                    default:
+                        this.disableStartAnimation = true;
+                }
+            },
             addLine(index) {
                 this.tableData.splice(index, 0,
                     {
@@ -217,6 +257,7 @@
                             event: 'ManualSplit',
                             icon: '',
                         }];
+                        this.refreshStartAnimationChange(this.tableData[0].event)
                         this.$nextTick(() => {
                             this.loading = false;
                         });
@@ -235,11 +276,17 @@
             },
             onEventChange(idx) {
                 const eventValue = this.tableData[idx].event;
+                if (idx === 0) {
+                    this.refreshStartAnimationChange(eventValue)
+                }
                 const opt = this.options.find(o => o.value === eventValue);
                 if (opt) {
                     const label = opt.label;
                     const pos = label.indexOf('（');
                     this.tableData[idx].name = pos === -1 ? label : label.slice(0, pos);
+                }
+                if (idx === 0) {
+                    return;
                 }
                 axios.get('/get-icon?name=' + encodeURIComponent(this.tableData[idx].event))
                     .then(response => {

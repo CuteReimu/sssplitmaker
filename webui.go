@@ -186,9 +186,7 @@ func webBuildSplits(c *gin.Context) {
 	if fileRunData.GameName == "" {
 		fileRunData.GameName = "Hollow Knight: Silksong"
 	}
-	if fileRunData.Offset == "" {
-		fileRunData.Offset = "00:00:00"
-	}
+	fileRunData.Offset = "00:00:00"
 	splits := &xmlWasmSetting{
 		Id:   "splits",
 		Type: "list",
@@ -205,6 +203,9 @@ func webBuildSplits(c *gin.Context) {
 			Value: line.Event,
 		})
 		if i == 0 {
+			if splits.Setting[0].Value == "Act1Start" {
+				fileRunData.Offset = "00:00:21.7600000"
+			}
 			continue
 		}
 		fileRunData.Segments = append(fileRunData.Segments, &xmlSegment{

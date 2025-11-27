@@ -25,6 +25,7 @@ var splitLinesViewContainer *walk.Composite
 var splitLinesView *walk.Composite
 var startTriggerComboBox *walk.ComboBox
 var splitmakerComboBox *walk.ComboBox
+var skipStartAnimationCheckBox *walk.CheckBox
 
 func main() {
 	initWebUi()
@@ -113,14 +114,39 @@ func main() {
 						Layout:  HBox{},
 						Children: []Widget{
 							CheckBox{
-								Text:    "自动开始",
-								Enabled: false,
-								Checked: true,
+								AssignTo: &skipStartAnimationCheckBox,
+								Text:     "跳过开局动画",
+								OnClicked: func() {
+									var err error
+									id := translate.SplitsCache[startTriggerComboBox.CurrentIndex()].ID
+									if id == "StartNewGame" || id == "Act1Start" {
+										if skipStartAnimationCheckBox.Checked() {
+											err = startTriggerComboBox.SetCurrentIndex(translate.GetIndexByID("Act1Start"))
+										} else {
+											err = startTriggerComboBox.SetCurrentIndex(translate.GetIndexByID("StartNewGame"))
+										}
+									}
+									if err != nil {
+										walk.MsgBox(mainWindow, "内部错误", err.Error(), walk.MsgBoxIconError)
+									}
+								},
 							},
 							ComboBox{
 								AssignTo: &startTriggerComboBox,
 								Model:    splitDescriptions,
 								Value:    translate.GetSplitDescriptionByID("StartNewGame"),
+								OnCurrentIndexChanged: func() {
+									switch translate.SplitsCache[startTriggerComboBox.CurrentIndex()].ID {
+									case "StartNewGame":
+										skipStartAnimationCheckBox.SetEnabled(true)
+										skipStartAnimationCheckBox.SetChecked(false)
+									case "Act1Start":
+										skipStartAnimationCheckBox.SetEnabled(true)
+										skipStartAnimationCheckBox.SetChecked(true)
+									default:
+										skipStartAnimationCheckBox.SetEnabled(false)
+									}
+								},
 							},
 						},
 					},
