@@ -40,12 +40,15 @@ func TestSplits(t *testing.T) {
 	for _, split := range splits {
 		splitMap[split.Key] = split
 	}
+	var emptyCount int
 	for i, split := range SplitsCache {
 		if index := GetIndexByID(split.ID); index != i && index != -1 {
 			t.Log("重复分割: " + split.ID)
 			t.Fail()
 		}
-		if id := GetIDByDescription(split.Description); id != "" && id != split.ID {
+		if split.Description == "" {
+			emptyCount++
+		} else if id := GetIDByDescription(split.Description); id != "" && id != split.ID {
 			t.Log("重复翻译: " + split.ID)
 			t.Fail()
 		}
@@ -54,6 +57,7 @@ func TestSplits(t *testing.T) {
 			t.Fail()
 		}
 	}
+	t.Log("尚未翻译的数量: ", emptyCount)
 	if t.Failed() {
 		for _, s := range newSplits {
 			fmt.Printf("{ID: \"%s\", Description: \"\"},\n", s)
