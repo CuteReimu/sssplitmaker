@@ -57,7 +57,6 @@ func TestSplits(t *testing.T) {
 			t.Fail()
 		}
 	}
-	t.Log("尚未翻译的数量: ", emptyCount)
 	if t.Failed() {
 		for _, s := range newSplits {
 			fmt.Printf("{ID: \"%s\", Description: \"\"},\n", s)
@@ -70,4 +69,6 @@ func TestSplits(t *testing.T) {
 		fmt.Printf("\t\"%s\": \"%s\",\n", s.Alias, s.Key)
 	}
 	fmt.Println("}")
+
+	fmt.Println("尚未翻译的数量: ", emptyCount)
 }
