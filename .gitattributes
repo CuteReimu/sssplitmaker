@@ -1,3 +1,4 @@
 *.html linguist-language=Vue
 icons/** linguist-vendored
 splitmaker/** linguist-vendored
+translate/splits.json -diff
