@@ -26,6 +26,7 @@ var splitLinesView *walk.Composite
 var startTriggerComboBox *walk.ComboBox
 var splitmakerComboBox *walk.ComboBox
 var skipStartAnimationCheckBox *walk.CheckBox
+var includeTimeRecordsCheckBox *walk.CheckBox
 
 func main() {
 	initWebUi()
@@ -165,6 +166,12 @@ func main() {
 						},
 					},
 				},
+			},
+			CheckBox{
+				AssignTo:  &includeTimeRecordsCheckBox,
+				Alignment: AlignHFarVCenter,
+				Checked:   true,
+				Text:      "保留*.lss文件中原本的时间记录（如果有）",
 			},
 			Composite{
 				Layout: HBox{},

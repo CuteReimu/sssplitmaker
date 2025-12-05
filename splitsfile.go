@@ -155,6 +155,9 @@ func loadLayoutFileFromSplitmaker(fileName string) {
 }
 
 func onSaveSplitsFile() {
+	if !includeTimeRecordsCheckBox.Checked() {
+		fileRunData.Other = nil
+	}
 	if fileRunData.Version == "" {
 		fileRunData.Version = "1.7.0"
 	}
@@ -192,9 +195,13 @@ func onSaveSplitsFile() {
 		if icon == "" {
 			icon = getIcon(splitId)
 		}
+		var other []*xmlElement
+		if includeTimeRecordsCheckBox.Checked() {
+			other = line.xmlSegmentOther
+		}
 		fileRunData.Segments = append(fileRunData.Segments, &xmlSegment{
 			Name:  line.name.Text(),
-			Other: line.xmlSegmentOther,
+			Other: other,
 			Icon:  xmlIcon{icon},
 		})
 	}

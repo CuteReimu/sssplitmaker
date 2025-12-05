@@ -76,6 +76,7 @@
             </template>
         </el-table-column>
     </el-table>
+    <el-checkbox v-model="includeTimeRecords" size="large">保留*.lss文件中原本的时间记录（如果有）</el-checkbox>
     <el-button type="primary" @click="submit" style="align-self: flex-start;" :disabled="disableSubmit">另存为</el-button>
 </div>
 
@@ -87,6 +88,7 @@
     const app = createApp({
         data() {
             return {
+                includeTimeRecords: true,
                 disableSubmit: false,
                 skipStartAnimation: false,
                 disableStartAnimation: false,
@@ -177,7 +179,7 @@
             },
             submit() {
                 axios.post('/build-splits',
-                    this.tableData.slice(0, -1),
+                    { data: this.tableData.slice(0, -1), includeTimeRecords: this.includeTimeRecords },
                     {
                         responseType: 'blob',
                         headers: { 'Content-Type': 'application/json' },

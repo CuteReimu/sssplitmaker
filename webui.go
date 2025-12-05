@@ -161,21 +161,22 @@ type webSplitLine struct {
 }
 
 func webBuildSplits(c *gin.Context) {
-	var lines []webSplitLine
-	buf, err := c.GetRawData()
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"code": -2, "msg": err.Error()})
-		return
+	var data struct {
+		Lines              []webSplitLine `json:"data"`
+		IncludeTimeRecords bool           `json:"includeTimeRecords"`
 	}
-	err = json.Unmarshal(buf, &lines)
+	err := c.Bind(&data)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"code": -1, "msg": "unmarshal failed"})
+		c.JSON(http.StatusBadRequest, gin.H{"code": -4, "msg": err.Error()})
 		return
 	}
 
-	fileRunData := webRun
-	if fileRunData == nil {
-		fileRunData = &xmlRun{}
+	var fileRunData xmlRun
+	if webRun != nil {
+		fileRunData = *webRun
+	}
+	if !data.IncludeTimeRecords {
+		fileRunData.Other = nil
 	}
 	if fileRunData.Version == "" {
 		fileRunData.Version = "1.7.0"
@@ -197,7 +198,7 @@ func webBuildSplits(c *gin.Context) {
 		Value: "silksong_autosplit_wasm",
 	}, splits}
 	fileRunData.Segments = nil
-	for i, line := range lines {
+	for i, line := range data.Lines {
 		splits.Setting = append(splits.Setting, &xmlWasmSetting{
 			Type:  "string",
 			Value: line.Event,
@@ -208,13 +209,17 @@ func webBuildSplits(c *gin.Context) {
 			}
 			continue
 		}
+		var other []*xmlElement
+		if data.IncludeTimeRecords {
+			other = line.Other
+		}
 		fileRunData.Segments = append(fileRunData.Segments, &xmlSegment{
 			Name:  line.Name,
-			Other: line.Other,
+			Other: other,
 			Icon:  xmlIcon{convertIconToLiveSplitFormat(line.Icon)},
 		})
 	}
-	buf, err = xml.MarshalIndent(fileRunData, "", "  ")
+	buf, err := xml.MarshalIndent(fileRunData, "", "  ")
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"code": -3, "msg": err.Error()})
 		return
