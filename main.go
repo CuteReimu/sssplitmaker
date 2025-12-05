@@ -29,6 +29,9 @@ var skipStartAnimationCheckBox *walk.CheckBox
 
 func main() {
 	initWebUi()
+	if walk.DlgCmdOK == walk.MsgBox(nil, "提示", "除“更新LiveSplit”功能以外，计时器生成器网页版在其它功能方面都更加好用，是否打开网页版？", walk.MsgBoxOKCancel|walk.MsgBoxIconInformation) {
+		_ = exec.CommandContext(context.Background(), "rundll32", "url.dll,FileProtocolHandler", "http://127.0.0.1:12333/").Start()
+	}
 	screenX, screenY := getSystemMetrics(0), getSystemMetrics(1)
 	width, height := 720, 960
 	err := MainWindow{
