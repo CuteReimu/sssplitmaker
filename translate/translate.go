@@ -341,7 +341,7 @@ var SplitsCache = []*SplitData{
 	{ID: "EnterBoneBottom", Description: "进入骸底镇（切图）"},
 	{ID: "NeedleStrike", Description: "蓄力斩（技能）"},
 	{ID: "NeedleStrikeTrans", Description: "蓄力斩（切图）"},
-	{ID: "EnterCitadelFrontGate", Description: "进入圣堡正门（切图）"},
+	{ID: "EnterGrandGate", Description: "进入圣堡正门（切图）"},
 	{ID: "EnterWhisperingVaults", Description: "进入低语书库（切图）"},
 	{ID: "EnterPutrifiedDucts", Description: "进入腐殖渠（切图）"},
 	{ID: "ToolPouch1", Description: "工具袋1（升级）"},
@@ -495,11 +495,15 @@ var SplitsCache = []*SplitData{
 	{ID: "WeightedBelt", Description: "负重环带（工具）"},
 	{ID: "WispfireLantern", Description: "灵火提灯（工具）"},
 	{ID: "WreathofPurity", Description: "净界花环（工具）"},
+	{ID: "Crawfather", Description: "腐囊之父（Boss）"},
+	{ID: "EnterChoralChambers", Description: "进入圣咏殿（切图）"},
+	{ID: "ReverseAbyssEscapeTrans", Description: "反向跑深渊逃脱（切图）"},
 }
 
 var cacheAliases = map[string]string{
 	"Conchflies1":                   "GreatConchflies",
 	"WhisperingVaultsGauntlet":      "WhisperingVaultsArena",
+	"EnterCitadelFrontGate":         "EnterGrandGate",
 	"GivenCouriersRasher":           "DeliveredCouriersRasher",
 	"EnterHighHallsGauntlet":        "EnterHighHallsArena",
 	"HighHallsGauntlet":             "HighHallsArena",

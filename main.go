@@ -84,7 +84,7 @@ func main() {
 					},
 					TextLabel{
 						TextAlignment: AlignHFarVCenter,
-						Text:          "Auto Splitter Version: 1.14.0",
+						Text:          "Auto Splitter Version: 1.19.0",
 					},
 					PushButton{
 						Text:      "更新LiveSplit",
