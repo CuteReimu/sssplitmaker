@@ -498,6 +498,8 @@ var SplitsCache = []*SplitData{
 	{ID: "Crawfather", Description: "腐囊之父（Boss）"},
 	{ID: "EnterChoralChambers", Description: "进入圣咏殿（切图）"},
 	{ID: "ReverseAbyssEscapeTrans", Description: "反向跑深渊逃脱（切图）"},
+	{ID: "SinnersRoadSimpleKey", Description: "罪途简单钥匙（道具）"},
+	{ID: "JubilanaSimpleKey", Description: "朱比拉娜简单钥匙（道具）"},
 }
 
 var cacheAliases = map[string]string{
