@@ -500,6 +500,18 @@ var SplitsCache = []*SplitData{
 	{ID: "ReverseAbyssEscapeTrans", Description: "反向跑深渊逃脱（切图）"},
 	{ID: "SinnersRoadSimpleKey", Description: "罪途简单钥匙（道具）"},
 	{ID: "JubilanaSimpleKey", Description: "朱比拉娜简单钥匙（道具）"},
+	{ID: "PlasmifiedZangoEncountered", Description: "生质异化的赞戈-遭遇（Boss）"},
+	{ID: "SisterSplinterEncountered", Description: "碎裂者修女-遭遇（Boss）"},
+	{ID: "SisterSplinter", Description: "碎裂者修女（Boss）"},
+	{ID: "SisterSplinterTrans", Description: "碎裂者修女（切图）"},
+	{ID: "LostGarmond", Description: "失心加蒙德（Boss）"},
+	{ID: "FaydownCloakTrans", Description: "二段跳（切图）"},
+	{ID: "TrobbioEncountered", Description: "特罗比奥-遭遇（Boss）"},
+	{ID: "TormentedTrobbioEncountered", Description: "痛苦的特罗比奥-遭遇（Boss）"},
+	{ID: "TormentedTrobbio", Description: "痛苦的特罗比奥（Boss）"},
+	{ID: "TormentedTrobbioTrans", Description: "痛苦的特罗比奥（切图）"},
+	{ID: "EnterLace2", Description: "进入蕾丝2（切图）"},
+	{ID: "SilkSoarTrans", Description: "灵丝升腾（切图）"},
 }
 
 var cacheAliases = map[string]string{
