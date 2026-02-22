@@ -512,6 +512,10 @@ var SplitsCache = []*SplitData{
 	{ID: "TormentedTrobbioTrans", Description: "痛苦的特罗比奥（切图）"},
 	{ID: "EnterLace2", Description: "进入蕾丝2（切图）"},
 	{ID: "SilkSoarTrans", Description: "灵丝升腾（切图）"},
+	{ID: "TrailsEndMenu", Description: "沙克拉导师（菜单）"},
+	{ID: "OnObtainSpoolFragment", Description: "灵丝轴碎片（获得）"},
+	{ID: "PalestagTrans", Description: "苍白苜鹿（切图）"},
+	{ID: "ForebrothersTrans", Description: "监工兄弟（切图）"},
 }
 
 var cacheAliases = map[string]string{
