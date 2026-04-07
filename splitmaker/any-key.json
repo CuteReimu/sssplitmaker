@@ -8,7 +8,8 @@
         "SwiftStepTrans",
         "EnterWormways",
         "ClingGripTrans",
-        "BellhartBell",
+        "Widow",
+        "EnterGreymoor",
         "EnterMist",
         "LeaveMist",
         "Act2Started",
@@ -20,12 +21,16 @@
         "ArchitectsMelodyTrans",
         "EnterHighHallsArena",
         "ConductorsMelodyTrans",
+        "EnterLace2",
         "PostLace2ArenaTrans",
         "EndingSplit"
     ],
-    "names": { "EndingSplit": "Grand Mother Silk" },
+    "names": {
+        "EndingSplit": "Grand Mother Silk"
+    },
     "gameName": "Hollow Knight: Silksong",
     "variables": {
-        "Any% Subcategory": "No Major Glitches"
+        "Any% Subcategory": "No Major Glitches",
+        "Any% Drifters Cloak?": "Cloakless"
     }
 }

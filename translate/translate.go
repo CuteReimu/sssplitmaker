@@ -516,6 +516,13 @@ var SplitsCache = []*SplitData{
 	{ID: "OnObtainSpoolFragment", Description: "灵丝轴碎片（获得）"},
 	{ID: "PalestagTrans", Description: "苍白苜鹿（切图）"},
 	{ID: "ForebrothersTrans", Description: "监工兄弟（切图）"},
+	{ID: "MaggotsRemoved", Description: "清除蛆（事件）"},
+	{ID: "EnterSprintmasterCave", Description: "进入辛德里尔织巢（切图）"},
+	{ID: "BenchHalfwayHome", Description: "中途酒馆椅子（椅子）"},
+	{ID: "EnterCrawCourtroom", Description: "进入腐囊虫院子（切图）"},
+	{ID: "BenchChoralChambersBelowDining", Description: "圣咏殿餐厅下方椅子（椅子）"},
+	{ID: "VaultkeepersMelodyMenu", Description: "管理员旋律（菜单）"},
+	{ID: "ConductorsMelodyMenu", Description: "指挥家旋律（菜单）"},
 }
 
 var cacheAliases = map[string]string{
