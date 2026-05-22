@@ -7,6 +7,9 @@ import (
 	"encoding/xml"
 	"errors"
 	"fmt"
+	"image"
+	"image/draw"
+	"image/png"
 	"io"
 	"net/http"
 	"regexp"
@@ -21,16 +24,14 @@ var (
 	//go:embed static
 	htmlFiles embed.FS
 	//go:embed index.html
-	htmlIndex string
+	htmlIndex []byte
+	//go:embed main.js
+	htmlMainJs string
 	//go:embed translate.html
 	htmlTranslate string
 )
 
 func initWebUi() {
-	t, err := template.New("result").Parse(htmlIndex)
-	if err != nil {
-		panic(err)
-	}
 	t2, err := template.New("translate").Parse(htmlTranslate)
 	if err != nil {
 		panic(err)
@@ -45,12 +46,7 @@ func initWebUi() {
 	for _, v := range translate.SplitsCache {
 		options = append(options, Option{Value: v.ID, Label: v.Description})
 	}
-	buf, err := json.MarshalIndent(options, "", "  ")
-	if err != nil {
-		panic(err)
-	}
-	var b bytes.Buffer
-	err = t.Execute(&b, map[string]any{"options": string(buf)})
+	optionsJSON, err := json.Marshal(options)
 	if err != nil {
 		panic(err)
 	}
@@ -64,8 +60,40 @@ func initWebUi() {
 	gin.SetMode(gin.ReleaseMode)
 	g := gin.New()
 	g.GET("/", func(c *gin.Context) {
-		c.Writer.Header().Set("Content-Type", "")
-		c.Data(http.StatusOK, "text/html; charset=utf-8", b.Bytes())
+		c.Data(http.StatusOK, "text/html; charset=utf-8", htmlIndex)
+	})
+	g.GET("/main.js", func(c *gin.Context) {
+		c.Data(http.StatusOK, "application/javascript", []byte(htmlMainJs))
+	})
+	g.GET("/favicon.png", func(c *gin.Context) {
+		data, err := iconFs.ReadFile("icons/Misc/Hornet.png")
+		if err != nil {
+			c.Status(http.StatusNotFound)
+			return
+		}
+		src, err := png.Decode(bytes.NewReader(data))
+		if err != nil {
+			c.Status(http.StatusInternalServerError)
+			return
+		}
+		b := src.Bounds()
+		size := b.Dx()
+		if b.Dy() > size {
+			size = b.Dy()
+		}
+		dst := image.NewNRGBA(image.Rect(0, 0, size, size))
+		offsetX := (size - b.Dx()) / 2
+		offsetY := (size - b.Dy()) / 2
+		draw.Draw(dst, image.Rect(offsetX, offsetY, offsetX+b.Dx(), offsetY+b.Dy()), src, b.Min, draw.Src)
+		var buf bytes.Buffer
+		if err = png.Encode(&buf, dst); err != nil {
+			c.Status(http.StatusInternalServerError)
+			return
+		}
+		c.Data(http.StatusOK, "image/png", buf.Bytes())
+	})
+	g.GET("/get-options", func(c *gin.Context) {
+		c.Data(http.StatusOK, "application/json", optionsJSON)
 	})
 	g.POST("/upload", func(c *gin.Context) {
 		file, err := c.FormFile("file")
