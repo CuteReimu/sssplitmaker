@@ -77,10 +77,7 @@ func initWebUi() {
 			return
 		}
 		b := src.Bounds()
-		size := b.Dx()
-		if b.Dy() > size {
-			size = b.Dy()
-		}
+		size := max(b.Dy(), b.Dx())
 		dst := image.NewNRGBA(image.Rect(0, 0, size, size))
 		offsetX := (size - b.Dx()) / 2
 		offsetY := (size - b.Dy()) / 2
