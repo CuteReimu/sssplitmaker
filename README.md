@@ -10,19 +10,24 @@ https://cutereimu.cn/daily/silksong/sssplitmaker-faq.html
 
 ## 编译说明
 
-**因为目前支持了网页版，因此需要提前下载CDN，运行`download_cdn.sh`或`download_cdn.ps1`即可下载。**
+首先需要 Go 和 Nodejs，然后安装 wails：
 
-**根据自己的编译环境，运行`build.bat`或`build.sh`即可进行编译。**
+```bash
+go install github.com/wailsapp/wails/v2/cmd/wails@latest
+```
 
-如果想要自己使用`go build`进行编译，需要提前下载wasm文件：
+然后使用以下命令就可以调试或打包了：
 
-```shell
+```bash
+# 提前下载wasm文件
 curl -O https://github.com/AlexKnauth/silksong-autosplit-wasm/releases/latest/download/silksong_autosplit_wasm_stable.wasm
 curl -O https://raw.githubusercontent.com/LiveSplit/LiveSplit.AutoSplitters/master/LiveSplit.AutoSplitters.xml
 
-# -ldflags中，-s是去掉符号表，-w是去掉调试信息，均可减小所生成二进制文件的体积
-# -H=windowsgui是打开Windows窗口时隐藏控制台的黑框框
-GOOS=windows GOARCH=amd64 go build -ldflags "-s -w -H=windowsgui" -o sssplitmaker.exe
+# 本地调试
+wails dev
+
+# 打包
+wails build -platform=windows/amd64 -webview2 embed
 ```
 
 ## （开发向）如何更新最新的节点

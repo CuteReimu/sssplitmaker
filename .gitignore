@@ -6,6 +6,12 @@
 *.xml
 
 # Binaries for programs and plugins
+build/bin
+node_modules
+frontend/dist
+dist/
+package.json.md5
+
 /sssplitmaker
 *.exe
 *.exe~

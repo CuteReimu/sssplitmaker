@@ -1,0 +1,13 @@
+{
+  "$schema": "https://wails.io/schemas/config.v2.json",
+  "name": "丝之歌计时器生成器",
+  "outputfilename": "丝之歌计时器生成器",
+  "frontend:install": "npm install",
+  "frontend:build": "npm run build",
+  "frontend:dev:watcher": "npm run dev",
+  "frontend:dev:serverUrl": "auto",
+  "author": {
+    "name": "奇葩の灵梦",
+    "email": "cutereimu@vip.qq.com"
+  }
+}
