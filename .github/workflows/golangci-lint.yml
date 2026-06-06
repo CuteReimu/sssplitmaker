@@ -22,6 +22,13 @@ jobs:
       run: |
         touch LiveSplit.AutoSplitters.xml
         touch silksong_autosplit_wasm_stable.wasm
+        mkdir -p frontend/dist
+        touch frontend/dist/1
+
+    - name: Create Fake Embed Files
+      run: |
+        touch LiveSplit.AutoSplitters.xml
+        touch silksong_autosplit_wasm_stable.wasm
         mkdir -p static
         touch static/axios.min.js
         touch static/index.css
