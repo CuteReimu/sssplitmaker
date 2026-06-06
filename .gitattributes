@@ -1,3 +1,5 @@
 icons/** linguist-vendored
 splitmaker/** linguist-vendored
 translate/splits.json -diff
+
+frontend/wailsjs/go/** linguist-generated
