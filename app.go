@@ -24,12 +24,6 @@ func NewApp() *App {
 	return &App{}
 }
 
-// startup is called when the app starts. The context is saved
-// so we can call the runtime methods
-func (a *App) startup(ctx context.Context) {
-	a.ctx = ctx
-}
-
 type Option struct {
 	Value string `json:"value"`
 	Label string `json:"label"`
@@ -245,6 +239,12 @@ func (a *App) DownloadIcons() (string, error) {
 		return "", err
 	}
 	return base64.StdEncoding.EncodeToString(buf), nil
+}
+
+// startup is called when the app starts. The context is saved
+// so we can call the runtime methods
+func (a *App) startup(ctx context.Context) {
+	a.ctx = ctx
 }
 
 // --- XML types ---

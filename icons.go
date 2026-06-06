@@ -96,20 +96,6 @@ func getIconHtmlFormat(splitId string) string {
 	return htmlFormatHeader + s
 }
 
-func getIcon(splitId string) string {
-	iconPath, ok := iconDict[splitId]
-	if !ok {
-		return ""
-	}
-	iconPath = path.Join("icons", iconPath)
-	buf, err := iconFs.ReadFile(iconPath)
-	if err != nil {
-		return ""
-	}
-	s := base64.StdEncoding.EncodeToString(append([]byte{0, 2}, buf...))
-	return livesplitFormatHeader + s
-}
-
 func convertIconToHtmlFormat(icon string) string {
 	if len(icon) == 0 {
 		return ""
