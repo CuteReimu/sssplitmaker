@@ -1,6 +1,6 @@
 icons/** linguist-vendored
-splitmaker/** linguist-vendored
-translate/splits.json -diff
+splitmaker/** linguist-vendored eol=lf
+translate/splits.json -diff eol=lf
 
 frontend/wailsjs/** linguist-generated eol=lf
 go.mod eol=lf
