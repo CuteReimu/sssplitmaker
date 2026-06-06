@@ -19,6 +19,7 @@
         <el-button type="danger" @click="resetIcons">一键清空所有图标</el-button>
         <el-button type="primary" @click="downloadIcons">下载所有图标</el-button>
         <el-button type="warning" @click="fixLiveSplit" :loading="fixingLiveSplit">更新LiveSplit</el-button>
+        <el-button type="warning" @click="openHelp">使用帮助</el-button>
     </div>
     <div>
         <el-switch
@@ -211,6 +212,10 @@ function openGithub() {
 
 function openSkipAnimationHelp() {
   BrowserOpenURL('https://cutereimu.cn/daily/silksong/speedrun-submit.html#%E6%96%B0%E8%A7%84%E5%88%99-%E5%85%81%E8%AE%B8%E8%B7%B3%E8%BF%87%E5%BC%80%E5%9C%BA%E5%8A%A8%E7%94%BB');
+}
+
+function openHelp() {
+  BrowserOpenURL('https://cutereimu.cn/daily/silksong/sssplitmaker-faq.html');
 }
 
 async function onEventChange(idx: number) {

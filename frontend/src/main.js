@@ -1,8 +1,7 @@
-import {createApp} from 'vue'
-import App from './App.vue'
-import router from './router.js'
+import {createApp} from 'vue';
+import App from './Home.vue';
 import './style.css';
 import 'element-plus/dist/index.css';
 import 'element-plus/theme-chalk/dark/css-vars.css';
 
-createApp(App).use(router).mount('#app')
+createApp(App).mount('#app');
