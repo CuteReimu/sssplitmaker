@@ -37,6 +37,7 @@ linters:
     - musttag
     - noinlineerr
     - containedctx
+    - funcorder
   settings:
     staticcheck:
       checks:

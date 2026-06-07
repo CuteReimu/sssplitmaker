@@ -131,8 +131,8 @@ func (a *App) GetIcon(splitId string) string {
 	return getIconHtmlFormat(splitId)
 }
 
-// BuildSplits builds the LSS XML and returns base64-encoded bytes
-func (a *App) BuildSplits(data []SplitLine, includeTimeRecords bool) (string, error) {
+// buildSplits builds the LSS XML and returns base64-encoded bytes
+func (a *App) buildSplits(data []SplitLine, includeTimeRecords bool) (string, error) {
 	var fileRunData xmlRun
 	if a.uploadedRun != nil {
 		fileRunData = *a.uploadedRun
@@ -185,7 +185,7 @@ func (a *App) BuildSplits(data []SplitLine, includeTimeRecords bool) (string, er
 
 // SaveSplitsFile shows a native save dialog and writes the LSS file
 func (a *App) SaveSplitsFile(data []SplitLine, includeTimeRecords bool) error {
-	b64, err := a.BuildSplits(data, includeTimeRecords)
+	b64, err := a.buildSplits(data, includeTimeRecords)
 	if err != nil {
 		return err
 	}
@@ -207,7 +207,7 @@ func (a *App) SaveSplitsFile(data []SplitLine, includeTimeRecords bool) error {
 
 // SaveIconsZip shows a native save dialog and writes the icons zip
 func (a *App) SaveIconsZip() error {
-	b64, err := a.DownloadIcons()
+	b64, err := a.downloadIcons()
 	if err != nil {
 		return err
 	}
@@ -227,8 +227,8 @@ func (a *App) SaveIconsZip() error {
 	return os.WriteFile(dest, raw, 0644)
 }
 
-// DownloadIcons returns base64-encoded zip of all icons
-func (a *App) DownloadIcons() (string, error) {
+// downloadIcons returns base64-encoded zip of all icons
+func (a *App) downloadIcons() (string, error) {
 	buf, err := zipIcons()
 	if err != nil {
 		return "", err

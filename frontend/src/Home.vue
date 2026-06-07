@@ -61,9 +61,9 @@
 <script setup lang="ts">
 import { ElAlert, ElSelect, ElSelectV2, ElOption, ElUpload, ElButton, ElSwitch, ElTable, ElTableColumn, ElCheckbox, ElMessage, ElText, ElIcon, ElImage, ElInput } from 'element-plus';
 import { Plus, Minus, Top, Bottom, UploadFilled } from '@element-plus/icons-vue';
-import { ref, nextTick, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import { GetOptions, GetTemplates, LoadSplitFile, GetSplits, GetIcon, SaveSplitsFile, SaveIconsZip, FixLiveSplit } from '../wailsjs/go/main/App';
-import { BrowserOpenURL, LogError } from '../wailsjs/runtime/runtime';
+import { BrowserOpenURL, LogError } from '../wailsjs/runtime';
 
 interface Row {
   name: string;
@@ -151,7 +151,7 @@ async function submit() {
   try {
     await SaveSplitsFile(tableData.value.slice(0, -1) as any, includeTimeRecords.value);
   } catch (e) {
-    console.error(e);
+    LogError(e);
     ElMessage({ message: '导出失败', type: 'error', plain: true });
   } finally {
     disableSubmit.value = false;
@@ -163,7 +163,7 @@ async function downloadIcons() {
   try {
     await SaveIconsZip();
   } catch (e) {
-    console.error(e);
+    LogError(e);
     ElMessage({ message: '导出失败', type: 'error', plain: true });
   } finally {
     disableSubmit.value = false;
@@ -178,6 +178,7 @@ async function handleChange(file: { raw: File }) {
     tableData.value = newData as Row[];
     refreshStartAnimationChange(tableData.value[0]?.event ?? '');
   } catch (e) {
+    LogError(e);
     ElMessage({ message: String(e), type: 'error', plain: true });
   }
 }

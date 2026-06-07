@@ -1,4 +1,5 @@
 icons/** linguist-vendored
+icons.ts linguist-vendored eol=lf
 splitmaker/** linguist-vendored eol=lf
 translate/splits.json -diff eol=lf
 
