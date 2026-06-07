@@ -243,10 +243,7 @@ function resetIcons() {
 async function fixLiveSplit() {
   fixingLiveSplit.value = true;
   try {
-    const msg = await FixLiveSplit();
-    if (msg) ElMessage({ message: msg, type: 'success', plain: true });
-  } catch (e) {
-    ElMessage({ message: String(e), type: 'error', plain: true });
+    await FixLiveSplit();
   } finally {
     fixingLiveSplit.value = false;
   }
