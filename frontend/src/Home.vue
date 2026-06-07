@@ -63,7 +63,7 @@ import { ElAlert, ElSelect, ElSelectV2, ElOption, ElUpload, ElButton, ElSwitch, 
 import { Plus, Minus, Top, Bottom, UploadFilled } from '@element-plus/icons-vue';
 import { ref, nextTick, onMounted } from 'vue';
 import { GetOptions, GetTemplates, LoadSplitFile, GetSplits, GetIcon, SaveSplitsFile, SaveIconsZip, FixLiveSplit } from '../wailsjs/go/main/App';
-import { BrowserOpenURL } from '../wailsjs/runtime/runtime';
+import { BrowserOpenURL, LogError } from '../wailsjs/runtime/runtime';
 
 interface Row {
   name: string;
@@ -95,17 +95,17 @@ onMounted(async () => {
   try {
     options.value = await GetOptions();
   } catch (e) {
-    console.log(e);
+    LogError(e);
   }
   try {
     templates.value = await GetTemplates();
   } catch (e) {
-    console.log(e);
+    LogError(e);
   }
   try {
     tableData.value[1].icon = await GetIcon(tableData.value[1].event);
   } catch (e) {
-    console.log(e);
+    LogError(e);
   }
 });
 
@@ -188,7 +188,7 @@ async function selectTemplate(value: string) {
     tableData.value = [...res.splits as Row[], { name: '', event: 'ManualSplit', icon: '' }];
     refreshStartAnimationChange(tableData.value[0].event);
   } catch (e) {
-    console.log(e);
+    LogError(e);
   }
 }
 
@@ -216,7 +216,7 @@ async function onEventChange(idx: number) {
   try {
     tableData.value[idx].icon = await GetIcon(tableData.value[idx].event);
   } catch (e) {
-    console.log(e);
+    LogError(e);
   }
 }
 
@@ -227,7 +227,7 @@ async function fillIcons() {
       try {
         row.icon = await GetIcon(row.event);
       } catch (e) {
-        console.log(e);
+        LogError(e);
       }
     }
   }

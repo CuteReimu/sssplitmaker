@@ -3,7 +3,10 @@
 
 /hk-split-maker/
 .idea/
+.vs/
+.vscode/
 *.xml
+*.log
 
 # Binaries for programs and plugins
 build/bin
