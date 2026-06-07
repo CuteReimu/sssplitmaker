@@ -17,19 +17,21 @@ var liveSplitAutoSplittersXml []byte
 //go:embed silksong_autosplit_wasm_stable.wasm
 var wasmFile []byte
 
+var ErrFixLiveSplitIgnore = errors.New("fix live split ignore")
+
 func (a *App) FixLiveSplit() {
 	err := a.fixLiveSplit()
-	if err != nil {
-		_, _ = runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
-			Type:    runtime.ErrorDialog,
-			Title:   "错误",
-			Message: err.Error(),
-		})
-	} else {
+	if err == nil {
 		_, _ = runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
 			Type:    runtime.InfoDialog,
 			Title:   "成功",
 			Message: "修复成功，建议使用管理员模式打开计时器",
+		})
+	} else if !errors.Is(err, ErrFixLiveSplitIgnore) {
+		_, _ = runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
+			Type:    runtime.ErrorDialog,
+			Title:   "错误",
+			Message: err.Error(),
 		})
 	}
 }
@@ -45,7 +47,7 @@ func (a *App) fixLiveSplit() error {
 		return err
 	}
 	if file == "" {
-		return nil
+		return ErrFixLiveSplitIgnore
 	}
 	if filepath.Base(file) != "LiveSplit.exe" {
 		return errors.New("您选择的并不是LiveSplit.exe")

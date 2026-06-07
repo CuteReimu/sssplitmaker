@@ -9,7 +9,8 @@
 			"FileDescription": "{{.Info.ProductName}}",
 			"LegalCopyright": "{{.Info.Copyright}}",
 			"ProductName": "{{.Info.ProductName}}",
-			"Comments": "{{.Info.Comments}}"
+			"Comments": "{{.Info.Comments}}",
+			"Language": "简体中文"
 		}
 	}
 }
