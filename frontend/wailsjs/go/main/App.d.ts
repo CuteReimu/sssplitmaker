@@ -16,8 +16,6 @@ export function GetSplits(arg1:string):Promise<main.GetSplitsResult>;
 
 export function GetTemplates():Promise<Array<main.Option>>;
 
-export function GetTranslateData():Promise<string>;
-
 export function LoadSplitFile(arg1:string):Promise<Array<main.SplitLine>>;
 
 export function SaveIconsZip():Promise<void>;

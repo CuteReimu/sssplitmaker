@@ -30,10 +30,6 @@ export function GetTemplates() {
   return window['go']['main']['App']['GetTemplates']();
 }
 
-export function GetTranslateData() {
-  return window['go']['main']['App']['GetTranslateData']();
-}
-
 export function LoadSplitFile(arg1) {
   return window['go']['main']['App']['LoadSplitFile'](arg1);
 }

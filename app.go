@@ -126,11 +126,6 @@ func (a *App) GetSplits(name string) (*GetSplitsResult, error) {
 	return &GetSplitsResult{Name: categoryName, Splits: splits}, nil
 }
 
-// GetTranslateData returns the full translation table as a JSON string
-func (a *App) GetTranslateData() string {
-	return translate.SplitsHtml
-}
-
 // GetIcon returns the icon in HTML img-src format for a split ID
 func (a *App) GetIcon(splitId string) string {
 	return getIconHtmlFormat(splitId)
