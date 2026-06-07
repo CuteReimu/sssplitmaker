@@ -245,6 +245,42 @@ func (a *App) DownloadIcons() (string, error) {
 // so we can call the runtime methods
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
+	a.setWindowSize()
+}
+
+func (a *App) setWindowSize() {
+	// 1. 获取所有屏幕的信息
+	screens, _ := runtime.ScreenGetAll(a.ctx)
+	if len(screens) == 0 {
+		return // 获取失败，使用默认配置
+	}
+
+	// 2. 找到主屏幕 (IsPrimary) 或当前屏幕 (IsCurrent)
+	var targetScreen *runtime.Screen
+	for _, screen := range screens {
+		if screen.IsPrimary || screen.IsCurrent {
+			targetScreen = &screen
+			break
+		}
+	}
+	// 如果没找到主屏幕，就回退使用第一个屏幕
+	if targetScreen == nil && len(screens) > 0 {
+		targetScreen = &screens[0]
+	}
+	if targetScreen == nil {
+		return
+	}
+
+	// 3. 计算高度：屏幕总高度减去 100 像素
+	newHeight := targetScreen.Size.Height - 100
+
+	// 防止负高度（比如屏幕高度本身就小于 100，虽然很少见）
+	if newHeight < 200 {
+		newHeight = targetScreen.Size.Height
+	}
+
+	runtime.WindowSetSize(a.ctx, 1000, newHeight)
+	runtime.WindowCenter(a.ctx)
 }
 
 // --- XML types ---

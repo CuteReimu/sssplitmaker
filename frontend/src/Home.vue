@@ -3,16 +3,11 @@
     <el-select v-model="currentTemplate" filterable placeholder="你可以选择现有模板" style="width: 500px" @change="selectTemplate">
         <el-option v-for="item in templates" :key="item.value" :label="item.label" :value="item.value"></el-option>
     </el-select>
-    <el-upload drag accept=".lss" :auto-upload="false" :show-file-list="false" :on-change="handleChange" style="max-width: 960px">
+    <el-upload drag accept=".lss" :auto-upload="false" :show-file-list="false" :on-change="handleChange">
         <el-icon class="el-icon--upload"><upload-filled style="width: 80px;"></upload-filled></el-icon>
         <div class="el-upload__text">
-            你也可以将文件拖拽到这里或者 <em>点击上传</em>
+            你也可以将文件拖拽到这里或者 <em>点击上传</em> <br/> 只支持 *.lss 文件
         </div>
-        <template #tip>
-            <div class="el-upload__tip">
-                只支持 *.lss 文件
-            </div>
-        </template>
     </el-upload>
     <div style="display: flex; gap: 8px;">
         <el-button type="success" @click="fillIcons">一键填充所有未填充的图标</el-button>
@@ -33,7 +28,7 @@
         ></el-switch>
         <el-text size="large" style="margin-left: 12px; cursor: pointer; text-decoration: underline;" @click="openSkipAnimationHelp">这是什么意思？</el-text>
     </div>
-    <el-table :data="tableData" style="max-width: 960px" v-loading="loading" element-loading-text="正在加载数据...">
+    <el-table :data="tableData" style="max-width: 960px">
         <el-table-column label="图标" width="60px">
             <template #default="scope">
                 <el-image v-if="scope.row.icon.length>0" style="width: 25px; height: 25px" :src="scope.row.icon" fit="contain"></el-image>
@@ -46,11 +41,8 @@
         </el-table-column>
         <el-table-column label="触发事件">
             <template #default="scope">
-                <el-select v-if="scope.$index<tableData.length-1" v-model="scope.row.event"
-                           @change="onEventChange(scope.$index)" filterable placeholder="触发事件" style="width: 300px">
-                    <el-option v-for="item in options" :key="item.value" :label="item.label"
-                               :value="item.value"></el-option>
-                </el-select>
+                <el-select-v2 v-if="scope.$index<tableData.length-1" v-model="scope.row.event" :options="options"
+                           @change="onEventChange(scope.$index)" filterable placeholder="触发事件" style="width: 300px" />
             </template>
         </el-table-column>
         <el-table-column label="操作" :width="220">
@@ -67,7 +59,7 @@
 </template>
 
 <script setup lang="ts">
-import { ElAlert, ElSelect, ElOption, ElUpload, ElButton, ElSwitch, ElTable, ElTableColumn, ElCheckbox, ElMessage, ElText, ElIcon, ElImage, ElInput } from 'element-plus';
+import { ElAlert, ElSelect, ElSelectV2, ElOption, ElUpload, ElButton, ElSwitch, ElTable, ElTableColumn, ElCheckbox, ElMessage, ElText, ElIcon, ElImage, ElInput } from 'element-plus';
 import { Plus, Minus, Top, Bottom, UploadFilled } from '@element-plus/icons-vue';
 import { ref, nextTick, onMounted } from 'vue';
 import { GetOptions, GetTemplates, LoadSplitFile, GetSplits, GetIcon, SaveSplitsFile, SaveIconsZip, FixLiveSplit } from '../wailsjs/go/main/App';
@@ -92,7 +84,6 @@ const disableStartAnimation = ref(false);
 const options = ref<Option[]>([]);
 const currentTemplate = ref('');
 const templates = ref<Option[]>([]);
-const loading = ref(false);
 const fixingLiveSplit = ref(false);
 const tableData = ref<Row[]>([
   { name: '', event: 'StartNewGame', icon: '' },
@@ -181,29 +172,23 @@ async function downloadIcons() {
 
 async function handleChange(file: { raw: File }) {
   if (!file?.raw) return;
-  loading.value = true;
   try {
     const text = await file.raw.text();
     const newData = await LoadSplitFile(text);
     tableData.value = newData as Row[];
     refreshStartAnimationChange(tableData.value[0]?.event ?? '');
-    nextTick(() => { loading.value = false; });
   } catch (e) {
-    loading.value = false;
     ElMessage({ message: String(e), type: 'error', plain: true });
   }
 }
 
 async function selectTemplate(value: string) {
-  loading.value = true;
   try {
     const res = await GetSplits(value);
     tableData.value = [...res.splits as Row[], { name: '', event: 'ManualSplit', icon: '' }];
     refreshStartAnimationChange(tableData.value[0].event);
-    nextTick(() => { loading.value = false; });
   } catch (e) {
     console.log(e);
-    loading.value = false;
   }
 }
 
