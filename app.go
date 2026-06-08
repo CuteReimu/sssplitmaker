@@ -255,7 +255,9 @@ func (a *App) setWindowSize() {
 	for _, screen := range screens {
 		if screen.IsPrimary || screen.IsCurrent {
 			targetScreen = &screen
-			break
+			if screen.IsCurrent {
+				break
+			}
 		}
 	}
 	// 如果没找到主屏幕，就回退使用第一个屏幕

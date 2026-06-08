@@ -2,8 +2,8 @@
 
 package main
 
-import "errors"
+import "github.com/wailsapp/wails/v2/pkg/runtime"
 
-func (a *App) FixLiveSplit() (string, error) {
-	return "", errors.New("仅支持 Windows")
+func (a *App) FixLiveSplit() {
+	runtime.EventsEmit(a.ctx, "ElMessage", "error", "LiveSplit 仅支持 Windows")
 }

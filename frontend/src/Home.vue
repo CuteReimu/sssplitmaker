@@ -63,7 +63,7 @@ import { ElAlert, ElSelect, ElSelectV2, ElOption, ElUpload, ElButton, ElSwitch, 
 import { Plus, Minus, Top, Bottom, UploadFilled } from '@element-plus/icons-vue';
 import { ref, onMounted } from 'vue';
 import { GetOptions, GetTemplates, LoadSplitFile, GetSplits, GetIcon, SaveSplitsFile, SaveIconsZip, FixLiveSplit } from '../wailsjs/go/main/App';
-import { BrowserOpenURL, LogError } from '../wailsjs/runtime';
+import { BrowserOpenURL, LogError, EventsOn } from '../wailsjs/runtime';
 
 interface Row {
   name: string;
@@ -248,4 +248,8 @@ async function fixLiveSplit() {
     fixingLiveSplit.value = false;
   }
 }
+
+EventsOn("ElMessage", (type, message) => {
+  ElMessage({ message, type, plain: true });
+});
 </script>
