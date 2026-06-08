@@ -165,34 +165,3 @@ body, html {
     font-weight: normal;
   }
 }
-
-// 消息提示 (Message)
-.el-message {
-  border: 1px solid $win-border;
-  box-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-  border-radius: 0;
-}
-
-// 菜单 (Menu) - Windows 经典菜单栏风格
-.el-menu {
-  border-bottom: 1px solid $win-border;
-  background: $win-bg;
-
-  .el-menu-item {
-    font-size: 12px;
-    padding: 0 16px;
-    height: 28px;
-    line-height: 28px;
-    color: $win-text;
-
-    &:hover {
-      background-color: $win-hover-bg;
-      color: $win-text;
-    }
-
-    &.is-active {
-      background-color: #cce4ff;
-      border-bottom: none;
-    }
-  }
-}
