@@ -6,14 +6,14 @@
     <el-upload drag accept=".lss" :auto-upload="false" :show-file-list="false" :on-change="handleChange">
         <el-icon class="el-icon--upload"><upload-filled style="width: 80px;"></upload-filled></el-icon>
         <div class="el-upload__text">
-            你也可以将文件拖拽到这里或者 <em>点击上传</em> <br/> 只支持 *.lss 文件
+            你也可以将文件拖拽到这里或者 <em>点击上传</em> 只支持 *.lss 文件
         </div>
     </el-upload>
     <div style="display: flex; gap: 8px;">
         <el-button type="success" @click="fillIcons">一键填充所有未填充的图标</el-button>
         <el-button type="danger" @click="resetIcons">一键清空所有图标</el-button>
         <el-button type="primary" @click="downloadIcons">下载所有图标</el-button>
-        <el-text style="margin: 0px 10px 0px 10px;">Auto Splitter版本：1.25.4</el-text>
+        <el-text style="margin: 0px 10px;">Auto Splitter版本：1.25.4</el-text>
         <el-button type="warning" @click="fixLiveSplit" :loading="fixingLiveSplit">更新LiveSplit</el-button>
         <el-button type="warning" @click="openHelp">查看帮助</el-button>
     </div>
@@ -36,7 +36,7 @@
         </el-table-column>
         <el-table-column label="节点名称">
             <template #default="scope">
-                <el-input v-if="scope.$index>0 && scope.$index<tableData.length-1" v-model="scope.row.name" filterable placeholder="节点名称" style="width: 300px"></el-input>
+                <el-input v-if="scope.$index>0 && scope.$index<tableData.length-1" v-model="scope.row.name" placeholder="节点名称" style="width: 300px"></el-input>
             </template>
         </el-table-column>
         <el-table-column label="触发事件">
@@ -54,8 +54,10 @@
             </template>
         </el-table-column>
     </el-table>
-    <el-checkbox v-model="includeTimeRecords" size="large">保留*.lss文件中原本的时间记录（如果有）</el-checkbox>
-    <el-button type="primary" @click="submit" style="align-self: flex-start;" :disabled="disableSubmit">另存为</el-button>
+    <div>
+        <el-button type="primary" @click="submit" style="align-self: flex-start;" :disabled="disableSubmit">另存为</el-button>
+        <el-checkbox v-model="includeTimeRecords" size="large" style="margin-left: 20px">保留*.lss文件中原本的时间记录（如果有）</el-checkbox>
+    </div>
 </template>
 
 <script setup lang="ts">

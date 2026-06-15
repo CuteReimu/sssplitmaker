@@ -1,0 +1,462 @@
+{
+    "Main": [
+        {
+            "fileName": "blank",
+            "displayName": "Blank Template",
+            "data": {}
+        },
+        {
+            "fileName": "blank-act1start",
+            "displayName": "Blank Template (Act1Start)",
+            "data": {}
+        },
+        {
+            "fileName": "100-bells-route",
+            "displayName": "100% (LP Bells Route)",
+            "data": {
+                "routeNotesURL": "https://pastebin.com/raw/DKvsQWg9"
+            }
+        },
+        {
+            "fileName": "100-jw",
+            "displayName": "100% (JW Route)",
+            "data": {
+                "routeNotesURL": "https://docs.google.com/document/d/1bKXTu8ZtDbsMReaRgIrm2zAMZHon7sl8yN3AkbycfJM"
+            }
+        },
+        {
+            "fileName": "100-mist-route",
+            "displayName": "100% (LP Mist Route)",
+            "data": {
+                "routeNotesURL": "https://pastebin.com/raw/wXQeQpvW"
+            }
+        },
+        {
+            "fileName": "100-monstah-39",
+            "displayName": "100% (Monstah 3.9 Route)",
+            "data": {
+                "routeNotesURL": "https://app.milanote.com/1V7BrX1cs2nZ9F/route-v39?p=4KWVkAUB4ds"
+            }
+        },
+        {
+            "fileName": "100-monstah-40",
+            "displayName": "100% (Monstah 4.0 Route)",
+            "data": {
+                "routeNotesURL": "https://app.milanote.com/1V56Bk15t7HI6z?p=4KWVkAUB4ds"
+            }
+        },
+        {
+            "fileName": "100-monstah-50",
+            "displayName": "100% (Monstah 5.0 Route)",
+            "data": {
+                "routeNotesURL": "https://app.milanote.com/1VeN2d1HkF2Hdw?p=4KWVkAUB4ds"
+            }
+        },
+        {
+            "fileName": "100-monstah-51",
+            "displayName": "100% (Monstah 5.1 Route)",
+            "data": {
+                "routeNotesURL": "https://app.milanote.com/1UWRKC16EY1t7x?p=4KWVkAUB4ds"
+            }
+        },
+        {
+            "fileName": "100-monstah-60",
+            "displayName": "100% (Monstah 6.0 Route)",
+            "data": {
+                "routeNotesURL": "https://app.milanote.com/1VQhxW1sbcJi3g?p=4KWVkAUB4ds"
+            }
+        },
+        {
+            "fileName": "100-monstah-62",
+            "displayName": "100% (Monstah 6.2 Route)",
+            "data": {
+                "routeNotesURL": "https://app.milanote.com/1Wu0KL12QxHseO?p=4KWVkAUB4ds"
+            }
+        },
+        {
+            "fileName": "100-troute",
+            "displayName": "100% (tRoute)",
+            "data": {
+                "routeNotesURL": "https://app.milanote.com/1VwIKA1LVBKZdf?p=dJ9GRAcsEDO"
+            }
+        },
+        {
+            "fileName": "100-zroute-891",
+            "displayName": "100% (zRoute 1.0.28891)",
+            "data": {
+                "routeNotesURL": "https://app.milanote.com/1WveEr1gD7FZ4H/100-mist-route-891?p=lxGFEERn8Hw"
+            }
+        },
+        {
+            "fileName": "act1-judgement",
+            "displayName": "Act 1 Judgement",
+            "data": {}
+        },
+        {
+            "fileName": "act1-judgement-fleas",
+            "displayName": "Act 1 Judgement (Fleas)",
+            "data": {}
+        },
+        {
+            "fileName": "act1-sinner",
+            "displayName": "Act 1 Sinner",
+            "data": {}
+        },
+        {
+            "fileName": "all-bosses",
+            "displayName": "All Bosses",
+            "data": {
+                "routeNotesURL": "https://app.milanote.com/1VHsXX12I0A9ei?p=gYq4kmb6BNH"
+            }
+        },
+        {
+            "fileName": "all-bosses-mist",
+            "displayName": "All Bosses (Mist Route)",
+            "data": {
+                "routeNotesURL": "https://app.milanote.com/1VQX1L1C8nMs0q?p=R1lE2KGJH9w"
+            }
+        },
+        {
+            "fileName": "all-bosses-zodiam",
+            "displayName": "All Bosses (Zodiam Route)",
+            "data": {
+                "routeNotesURL": "https://app.milanote.com/1VVhJE1QSvIM9i?p=7MyJrpBqjMC"
+            }
+        },
+        {
+            "fileName": "all-act-one-bosses",
+            "displayName": "All Act One Bosses",
+            "data": {
+                "routeNotesURL": "https://docs.google.com/document/d/1Nzk0IuUnTxfF_fWKozyHhh_zAtBB79OYSWqfKydPnf8"
+            }
+        },
+        {
+            "fileName": "all-act-one-bosses-evo",
+            "displayName": "All Act One Bosses (Evo)",
+            "data": {
+                "routeNotesURL": "https://docs.google.com/document/d/1_M_ulh_tY38vlINZfq0LF1KCo0U-p1yesrHw63ZYbXk"
+            }
+        },
+        {
+            "fileName": "all-act-two-bosses",
+            "displayName": "All Act Two Bosses",
+            "data": {
+                "routeNotesURL": "https://docs.google.com/document/d/1w8pymwxMqiM_Ep6qMJJbcyxqf_a_7zgfrYxawWpy_tE"
+            }
+        },
+        {
+            "fileName": "all-act-two-bosses-mist",
+            "displayName": "All Act Two Bosses (Mist Route)",
+            "data": {
+                "routeNotesURL": "https://app.milanote.com/1WsjCN1URPpAeA?p=dP2BnE8pNA6"
+            }
+        },
+        {
+            "fileName": "any-bells",
+            "displayName": "Any% (Bells Route, Cloak)",
+            "data": {
+                "routeNotesURL": "https://docs.google.com/document/d/1OwFO5OSDMIZWn24Jm6f14QtfF7145Aom5T-exSffINI/edit?tab=t.gxdxsxf2j77q"
+            }
+        },
+        {
+            "fileName": "any-fleas",
+            "displayName": "Any% (Fleas Route, Cloakless)",
+            "data": {
+                "routeNotesURL": "https://docs.google.com/document/d/1yA3h72XDO3627Hs_8m6ag0cZPAH8-7jlGK4Xkduuskc"
+            }
+        },
+        {
+            "fileName": "any-key",
+            "displayName": "Any% (Key Route, Cloakless)",
+            "data": {
+                "routeNotesURL": "https://github.com/Iurig/Silksong-Route-Notes/blob/main/Key%20Route%20Rosary%20Guide.md"
+            }
+        },
+        {
+            "fileName": "any-mist",
+            "displayName": "Any% (Mist Route, Cloak)",
+            "data": {
+                "routeNotesURL": "https://docs.google.com/document/d/1OwFO5OSDMIZWn24Jm6f14QtfF7145Aom5T-exSffINI/edit?tab=t.0"
+            }
+        },
+        {
+            "fileName": "low",
+            "displayName": "Low%",
+            "data": {
+                "routeNotesURL": "https://docs.google.com/document/d/1mwzi3iZh_tu0_E4a9ldDLk4e7XvYJrVvIaOJA1i_EJk"
+            }
+        },
+        {
+            "fileName": "low-te",
+            "displayName": "Low% True Ending",
+            "data": {
+                "routeNotesURL": "https://docs.google.com/document/d/1To9dVt89HbOxghuxU-wRUELeiuw1j07IcSvGKLTO-aU"
+            }
+        },
+        {
+            "fileName": "te",
+            "displayName": "True Ending",
+            "data": {
+                "routeNotesURL": "https://app.milanote.com/1WbEZ11uqkHtUz/silksong-true-ending-lp?p=Ug6mw9f6KRi"
+            }
+        },
+        {
+            "fileName": "te-891",
+            "displayName": "True Ending (1.0.28891 Voltpogos)",
+            "data": {
+                "routeNotesURL": "https://app.milanote.com/1WbFcm1cdcT3dK/silksong-true-ending-patch-1028891?p=Ug6mw9f6KRi"
+            }
+        }
+    ],
+    "Glitched": [
+        {
+            "fileName": "any-ag",
+            "displayName": "Any% (All Glitches, Cling Grip)",
+            "data": {}
+        },
+        {
+            "fileName": "any-ag-swift-step",
+            "displayName": "Any% (All Glitches, Swift Step)",
+            "data": {}
+        },
+        {
+            "fileName": "low-ag",
+            "displayName": "Low% (All Glitches)",
+            "data": {}
+        },
+        {
+            "fileName": "act1-judgement-ag",
+            "displayName": "Act 1 Judgement (All Glitches)",
+            "data": {}
+        },
+        {
+            "fileName": "5-tools-ag",
+            "displayName": "5 Tools (All Glitches)",
+            "data": {}
+        },
+        {
+            "fileName": "bath-ag",
+            "displayName": "Bath% (All Glitches)",
+            "data": {}
+        },
+        {
+            "fileName": "twisted-ag",
+            "displayName": "Twisted% (All Glitches)",
+            "data": {}
+        }
+    ],
+    "Individual Level": [
+        {
+            "fileName": "coral-tower",
+            "displayName": "Coral Tower",
+            "data": {}
+        },
+        {
+            "fileName": "moss-grotto",
+            "displayName": "Moss Grotto",
+            "data": {}
+        },
+        {
+            "fileName": "room-timer",
+            "displayName": "Room Timer",
+            "data": {}
+        }
+    ],
+    "Mods": [],
+    "Category Extensions": [
+        {
+            "fileName": "2-spool-fragments",
+            "displayName": "2 Spool Fragments",
+            "data": {
+                "routeNotesURL": "https://speedpastes.org/w5CwLHDD"
+            }
+        },
+        {
+            "fileName": "3-memory-lockets",
+            "displayName": "3 Memory Lockets",
+            "data": {
+                "routeNotesURL": "https://speedpastes.org/M9MtqJQn"
+            }
+        },
+        {
+            "fileName": "4ms",
+            "displayName": "4 Mask Shards",
+            "data": {
+                "routeNotesURL": "https://speedpastes.org/WC8JqVnP"
+            }
+        },
+        {
+            "fileName": "4ms-no-bellway-route",
+            "displayName": "4 Mask Shards (No Bellway Route)",
+            "data": {
+                "routeNotesURL": "https://speedpastes.org/ByYe7pDm"
+            }
+        },
+        {
+            "fileName": "5-tools",
+            "displayName": "5 Tools",
+            "data": {
+                "routeNotesURL": "https://pastebin.com/raw/KZJdr1D1"
+            }
+        },
+        {
+            "fileName": "6-wishes",
+            "displayName": "6 Wishes",
+            "data": {
+                "routeNotesURL": "https://speedpastes.org/VT5Jw8RG"
+            }
+        },
+        {
+            "fileName": "7-beast-shards-sprintmaster",
+            "displayName": "7 Beast Shards (1.0.28891 Voltpogo Sprintmaster)",
+            "data": {
+                "routeNotesURL": "https://docs.google.com/document/d/1QXqL4n9DmE_EUQUe7wOeYA0uyW7U3rAxa61ivQGIvNQ/edit?usp=sharing"
+            }
+        },
+        {
+            "fileName": "7-equips",
+            "displayName": "7 Equips",
+            "data": {
+                "routeNotesURL": "https://speedpastes.org/4JwNXnLR"
+            }
+        },
+        {
+            "fileName": "8-craftmetals",
+            "displayName": "8 Craftmetals",
+            "data": {
+                "routeNotesURL": "https://speedpastes.org/gKDYYBTb"
+            }
+        },
+        {
+            "fileName": "9-silkeaters",
+            "displayName": "9 Silkeaters",
+            "data": {
+                "routeNotesURL": "https://docs.google.com/document/d/1SfFsfj9xjYMbKf4Ug5LaUjzaviD2qlGQA1LsOPZJsG0/edit?tab=t.9x10y4ja1dlj"
+            }
+        },
+        {
+            "fileName": "10-achievements",
+            "displayName": "10 Achievements",
+            "data": {
+                "routeNotesURL": "https://speedpastes.org/sM7ZCzYH"
+            }
+        },
+        {
+            "fileName": "11-keys",
+            "displayName": "11 Keys",
+            "data": {
+                "routeNotesURL": "https://speedpastes.org/sQfEhTu5"
+            }
+        },
+        {
+            "fileName": "16ms",
+            "displayName": "16 Mask Shards",
+            "data": {
+                "routeNotesURL": "https://docs.google.com/document/d/1zPc_n5_IpXIZBBY3XqmBzDXio-MMs--pnU1FAWnOby0"
+            }
+        },
+        {
+            "fileName": "all-bellways-mist-wings",
+            "displayName": "All Bellways (Mist Wings)",
+            "data": {
+                "routeNotesURL": "https://pastebin.com/raw/5JXJ1eeh"
+            }
+        },
+        {
+            "fileName": "all-bellways-bells",
+            "displayName": "All Bellways (Bells)",
+            "data": {
+                "routeNotesURL": "https://speedpastes.org/pIWZGp3T"
+            }
+        },
+        {
+            "fileName": "all-bellways-mist",
+            "displayName": "All Bellways (Mist)",
+            "data": {
+                "routeNotesURL": "https://speedpastes.org/DIBdoaQd"
+            }
+        },
+        {
+            "fileName": "awoo",
+            "displayName": "Awoo%",
+            "data": {
+                "routeNotesURL": "https://pastebin.com/raw/bhUeUTUd"
+            }
+        },
+        {
+            "fileName": "bath",
+            "displayName": "Bath%",
+            "data": {
+                "routeNotesURL": "https://speedpastes.org/67pVQAcN"
+            }
+        },
+        {
+            "fileName": "beer-bottle",
+            "displayName": "Beer Bottle%",
+            "data": {
+                "routeNotesURL": "https://docs.google.com/document/d/1fFSlz-ak-iD_2FXyIBMmwQUp6Z275E3vFTvWPrJ07jQ"
+            }
+        },
+        {
+            "fileName": "beer-bottle-early-hm",
+            "displayName": "Beer Bottle% (Early Hunter's March)",
+            "data": {
+                "routeNotesURL": "https://speedpastes.org/l4akx8AJ"
+            }
+        },
+        {
+            "fileName": "dapper-slapper",
+            "displayName": "Dapper Slapper",
+            "data": {
+                "routeNotesURL": "https://docs.google.com/document/d/1IbRnAVxcAzzxbvHKevTz2xz-E217hXeofCyNnAeZ5so"
+            }
+        },
+        {
+            "fileName": "firewood",
+            "displayName": "Firewood%",
+            "data": {
+                "routeNotesURL": "https://pastebin.com/raw/QWqAUnf5"
+            }
+        },
+        {
+            "fileName": "glutton",
+            "displayName": "Glutton%",
+            "data": {
+                "routeNotesURL": "https://docs.google.com/document/d/1OcP9vnVO7ziw5Vp6raPE25Iqc2eEieh7VDqc0da5DPU"
+            }
+        },
+        {
+            "fileName": "ordinal",
+            "displayName": "Ordinal%",
+            "data": {
+                "routeNotesURL": "https://speedpastes.org/_q64foxH"
+            }
+        },
+        {
+            "fileName": "slab-bellbeast",
+            "displayName": "Slab% (Bellbeast)",
+            "data": {
+                "routeNotesURL": "https://speedpastes.org/1DeeqkeT"
+            }
+        },
+        {
+            "fileName": "slab-jailed",
+            "displayName": "Slab% (Jailed)",
+            "data": {
+                "routeNotesURL": "https://speedpastes.org/msqJSb8s"
+            }
+        },
+        {
+            "fileName": "sylphsong",
+            "displayName": "Sylphsong%",
+            "data": {
+                "routeNotesURL": "https://pastebin.com/raw/PzWLD0k5"
+            }
+        },
+        {
+            "fileName": "twisted",
+            "displayName": "Twisted%",
+            "data": {}
+        }
+    ]
+}

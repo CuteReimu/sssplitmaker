@@ -11,10 +11,6 @@ git sparse-checkout set --no-cone
 
 # 配置稀疏检出规则
 Set-Content .git/info/sparse-checkout "src/asset/silksong/categories/*"
-Add-Content .git/info/sparse-checkout "!src/asset/silksong/categories/category-directory.json"
-Add-Content .git/info/sparse-checkout "!src/asset/silksong/categories/every.json"
-Add-Content .git/info/sparse-checkout "!src/asset/silksong/categories/room-timer.json"
-Add-Content .git/info/sparse-checkout "!src/asset/silksong/categories/blank.json"
 Add-Content .git/info/sparse-checkout "src/asset/silksong/icons/*"
 
 # 拉取主分支

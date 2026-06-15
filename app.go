@@ -38,12 +38,7 @@ func (a *App) GetOptions() []Option {
 }
 
 func (a *App) GetTemplates() []Option {
-	files := GetAllFiles()
-	ret := make([]Option, 0, len(files))
-	for _, f := range files {
-		ret = append(ret, Option{Value: f, Label: f})
-	}
-	return ret
+	return GetAllFiles()
 }
 
 type SplitLine struct {

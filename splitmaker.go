@@ -8,10 +8,24 @@ import (
 //go:embed splitmaker/*
 var fs embed.FS
 
-func GetAllFiles() (allFiles []string) {
-	dir, _ := fs.ReadDir("splitmaker")
-	for _, f := range dir {
-		allFiles = append(allFiles, f.Name())
+type CategoryDirectoryData struct {
+	FileName    string `json:"fileName"`
+	DisplayName string `json:"displayName"`
+}
+
+func GetAllFiles() (allFiles []Option) {
+	file, _ := fs.ReadFile("splitmaker/category-directory.json")
+	var v map[string][]*CategoryDirectoryData
+	if err := json.Unmarshal(file, &v); err != nil {
+		panic(err)
+	}
+	for _, categoryName := range []string{"Main", "Individual Level", "Category Extensions"} {
+		for _, f := range v[categoryName] {
+			allFiles = append(allFiles, Option{
+				Value: f.FileName + ".json",
+				Label: f.DisplayName,
+			})
+		}
 	}
 	return
 }
