@@ -13,7 +13,7 @@
         <el-button type="success" @click="fillIcons">一键填充所有未填充的图标</el-button>
         <el-button type="danger" @click="resetIcons">一键清空所有图标</el-button>
         <el-button type="primary" @click="downloadIcons">下载所有图标</el-button>
-        <el-text style="margin: 0px 10px;">Auto Splitter版本：1.25.4</el-text>
+        <el-text style="margin: 0 10px;">Auto Splitter版本：1.25.4</el-text>
         <el-button type="warning" @click="fixLiveSplit" :loading="fixingLiveSplit">更新LiveSplit</el-button>
         <el-button type="warning" @click="openHelp">查看帮助</el-button>
     </div>
@@ -61,7 +61,7 @@
 </template>
 
 <script setup lang="ts">
-import { ElAlert, ElSelect, ElSelectV2, ElOption, ElUpload, ElButton, ElSwitch, ElTable, ElTableColumn, ElCheckbox, ElMessage, ElText, ElIcon, ElImage, ElInput } from 'element-plus';
+import { ElAlert, ElSelect, ElSelectV2, ElOption, ElUpload, ElButton, ElSwitch, ElTable, ElTableColumn, ElCheckbox, ElMessage, ElText, ElIcon, ElImage, ElInput, UploadFile } from 'element-plus';
 import { Plus, Minus, Top, Bottom, UploadFilled } from '@element-plus/icons-vue';
 import { ref, onMounted } from 'vue';
 import { GetOptions, GetTemplates, LoadSplitFile, GetSplits, GetIcon, SaveSplitsFile, SaveIconsZip, FixLiveSplit } from '../wailsjs/go/main/App';
@@ -93,22 +93,22 @@ const tableData = ref<Row[]>([
   { name: '', event: 'ManualSplit', icon: '' },
 ]);
 
-onMounted(async () => {
-  try {
-    options.value = await GetOptions();
-  } catch (e) {
+onMounted(() => {
+  GetOptions().then(res => {
+    options.value = res;
+  }).catch(e => {
     LogError(e);
-  }
-  try {
-    templates.value = await GetTemplates();
-  } catch (e) {
+  });
+  GetTemplates().then(res => {
+    templates.value = res;
+  }).catch(e => {
     LogError(e);
-  }
-  try {
-    tableData.value[1].icon = await GetIcon(tableData.value[1].event);
-  } catch (e) {
+  });
+  GetIcon(tableData.value[1].event).then(res => {
+    tableData.value[1].icon = res;
+  }).catch(e => {
     LogError(e);
-  }
+  });
 });
 
 function refreshStartAnimationChange(eventValue: string) {
@@ -153,51 +153,49 @@ function swapLine(index1: number, index2: number) {
   tableData.value[index2] = temp;
 }
 
-async function submit() {
+function submit() {
   disableSubmit.value = true;
-  try {
-    await SaveSplitsFile(tableData.value.slice(0, -1) as any, includeTimeRecords.value);
-  } catch (e) {
+  SaveSplitsFile(tableData.value.slice(0, -1) as any, includeTimeRecords.value).catch(e => {
     LogError(e);
     ElMessage({ message: '导出失败', type: 'error', plain: true });
-  } finally {
+  }).finally(() => {
     disableSubmit.value = false;
-  }
+  });
 }
 
-async function downloadIcons() {
+function downloadIcons() {
   disableSubmit.value = true;
-  try {
-    await SaveIconsZip();
-  } catch (e) {
+  SaveIconsZip().catch(e => {
     LogError(e);
     ElMessage({ message: '导出失败', type: 'error', plain: true });
-  } finally {
+  }).finally(() => {
     disableSubmit.value = false;
-  }
+  });
 }
 
-async function handleChange(file: { raw: File }) {
+function handleChange(file: UploadFile) {
   if (!file?.raw) return;
-  try {
-    const text = await file.raw.text();
-    const newData = await LoadSplitFile(text);
-    tableData.value = newData as Row[];
-    refreshStartAnimationChange(tableData.value[0]?.event ?? '');
-  } catch (e) {
+  file.raw.text().then(text => {
+    LoadSplitFile(text).then(newData => {
+      tableData.value = newData as Row[];
+      refreshStartAnimationChange(tableData.value[0]?.event ?? '');
+    }).catch(e => {
+      LogError(e);
+      ElMessage({ message: String(e), type: 'error', plain: true });
+    });
+  }).catch(e => {
     LogError(e);
     ElMessage({ message: String(e), type: 'error', plain: true });
-  }
+  });
 }
 
-async function selectTemplate(value: string) {
-  try {
-    const res = await GetSplits(value);
+function selectTemplate(value: string) {
+  GetSplits(value).then((res) => {
     tableData.value = [...res.splits as Row[], { name: '', event: 'ManualSplit', icon: '' }];
     refreshStartAnimationChange(tableData.value[0].event);
-  } catch (e) {
+  }).catch(e => {
     LogError(e);
-  }
+  });
 }
 
 function openGithub() {
@@ -212,7 +210,7 @@ function openHelp() {
   BrowserOpenURL('https://cutereimu.cn/daily/silksong/sssplitmaker-faq.html');
 }
 
-async function onEventChange(idx: number) {
+function onEventChange(idx: number) {
   const eventValue = tableData.value[idx].event;
   if (idx === 0) refreshStartAnimationChange(eventValue);
   const opt = options.value.find(o => o.value === eventValue);
@@ -221,24 +219,26 @@ async function onEventChange(idx: number) {
     tableData.value[idx].name = pos === -1 ? opt.label : opt.label.slice(0, pos);
   }
   if (idx === 0) return;
-  try {
-    tableData.value[idx].icon = await GetIcon(tableData.value[idx].event);
-  } catch (e) {
+  GetIcon(tableData.value[idx].event).then(res => {
+    tableData.value[idx].icon = res;
+  }).catch(e => {
     LogError(e);
-  }
+  })
 }
 
-async function fillIcons() {
+function fillIcons() {
+  const p = [];
   for (let idx = 1; idx < tableData.value.length - 1; idx++) {
     const row = tableData.value[idx];
     if (row.icon.length === 0) {
-      try {
-        row.icon = await GetIcon(row.event);
-      } catch (e) {
-        LogError(e);
-      }
+      p.push(GetIcon(row.event).then(res => {
+        row.icon = res;
+      }));
     }
   }
+  Promise.all(p).catch(e => {
+    LogError(e);
+  });
 }
 
 function resetIcons() {
@@ -247,13 +247,11 @@ function resetIcons() {
   }
 }
 
-async function fixLiveSplit() {
+function fixLiveSplit() {
   fixingLiveSplit.value = true;
-  try {
-    await FixLiveSplit();
-  } finally {
+  FixLiveSplit().finally(() => {
     fixingLiveSplit.value = false;
-  }
+  });
 }
 
 EventsOn("ElMessage", (type, message) => {
