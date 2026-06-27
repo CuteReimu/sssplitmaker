@@ -10,7 +10,7 @@
         <el-button type="success" @click="fillIcons">一键填充所有未填充的图标</el-button>
         <el-button type="danger" @click="resetIcons">一键清空所有图标</el-button>
         <el-button type="primary" @click="downloadIcons">下载所有图标</el-button>
-        <el-text style="margin: 0 10px;">Auto Splitter版本：1.25.4</el-text>
+        <el-text style="margin: 0 10px;">Auto Splitter版本：1.25.5</el-text>
         <el-button type="warning" @click="fixLiveSplit" :loading="fixingLiveSplit">更新LiveSplit</el-button>
         <el-button type="warning" @click="openHelp">查看帮助</el-button>
     </div>
