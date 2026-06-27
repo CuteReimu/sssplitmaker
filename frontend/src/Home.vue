@@ -1,14 +1,11 @@
 <template>
     <el-alert title="如果想为本项目做贡献，请前往本项目的仓库地址： https://github.com/CuteReimu/sssplitmaker" type="info" effect="dark" close-text="前往" @close="openGithub" style="max-width: 960px"></el-alert>
-    <el-select v-model="currentTemplate" filterable placeholder="你可以选择现有模板" style="width: 500px" @change="selectTemplate">
-        <el-option v-for="item in templates" :key="item.value" :label="item.label" :value="item.value"></el-option>
-    </el-select>
-    <el-upload drag accept=".lss" :auto-upload="false" :show-file-list="false" :on-change="handleChange">
-        <el-icon class="el-icon--upload"><upload-filled style="width: 80px;"></upload-filled></el-icon>
-        <div class="el-upload__text">
-            你也可以将文件拖拽到这里或者 <em>点击上传</em> 只支持 *.lss 文件
-        </div>
-    </el-upload>
+    <div>
+        <el-select v-model="currentTemplate" filterable placeholder="你可以选择现有模板" style="width: 500px" @change="selectTemplate">
+            <el-option v-for="item in templates" :key="item.value" :label="item.label" :value="item.value"></el-option>
+        </el-select>
+        <el-text style="margin-left:15px">你也可以将文件拖进来，只支持 *.lss 文件</el-text>
+    </div>
     <div style="display: flex; gap: 8px;">
         <el-button type="success" @click="fillIcons">一键填充所有未填充的图标</el-button>
         <el-button type="danger" @click="resetIcons">一键清空所有图标</el-button>
@@ -61,11 +58,11 @@
 </template>
 
 <script setup lang="ts">
-import { ElAlert, ElSelect, ElSelectV2, ElOption, ElUpload, ElButton, ElSwitch, ElTable, ElTableColumn, ElCheckbox, ElMessage, ElText, ElIcon, ElImage, ElInput, UploadFile } from 'element-plus';
+import { ElAlert, ElSelect, ElSelectV2, ElOption, ElButton, ElSwitch, ElTable, ElTableColumn, ElCheckbox, ElMessage, ElText, ElIcon, ElImage, ElInput, UploadFile } from 'element-plus';
 import { Plus, Minus, Top, Bottom, UploadFilled } from '@element-plus/icons-vue';
 import { ref, onMounted } from 'vue';
 import { GetOptions, GetTemplates, LoadSplitFile, GetSplits, GetIcon, SaveSplitsFile, SaveIconsZip, FixLiveSplit } from '../wailsjs/go/main/App';
-import { BrowserOpenURL, LogError, EventsOn } from '../wailsjs/runtime';
+import { BrowserOpenURL, LogError, EventsOn, OnFileDrop } from '../wailsjs/runtime';
 
 interface Row {
   name: string;
@@ -109,6 +106,17 @@ onMounted(() => {
   }).catch(e => {
     LogError(e);
   });
+  OnFileDrop((_x, _y, paths) => {
+    if (paths.length > 0) {
+      LoadSplitFile(paths[0]).then(newData => {
+        tableData.value = newData as Row[];
+        refreshStartAnimationChange(tableData.value[0]?.event ?? '');
+      }).catch(e => {
+        LogError(e);
+        ElMessage({ message: String(e), type: 'error', plain: true });
+      });
+    }
+  }, false);
 });
 
 function refreshStartAnimationChange(eventValue: string) {
@@ -170,22 +178,6 @@ function downloadIcons() {
     ElMessage({ message: '导出失败', type: 'error', plain: true });
   }).finally(() => {
     disableSubmit.value = false;
-  });
-}
-
-function handleChange(file: UploadFile) {
-  if (!file?.raw) return;
-  file.raw.text().then(text => {
-    LoadSplitFile(text).then(newData => {
-      tableData.value = newData as Row[];
-      refreshStartAnimationChange(tableData.value[0]?.event ?? '');
-    }).catch(e => {
-      LogError(e);
-      ElMessage({ message: String(e), type: 'error', plain: true });
-    });
-  }).catch(e => {
-    LogError(e);
-    ElMessage({ message: String(e), type: 'error', plain: true });
   });
 }
 
