@@ -58,8 +58,8 @@
 </template>
 
 <script setup lang="ts">
-import { ElAlert, ElSelect, ElSelectV2, ElOption, ElButton, ElSwitch, ElTable, ElTableColumn, ElCheckbox, ElMessage, ElText, ElIcon, ElImage, ElInput, UploadFile } from 'element-plus';
-import { Plus, Minus, Top, Bottom, UploadFilled } from '@element-plus/icons-vue';
+import { ElAlert, ElSelect, ElSelectV2, ElOption, ElButton, ElSwitch, ElTable, ElTableColumn, ElCheckbox, ElMessage, ElText, ElImage, ElInput } from 'element-plus';
+import { Plus, Minus, Top, Bottom } from '@element-plus/icons-vue';
 import { ref, onMounted } from 'vue';
 import { GetOptions, GetTemplates, LoadSplitFile, GetSplits, GetIcon, SaveSplitsFile, SaveIconsZip, FixLiveSplit } from '../wailsjs/go/main/App';
 import { BrowserOpenURL, LogError, EventsOn, OnFileDrop } from '../wailsjs/runtime';
@@ -119,7 +119,7 @@ onMounted(() => {
   }, false);
 });
 
-function refreshStartAnimationChange(eventValue: string) {
+const refreshStartAnimationChange = (eventValue: string) => {
   switch (eventValue) {
     case 'StartNewGame':
       skipStartAnimation.value = false;
@@ -132,36 +132,36 @@ function refreshStartAnimationChange(eventValue: string) {
     default:
       disableStartAnimation.value = true;
   }
-}
+};
 
-function onSkipStartAnimationChange(value: boolean) {
+const onSkipStartAnimationChange = (value: boolean) => {
   if (value) {
     if (tableData.value[0].event !== 'Act1Start') tableData.value[0].event = 'Act1Start';
   } else {
     if (tableData.value[0].event !== 'StartNewGame') tableData.value[0].event = 'StartNewGame';
   }
-}
+};
 
-function addLine(index: number) {
+const addLine = (index: number) => {
   GetIcon('ManualSplit').then(res => {
     tableData.value.splice(index, 0, { name: '手动分割', event: 'ManualSplit', icon: res });
   }).catch(e => {
     LogError(e);
     tableData.value.splice(index, 0, { name: '手动分割', event: 'ManualSplit', icon: '' });
   })
-}
+};
 
-function removeLine(index: number) {
+const removeLine = (index: number) => {
   tableData.value.splice(index, 1);
-}
+};
 
-function swapLine(index1: number, index2: number) {
+const swapLine = (index1: number, index2: number) => {
   const temp = tableData.value[index1];
   tableData.value[index1] = tableData.value[index2];
   tableData.value[index2] = temp;
-}
+};
 
-function submit() {
+const submit = () => {
   disableSubmit.value = true;
   SaveSplitsFile(tableData.value.slice(0, -1) as any, includeTimeRecords.value).catch(e => {
     LogError(e);
@@ -169,9 +169,9 @@ function submit() {
   }).finally(() => {
     disableSubmit.value = false;
   });
-}
+};
 
-function downloadIcons() {
+const downloadIcons = () => {
   disableSubmit.value = true;
   SaveIconsZip().catch(e => {
     LogError(e);
@@ -179,30 +179,30 @@ function downloadIcons() {
   }).finally(() => {
     disableSubmit.value = false;
   });
-}
+};
 
-function selectTemplate(value: string) {
+const selectTemplate = (value: string) => {
   GetSplits(value).then((res) => {
     tableData.value = [...res.splits as Row[], { name: '', event: 'ManualSplit', icon: '' }];
     refreshStartAnimationChange(tableData.value[0].event);
   }).catch(e => {
     LogError(e);
   });
-}
+};
 
-function openGithub() {
+const openGithub = () => {
   BrowserOpenURL('https://github.com/CuteReimu/sssplitmaker');
-}
+};
 
-function openSkipAnimationHelp() {
+const openSkipAnimationHelp = () => {
   BrowserOpenURL('https://cutereimu.cn/daily/silksong/speedrun-submit.html#%E6%96%B0%E8%A7%84%E5%88%99-%E5%85%81%E8%AE%B8%E8%B7%B3%E8%BF%87%E5%BC%80%E5%9C%BA%E5%8A%A8%E7%94%BB');
-}
+};
 
-function openHelp() {
+const openHelp = () => {
   BrowserOpenURL('https://cutereimu.cn/daily/silksong/sssplitmaker-faq.html');
-}
+};
 
-function onEventChange(idx: number) {
+const onEventChange = (idx: number) => {
   const eventValue = tableData.value[idx].event;
   if (idx === 0) refreshStartAnimationChange(eventValue);
   const opt = options.value.find(o => o.value === eventValue);
@@ -216,9 +216,9 @@ function onEventChange(idx: number) {
   }).catch(e => {
     LogError(e);
   })
-}
+};
 
-function fillIcons() {
+const fillIcons = () => {
   const p = [];
   for (let idx = 1; idx < tableData.value.length - 1; idx++) {
     const row = tableData.value[idx];
@@ -231,20 +231,20 @@ function fillIcons() {
   Promise.all(p).catch(e => {
     LogError(e);
   });
-}
+};
 
-function resetIcons() {
+const resetIcons = () => {
   for (let idx = 1; idx < tableData.value.length - 1; idx++) {
     tableData.value[idx].icon = '';
   }
-}
+};
 
-function fixLiveSplit() {
+const fixLiveSplit = () => {
   fixingLiveSplit.value = true;
   FixLiveSplit().finally(() => {
     fixingLiveSplit.value = false;
   });
-}
+};
 
 EventsOn("ElMessage", (type, message) => {
   ElMessage({ message, type, plain: true });
