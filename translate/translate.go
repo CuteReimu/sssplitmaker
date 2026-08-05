@@ -525,6 +525,16 @@ var SplitsCache = []*SplitData{
 	{ID: "ConductorsMelodyMenu", Description: "指挥家旋律（菜单）"},
 	{ID: "Skarrgard2", Description: "斯卡尔守卫-猎者小径顶部（小Boss）"},
 	{ID: "Skarrgard3", Description: "斯卡尔守卫-卡梅莉塔旁边（小Boss）"},
+	{ID: "BellBeastArenaExit", Description: ""},
+	{ID: "EnterHalfwayHome", Description: ""},
+	{ID: "EnterGreatConchflies", Description: ""},
+	{ID: "FirstSinnerArenaExit", Description: ""},
+	{ID: "KarakSimpleKeyExit", Description: ""},
+	{ID: "HighHallsArenaExit", Description: ""},
+	{ID: "SeenWhiteward", Description: ""},
+	{ID: "TheUnravelledArenaExit", Description: ""},
+	{ID: "StraightPinTrans", Description: ""},
+	{ID: "PimpilloTrans", Description: ""},
 }
 
 var cacheAliases = map[string]string{
